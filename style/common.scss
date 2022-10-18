@@ -1,3 +1,65 @@
+// 间距基础倍数
+$uni-space-root: 4 !default;
+
+@mixin fn($space, $direction, $size, $n) {
+  @if $n {
+    #{$space}-#{$direction}: #{$size * $uni-space-root}px;
+  } @else {
+    #{$space}-#{$direction}: #{-$size * $uni-space-root}px;
+  }
+}
+
+@mixin get-styles($direction, $i, $space, $n) {
+  @if $direction == t {
+    @include fn($space, top, $i, $n);
+  }
+  @if $direction == r {
+    @include fn($space, right, $i, $n);
+  }
+  @if $direction == b {
+    @include fn($space, bottom, $i, $n);
+  }
+  @if $direction == l {
+    @include fn($space, left, $i, $n);
+  }
+  @if $direction == x {
+    @include fn($space, left, $i, $n);
+    @include fn($space, right, $i, $n);
+  }
+  @if $direction == y {
+    @include fn($space, top, $i, $n);
+    @include fn($space, bottom, $i, $n);
+  }
+  @if $direction == a {
+    @if $n {
+      #{$space}: #{$i * $uni-space-root}px;
+    } @else {
+      #{$space}: #{-$i * $uni-space-root}px;
+    }
+  }
+}
+
+@each $orientation in m, p {
+  $space: margin;
+  @if $orientation == m {
+    $space: margin;
+  } @else {
+    $space: padding;
+  }
+  @for $i from 0 through 16 {
+    @each $direction in t, r, b, l, x, y, a {
+      .#{$orientation}#{$direction}-#{$i} {
+        @include get-styles($direction, $i, $space, true);
+      }
+      .#{$orientation}#{$direction}-n#{$i} {
+        @include get-styles($direction, $i, $space, false);
+      }
+    }
+  }
+}
+
+page{background-color: $u-bg-color;}
+
 view,text {box-sizing: border-box;}
 
 .w-full {width: 100%;}
@@ -19,4 +81,6 @@ view,text {box-sizing: border-box;}
 .text-lg {font-size: 18px;}
 
 .text-xl {font-size: 22px;}
+
+.bg-white{background-color: #fff;}
 

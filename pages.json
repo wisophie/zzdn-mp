@@ -1,15 +1,82 @@
 {
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarBackgroundColor": "#ffffff"
-	},
-	"uniIdRouter": {}
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    {
+      "path": "pages/goods/goods",
+      "style": {
+        "navigationBarTitleText": "商品"
+      }
+    },
+    {
+      "path": "pages/share/share",
+      "style": {
+        "navigationBarTitleText": "共享"
+      }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "沟通"
+      }
+    },
+    {
+      "path": "pages/platform/platform",
+      "style": {
+        "navigationBarTitleText": "平台"
+      }
+    },
+    {
+      "path": "pages/goods/order/order",
+      "style": {
+        "navigationBarTitleText": "我的订单"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#606266",
+    "selectedColor": "#5d51ff",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "static/tabbar/tab1.png",
+        "selectedIconPath": "static/tabbar/tab1_a.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/goods/goods",
+        "iconPath": "static/tabbar/tab2.png",
+        "selectedIconPath": "static/tabbar/tab2_a.png",
+        "text": "商品"
+      },
+      {
+        "pagePath": "pages/share/share",
+        "iconPath": "static/tabbar/tab3.png",
+        "selectedIconPath": "static/tabbar/tab3_a.png",
+        "text": "共享"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "iconPath": "static/tabbar/tab4.png",
+        "selectedIconPath": "static/tabbar/tab4_a.png",
+        "text": "沟通"
+      },
+      {
+        "pagePath": "pages/platform/platform",
+        "iconPath": "static/tabbar/tab5.png",
+        "selectedIconPath": "static/tabbar/tab5_a.png",
+        "text": "平台"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "uniIdRouter": {}
 }

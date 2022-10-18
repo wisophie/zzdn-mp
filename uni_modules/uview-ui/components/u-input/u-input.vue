@@ -187,10 +187,10 @@ export default {
                 style.padding = "0";
             } else {
                 // 由于uni-app的iOS开发者能力有限，导致需要分开写才有效
-                style.paddingTop = "6px";
-                style.paddingBottom = "6px";
-                style.paddingLeft = "9px";
-                style.paddingRight = "9px";
+                style.paddingTop = "4px";
+                style.paddingBottom = "4px";
+                style.paddingLeft = "8px";
+                style.paddingRight = "8px";
             }
             return uni.$u.deepMerge(style, uni.$u.addStyle(this.customStyle));
         },
@@ -321,11 +321,11 @@ export default {
             flex: 1;
 			
 			&__field {
-				line-height: 26px;
+				line-height: 24px;
 				text-align: left;
 				color: $u-main-color;
 				height: 24px;
-				font-size: 15px;
+				font-size: 14px;
 				flex: 1;
 			}
         }
