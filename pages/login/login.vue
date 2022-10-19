@@ -14,8 +14,8 @@
         <div>请先登录账号</div>
 
         <div class="login-box">
-          <button v-if="canIUseGetUserProfile" type="primary" class="wx-login-btn" @click="wxLogin">微信直接登录</button>  
-          <button v-else type="primary" class="wx-login-btn" open-type="getUserInfo" @getuserinfo="wxLogin">微信直接登录</button>
+          <button v-if="canIUseGetUserProfile" type="primary" class="uni-login-btn" @click="wxLogin">微信直接登录</button>  
+          <button v-else type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="wxLogin">微信直接登录</button>
           <button type="primary" class="account-login-btn" @click="accountLogin">账号登录</button>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default {
   methods: {
     wxLogin: function(e) {
       if (this.canIUseGetUserProfile) {
-        wx.getUserProfile({
+        uni.getUserProfile({
           desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
           success: (res) => {
             this.doLogin(res.userInfo)
@@ -58,7 +58,7 @@ export default {
       user.checkLogin().catch(() => {
         user.loginByWeixin(userInfo).then(res => {
           app.globalData.hasLogin = true;
-          wx.navigateBack({
+          uni.navigateBack({
             delta: 1
           })
         }).catch((err) => {
@@ -69,8 +69,8 @@ export default {
       });
     },
     accountLogin: function() {
-      wx.navigateTo({
-        url: "/pages/auth/accountLogin/accountLogin"
+      uni.navigateTo({
+        url: "/pages/login/accountLogin"
       });
     }
   }
@@ -92,7 +92,7 @@ export default {
   margin-top: 50rpx;
 }
 
-.wx-login-btn {
+.uni-login-btn {
   margin: 60rpx 0 40rpx 0;
   height: 96rpx;
   line-height: 96rpx;
