@@ -24,7 +24,7 @@ export default {
         block: false,
         lines: '',
         color: '#303133',
-        size: 15,
+        size: 14,
         iconStyle: () => ({
             fontSize: '15px'
         }),

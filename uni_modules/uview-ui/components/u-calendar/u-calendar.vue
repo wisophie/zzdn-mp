@@ -82,7 +82,7 @@ import Calendar from '../../libs/util/calendar.js'
  * @property {String}				startText			mode=range时，第一个日期底部的提示文字  (默认 '开始' )
  * @property {String}				endText				mode=range时，最后一个日期底部的提示文字 (默认 '结束' )
  * @property {Array}				customList			自定义列表
- * @property {String}				color				主题色，对底部按钮和选中日期有效  (默认 ‘#3c9cff' )
+ * @property {String}				color				主题色，对底部按钮和选中日期有效  (默认 ‘#5d51ff' )
  * @property {String | Number}		minDate				最小的可选日期	 (默认 0 )
  * @property {String | Number}		maxDate				最大可选日期  (默认 0 )
  * @property {Array | String| Date}	defaultDate			默认选中的日期，mode为multiple或range是必须为数组格式

@@ -12,7 +12,7 @@ export default {
     tabs: {
         duration: 300,
         list: () => [],
-        lineColor: '#3c9cff',
+        lineColor: '#5d51ff',
         activeStyle: () => ({
             color: '#303133'
         }),

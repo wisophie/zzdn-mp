@@ -57,7 +57,14 @@
     {
       "path": "pages/goods/order/order",
       "style": {
-        "navigationBarTitleText": "我的订单"
+        "navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/goods/wuliu",
+      "style": {
+        "navigationBarTitleText": "物流详情"
       }
     }
   ],

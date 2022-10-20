@@ -15,7 +15,7 @@
 	 * @tutorial https://uviewui.com/components/steps.html
 	 * @property {String}			direction		row-横向，column-竖向 (默认 'row' )
 	 * @property {String | Number}	current			设置当前处于第几步 (默认 0 )
-	 * @property {String}			activeColor		激活状态颜色 (默认 '#3c9cff' )
+	 * @property {String}			activeColor		激活状态颜色 (默认 '#5d51ff' )
 	 * @property {String}			inactiveColor	未激活状态颜色 (默认 '#969799' )
 	 * @property {String}			activeIcon		激活状态的图标
 	 * @property {String}			inactiveIcon	未激活状态图标 
