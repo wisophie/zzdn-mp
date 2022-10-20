@@ -82,5 +82,17 @@ view,text {box-sizing: border-box;}
 
 .text-xl {font-size: 22px;}
 
-.bg-white{background-color: #fff;}
+.text-bold {font-weight: 600;}
+
+.bg-white{background-color: $u-white;}
+
+.bg-gray{background-color: $u-bg-color;}
+
+.shadow-sm{box-shadow: 0 0 5px rgba($color: #d8d8d8, $alpha: 0.5);}
+
+.shadow-base{box-shadow: 0 1px 8px 1px rgba($color: #a5a5a5, $alpha: 0.2);}
+
+.shadow-lg{box-shadow: 0px 1px 10px 2px rgba($color: #a5a4a4, $alpha: 0.5);}
+
+.shadow-top{box-shadow: 0 -2px 4px -2px rgba($color: #a5a5a5, $alpha: 0.2);}
 

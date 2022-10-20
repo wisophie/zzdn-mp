@@ -9,7 +9,7 @@
 		@up="upCallback"
 	>
 		<view class="top-wrap">
-			<u--input prefixIcon="search" shape="circle" placeholder="请输入订单号/货品编码/用户名">
+			<u-input prefixIcon="search" shape="circle" placeholder="请输入订单号/货品编码/用户名">
 				<template slot="suffix">
 					<u-button
 						size="mini"
@@ -18,7 +18,7 @@
 						color="linear-gradient(to right, #C5C1FF, #473AFF)"
 					></u-button>
 				</template>
-			</u--input>
+			</u-input>
 			<view class="o-tabs">
 				<view
 					class="o-tabs__item"
@@ -32,7 +32,7 @@
 			</view>
 			<view class="o-dates">
 				<view @click="showPicker('start')">
-					<u--input
+					<u-input
 						:value="startDate"
 						disabled
 						disabledColor="#ffffff"
@@ -43,7 +43,7 @@
 				</view>
 				<text class="mx-2 u-tips-color">至</text>
 				<view @click="showPicker('end')">
-					<u--input
+					<u-input
 						:value="endDate"
 						disabled
 						disabledColor="#ffffff"
@@ -69,7 +69,7 @@
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
-import OrderList from './components/order-list'
+import OrderList from '@/components/OrderList'
 
 export default {
 	mixins: [MescrollMixin], // 使用mixin
@@ -205,6 +205,7 @@ export default {
 	margin-top: 10px;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	font-size: 14px;
 	&__item {
 		padding: 0 10px;
@@ -223,8 +224,5 @@ export default {
 	margin-top: 10px;
 	display: flex;
 	align-items: center;
-}
-.o-tabs__item + .o-tabs__item {
-	margin-left: 10px;
 }
 </style>

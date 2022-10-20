@@ -12,7 +12,7 @@
 				<view class="u-flex mt-2">
 					<text class="u-content-color">快递单号：</text>
 					<text class="mr-2">x1231312321313123</text>
-					<u--text type="warning" text="复制" />
+					<u--text type="warning" text="复制" @click="onCopy('x1231312321313123')" />
 				</view>
 			</view>
 		</view>
@@ -42,6 +42,16 @@
 export default {
 	data() {
 		return {}
+	},
+	methods: {
+		onCopy(data) {
+			uni.setClipboardData({
+				data: data,
+				success: function() {
+					uni.$u.toast('复制成功')
+				}
+			})
+		}
 	}
 }
 </script>

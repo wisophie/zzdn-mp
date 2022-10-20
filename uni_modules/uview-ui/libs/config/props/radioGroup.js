@@ -13,7 +13,7 @@ export default {
         value: '',
         disabled: false,
         shape: 'circle',
-        activeColor: '#2979ff',
+        activeColor: '#5d51ff',
         inactiveColor: '#c8c9cc',
         name: '',
         size: 18,

@@ -31,10 +31,32 @@
       }
     },
     {
-      "path": "pages/goods/order/order",
+      "path": "pages/goods/order-list",
       "style": {
         "navigationBarTitleText": "我的订单",
-				"enablePullDownRefresh": true
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/goods/goods-detail",
+      "style": {
+        "navigationBarTitleText": "商品详情"
+      }
+    },
+    {
+      "path": "pages/goods/order-submit",
+      "style": {
+        "navigationBarTitleText": "下单支付",
+				"navigationBarBackgroundColor": "#5d51ff",
+				"navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/goods/order-detail",
+      "style": {
+        "navigationBarTitleText": "订单详情",
+				"navigationBarBackgroundColor": "#5d51ff",
+				"navigationBarTextStyle": "white"
       }
     },
     {

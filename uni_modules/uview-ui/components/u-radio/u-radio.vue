@@ -14,7 +14,7 @@
 			<slot name="icon">
 				<u-icon
 				    class="u-radio__icon-wrap__icon"
-				    name="checkbox-mark"
+				    name="checkmark"
 				    :size="elIconSize"
 				    :color="elIconColor"
 				/>
