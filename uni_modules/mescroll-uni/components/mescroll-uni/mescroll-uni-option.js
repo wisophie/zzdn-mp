@@ -35,7 +35,7 @@ const GlobalOption = {
 			},
 			up: {
 				textLoading: '加载中 ...', // 加载中的提示文本
-				textNoMore: '-- END --', // 没有更多数据的提示文本
+				textNoMore: '我是有底线的', // 没有更多数据的提示文本
 				empty: {
 					tip: '~ 空空如也 ~' // 空提示
 				}

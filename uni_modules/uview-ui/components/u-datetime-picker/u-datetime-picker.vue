@@ -54,7 +54,7 @@
 	 * @property {String}			cancelText			取消按钮的文字  ( 默认 '取消' )
 	 * @property {String}			confirmText			确认按钮的文字  ( 默认 '确认' )
 	 * @property {String}			cancelColor			取消按钮的颜色  ( 默认 '#909193' )
-	 * @property {String}			confirmColor		确认按钮的颜色  ( 默认 '#3c9cff' )
+	 * @property {String}			confirmColor		确认按钮的颜色  ( 默认 '#5d51ff' )
 	 * @property {String | Number}	visibleItemCount	每列中可见选项的数量  ( 默认 5 )
 	 * @property {Boolean}			closeOnClickOverlay	是否允许点击遮罩关闭选择器  ( 默认 false )
 	 * @property {Array}			defaultIndex		各列的默认索引

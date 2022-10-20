@@ -87,7 +87,7 @@
  * @property {String | Number}	indicatorBarWidth		滑块的宽度 (默认 20 )
  * @property {Boolean}			indicator				是否显示面板指示器 (默认 true )
  * @property {String}			indicatorColor			指示器非激活颜色 (默认 '#f2f2f2' )
- * @property {String}			indicatorActiveColor	指示器的激活颜色 (默认 '#3c9cff' )
+ * @property {String}			indicatorActiveColor	指示器的激活颜色 (默认 '#5d51ff' )
  * @property {String | Object}	indicatorStyle			指示器样式，可通过bottom，left，right进行定位
  * @event {Function} left	滑动到左边时触发
  * @event {Function} right	滑动到右边时触发

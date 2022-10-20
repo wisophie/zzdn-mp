@@ -58,7 +58,7 @@ $uni-space-root: 4 !default;
   }
 }
 
-page{background-color: $u-bg-color;}
+page{font-size:14px;color:$u-main-color;background-color: $u-bg-color;}
 
 view,text {box-sizing: border-box;}
 

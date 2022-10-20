@@ -59,7 +59,7 @@ import props from "./props.js";
  * @tutorial https://www.uviewui.com/components/subsection.html
  * @property {Array}			list			tab的数据
  * @property {String ｜ Number}	current			当前活动的tab的index（默认 0 ）
- * @property {String}			activeColor		激活时的颜色（默认 '#3c9cff' ）
+ * @property {String}			activeColor		激活时的颜色（默认 '#5d51ff' ）
  * @property {String}			inactiveColor	未激活时的颜色（默认 '#303133' ）
  * @property {String}			mode			模式选择，mode=button为按钮形式，mode=subsection时为分段模式（默认 'button' ）
  * @property {String ｜ Number}	fontSize		字体大小，单位px（默认 12 ）
