@@ -6,6 +6,30 @@
         "navigationBarTitleText": "首页"
       }
     },
+		{
+			"path": "pages/login/login",
+			"style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+			"path": "pages/login/accountLogin",
+			"style": {
+        "navigationBarTitleText": "账号登录"
+      }
+    },
+    {
+			"path": "pages/login/register",
+			"style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+			"path": "pages/login/reset",
+			"style": {
+        "navigationBarTitleText": "重置密码"
+      }
+		},
     {
       "path": "pages/goods/goods",
       "style": {

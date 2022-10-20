@@ -1,5 +1,5 @@
 module.exports = vm => {
-  const baseURL = 'https://api.uomg.com/'
+  const baseURL = 'http://7dgvmk.natappfree.cc/'
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
       baseURL: baseURL,
@@ -29,7 +29,7 @@ module.exports = vm => {
     response => {
       const data = response.data
       const custom = response.config?.custom
-      if (data.code === 1) {
+      if (data.errno === 0) {
         return data ?? {}
       } else {
         if (custom.toast === true) {
