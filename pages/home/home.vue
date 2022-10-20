@@ -8,13 +8,23 @@
 
 <script>
 import { getDemo } from '@/api/common'
+import user from '@/utils/user'
 export default {
 	data() {
 		return {
 			title: '点按钮试试'
 		}
 	},
-	onLoad() {},
+	onLoad() {
+		user.checkLogin().then(res => {
+			console.log(res,'--gg')
+		}).catch(err => {
+			console.log(err, '--gg2')
+			uni.navigateTo({
+				url: '/pages/login/login'
+			})
+		})
+	},
 	methods: {
 		toPage(url) {
 			uni.$u.route(url)

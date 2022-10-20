@@ -41,14 +41,13 @@ export default {
             this.doLogin(res.userInfo)
           },
           fail: () => {
-            util.showErrorToast('微信登录失败');
+            uni.showToast('微信登录失败');
           }
         })
       }
       else {
         if (e.detail.userInfo == undefined) {
-          app.globalData.hasLogin = false;
-          util.showErrorToast('微信登录失败');
+          uni.showToast('微信登录失败');
           return;
         }
         this.doLogin(e.detail.userInfo)
@@ -57,13 +56,15 @@ export default {
     doLogin: function(userInfo) {
       user.checkLogin().catch(() => {
         user.loginByWeixin(userInfo).then(res => {
-          app.globalData.hasLogin = true;
+          console.log('登录成功111')
+          uni.showToast({
+            title: '微信登录成功'
+          });
           uni.navigateBack({
             delta: 1
           })
         }).catch((err) => {
-          app.globalData.hasLogin = false;
-          util.showErrorToast('微信登录失败');
+          uni.showToast('微信登录失败');
         });
 
       });

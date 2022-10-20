@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { loginByAccount } from '@/api/login'
 export default {
   data() {
     return {
@@ -38,7 +39,7 @@ export default {
       var that = this;
 
     if (this.password.length < 1 || this.username.length < 1) {
-      wx.showModal({
+      uni.showModal({
         title: '错误信息',
         content: '请输入用户名和密码',
         showCancel: false
@@ -46,7 +47,29 @@ export default {
       return false;
     }
 
-    wx.request({
+    loginByAccount({
+      username: that.username,
+      password: that.password
+    }).then(res => {
+      if (res.data.errno == 0) {
+        that.loginErrorCount = 0
+        uni.setStorageSync('userInfo', res.data.data.userInfo);
+        uni.setStorage({
+          key: "token",
+          data: res.data.data.token,
+          success: function() {
+            uni.switchTab({
+              url: '/pages/ucenter/index/index'
+            });
+          }
+        });
+      } else {
+        that.loginErrorCount += 1
+        uni.showErrorToast('账户登录失败');
+      }
+    })
+
+    uni.request({
       url: api.AuthLoginByAccount,
       data: {
         username: that.username,
@@ -62,12 +85,12 @@ export default {
             loginErrorCount: 0
           });
           app.globalData.hasLogin = true;
-          wx.setStorageSync('userInfo', res.data.data.userInfo);
-          wx.setStorage({
+          uni.setStorageSync('userInfo', res.data.data.userInfo);
+          uni.setStorage({
             key: "token",
             data: res.data.data.token,
             success: function() {
-              wx.switchTab({
+              uni.switchTab({
                 url: '/pages/ucenter/index/index'
               });
             }
@@ -77,7 +100,7 @@ export default {
             loginErrorCount: that.loginErrorCount + 1
           });
           app.globalData.hasLogin = false;
-          util.showErrorToast('账户登录失败');
+          uni.showErrorToast('账户登录失败');
         }
       }
     });
@@ -88,9 +111,9 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  box-sizing: border-box;
-  background-color: #f4f4f4;
-  font-family: PingFangSC-Light, helvetica, 'Heiti SC';
+  height: 100vh;
+  background: #fff;
+  overflow: hidden;
 }
 
 

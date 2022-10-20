@@ -14,18 +14,13 @@
         <input class="password" v-model="confirmPassword" password placeholder="确认密码" />
       </div>
 
-      <div class="form-item">
+      <!-- <div class="form-item">
         <input class="mobile" :value="genderValue" placeholder="性别" readonly  @click="genderShow = true" />
         <u-picker :show="genderShow" :columns="genderOption" keyName="label" @confirm="handleGender" @cancel="genderShow=false"></u-picker>
-      </div>
+      </div> -->
 
       <div class="form-item">
         <input class="mobile" v-model="birthday" placeholder="生日（例：2022-02-02）" />
-      </div>
-
-      <div class="form-item">
-        <input class="mobile" :value="genderValue" placeholder="所在省市区" readonly  @click="genderShow = true" />
-        <u-picker :show="genderShow" :columns="genderOption" keyName="label" @confirm="handleGender" @cancel="genderShow=false"></u-picker>
       </div>
 
       <div class="form-item">
@@ -39,14 +34,14 @@
         <div class="code-btn" @click="sendCode">获取验证码</div>
       </div>
 
-      <button type="primary" class="register-btn" @click="startRegister">注册</button>
+      <button type="primary" open-type="getUserInfo" class="register-btn" @getuserinfo="startRegister">注册</button>
 
     </div>
   </div>
 </template>
 
 <script>
-import { register } from '@/api/login'
+import { register, regCaptcha } from '@/api/login'
 export default {
   data() {
     return {
@@ -57,6 +52,7 @@ export default {
       code: '',
       gender: 0,
       birthday: '',
+      userInfo: {},
 
       genderShow: false,
       genderOption: [
@@ -66,7 +62,7 @@ export default {
         ]
       ],
       birthdayShow: false,
-      minDate: new Date().getTime() - 100 * 365 * 12 * 30 * 24 * 60 * 60 * 1000
+      // minDate: new Date().getTime() - 100 * 365 * 12 * 30 * 24 * 60 * 60 * 1000
     }
   },
 
@@ -92,7 +88,7 @@ export default {
       let that = this;
 
       if (this.mobile.length == 0) {
-        wx.showModal({
+        uni.showModal({
           title: '错误信息',
           content: '手机号不能为空',
           showCancel: false
@@ -100,105 +96,67 @@ export default {
         return false;
       }
 
-      wx.request({
-        url: api.AuthRegisterCaptcha,
-        data: {
-          mobile: that.mobile
-        },
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function(res) {
-          if (res.data.errno == 0) {
-            wx.showModal({
-              title: '发送成功',
-              content: '验证码已发送',
-              showCancel: false
-            });
-          } else {
-            wx.showModal({
-              title: '错误信息',
-              content: res.data.errmsg,
-              showCancel: false
-            });
-          }
-        }
-      });
-    },
-
-    requestRegister(wxCode) {
-      let that = this;
-      register({
-        username: that.username,
-        password: that.password,
-        mobile: that.mobile,
-        code: that.code,
-        wxCode: wxCode
+      regCaptcha({
+        mobile: this.mobile
       }).then(res => {
-        console.log(res, '---ggg')
         if (res.data.errno == 0) {
-          app.globalData.hasLogin = true;
-          wx.setStorageSync('userInfo', res.data.data.userInfo);
-          wx.setStorage({
-            key: "token",
-            data: res.data.data.token,
-            success: function() {
-              wx.switchTab({
-                url: '/pages/ucenter/index/index'
-              });
-            }
+          uni.showModal({
+            title: '发送成功',
+            content: '验证码已发送',
+            showCancel: false
           });
         } else {
-          wx.showModal({
+          uni.showModal({
             title: '错误信息',
             content: res.data.errmsg,
             showCancel: false
           });
         }
       })
-      // wx.request({
-      //   url: api.AuthRegister,
-      //   data: {
-      //     username: that.username,
-      //     password: that.password,
-      //     mobile: that.mobile,
-      //     code: that.code,
-      //     wxCode: wxCode
-      //   },
-      //   method: 'POST',
-      //   header: {
-      //     'content-type': 'application/json'
-      //   },
-      //   success: function(res) {
-      //     if (res.data.errno == 0) {
-      //       app.globalData.hasLogin = true;
-      //       wx.setStorageSync('userInfo', res.data.data.userInfo);
-      //       wx.setStorage({
-      //         key: "token",
-      //         data: res.data.data.token,
-      //         success: function() {
-      //           wx.switchTab({
-      //             url: '/pages/ucenter/index/index'
-      //           });
-      //         }
-      //       });
-      //     } else {
-      //       wx.showModal({
-      //         title: '错误信息',
-      //         content: res.data.errmsg,
-      //         showCancel: false
-      //       });
-      //     }
-      //   }
-      // });
     },
 
-    startRegister() {
-      var that = this;
+    requestRegister(wxCode) {
+      let that = this;
+      const { country, province, city } = this.userInfo
+      register({
+        username: that.username,
+        password: that.password,
+        mobile: that.mobile,
+        code: that.code,
+        wxCode: wxCode,
+        birthday: this.birthday,
+        country,
+        province,
+        city
+      }).then(res => {
+        console.log(res, '---ggg')
+        if (res.data.errno == 0) {
+          app.globalData.hasLogin = true;
+          uni.setStorageSync('userInfo', res.data.data.userInfo);
+          uni.setStorage({
+            key: "token",
+            data: res.data.data.token,
+            success: function() {
+              uni.switchTab({
+                url: '/pages/ucenter/index/index'
+              });
+            }
+          });
+        } else {
+          uni.showModal({
+            title: '错误信息',
+            content: res.data.errmsg,
+            showCancel: false
+          });
+        }
+      })
+    },
 
+    startRegister(e) {
+      var that = this;
+      this.userInfo = e.detail.userInfo
       if (this.password.length < 6 || this.username.length < 6) {
-        wx.showModal({
+        uni.showModal({
           title: '错误信息',
           content: '用户名和密码不得少于6位',
           showCancel: false
@@ -207,7 +165,7 @@ export default {
       }
 
       if (this.password != this.confirmPassword) {
-        wx.showModal({
+        uni.showModal({
           title: '错误信息',
           content: '确认密码不一致',
           showCancel: false
@@ -216,7 +174,7 @@ export default {
       }
 
       if (this.mobile.length == 0 || this.code.length == 0) {
-        wx.showModal({
+        uni.showModal({
           title: '错误信息',
           content: '手机号和验证码不能为空',
           showCancel: false
@@ -224,10 +182,10 @@ export default {
         return false;
       }
 
-      wx.login({
+      uni.login({
         success: function(res) {
           if (!res.code) {
-            wx.showModal({
+            uni.showModal({
               title: '错误信息',
               content: '注册失败',
               showCancel: false
@@ -256,6 +214,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  min-height: 100vh;
+  background: #fff;
+  overflow: auto;
+}
 .form-box {
   width: 100%;
   height: auto;

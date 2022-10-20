@@ -1,6 +1,7 @@
 /**
  * 用户相关服务
  */
+import { weixinLogin } from '@/api/login'
 const util = require('../utils/util.js');
 
 
@@ -50,11 +51,11 @@ function loginByWeixin(userInfo) {
 
   return new Promise(function(resolve, reject) {
     return login().then((res) => {
-      //登录远程服务器
-      util.request('http://r6m59y.natappfree.cc/wx/auth/login_by_weixin', {
+      weixinLogin({
         code: res.code,
         userInfo: userInfo
-      }, 'POST').then(res => {
+      }).then(res => {
+        console.log(res, '--gg')
         if (res.errno === 0) {
           //存储用户信息
           uni.setStorageSync('userInfo', res.data.userInfo);
@@ -65,6 +66,7 @@ function loginByWeixin(userInfo) {
           reject(res);
         }
       }).catch((err) => {
+        console.log(err, '--gg123')
         reject(err);
       });
     }).catch((err) => {

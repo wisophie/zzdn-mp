@@ -1,5 +1,11 @@
 {
   "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -24,12 +30,6 @@
         "navigationBarTitleText": "重置密码"
       }
 		},
-    {
-      "path": "pages/home/home",
-      "style": {
-        "navigationBarTitleText": "首页"
-      }
-    },
     {
       "path": "pages/goods/goods",
       "style": {
