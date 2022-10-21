@@ -15,9 +15,9 @@ module.exports = vm => {
     config => {
       // config.header['xxx'] = 'xxx' // 示例
       config.data = config.data || {}
-      // if (config?.custom?.auth) {
-      // 	config.header['accessToken'] = vm.$store.state.token
-      // }
+      if (config?.custom?.auth) {
+      	config.header['X-Litemall-Token'] = uni.getStorageSync('token')
+      }
       return config
     },
     config => {
@@ -33,7 +33,7 @@ module.exports = vm => {
         return data ?? {}
       } else {
         if (custom.toast === true) {
-          uni.$u.toast(data.message)
+          uni.$u.toast(data.errmsg)
         }
         return Promise.reject(data)
       }

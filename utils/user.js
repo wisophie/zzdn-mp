@@ -55,7 +55,6 @@ function loginByWeixin(userInfo) {
         code: res.code,
         userInfo: userInfo
       }).then(res => {
-        console.log(res, '--gg')
         if (res.errno === 0) {
           //存储用户信息
           uni.setStorageSync('userInfo', res.data.userInfo);

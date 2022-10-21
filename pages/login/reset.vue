@@ -127,6 +127,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  min-height: 100vh;
+  background: #fff;
+  overflow: auto;
+}
+
 .form-box {
   width: 100%;
   height: auto;

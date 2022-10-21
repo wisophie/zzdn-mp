@@ -33,3 +33,11 @@ export const loginByAccount = (data = {}) =>
       auth: false
     }
   })
+
+// 账号密码登录
+export const bindPhone = (data = {}) =>
+  http.post('wx/auth/bindPhone', data, {
+    custom: {
+      auth: true
+    }
+  })

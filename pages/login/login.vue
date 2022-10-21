@@ -1,79 +1,116 @@
 <template>
   <div class="container">
     <div class="login">
-      <div class="login-header">
+      <!-- <div class="login-header">
         <div class="login-avatar">
           <open-data type="userAvatarUrl"></open-data>
         </div>
         <div class="login-nickname">
           <open-data type="userNickName"></open-data>
         </div>
-      </div>
+      </div> -->
       <div class="login-content">
         <image class="login-image" src="/static/home/image-login.png"></image>
         <div>请先登录账号</div>
 
         <div class="login-box">
-          <button v-if="canIUseGetUserProfile" type="primary" class="uni-login-btn" @click="wxLogin">微信直接登录</button>  
-          <button v-else type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="wxLogin">微信直接登录</button>
+          <button type="primary" class="uni-login-btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信授权登录/注册</button>
           <button type="primary" class="account-login-btn" @click="accountLogin">账号登录</button>
         </div>
       </div>
     </div>
+
+    <u-popup :show="authVisible" :round="10" mode="center">
+      <view class="popup-content">
+        <view class="popup-title">授权</view>
+        <view class="popup-desc">授权完善你的昵称、头像等公开信息<br>获得更好体验</view>
+        <view class="popup-button">
+          <button class="button-left" @click="authVisible=false">不同意</button>
+          <button class="button-right" open-type="getUserInfo" @getuserinfo="getUserInfo">同意</button>
+        </view>
+      </view>
+    </u-popup>
   </div>
 </template>
 
 <script>
 import user from '@/utils/user'
+import { bindPhone } from '@/api/login'
 export default {
   data() {
     return {
-      canIUseGetUserProfile: false
+      userInfo: null,
+      phoneInfo: null,
+      authVisible: true
     }
   },
 
   methods: {
-    wxLogin: function(e) {
-      if (this.canIUseGetUserProfile) {
-        uni.getUserProfile({
-          desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-          success: (res) => {
-            this.doLogin(res.userInfo)
-          },
-          fail: () => {
-            uni.showToast('微信登录失败');
-          }
-        })
-      }
-      else {
-        if (e.detail.userInfo == undefined) {
-          uni.showToast('微信登录失败');
-          return;
+    getUserInfo(e) {
+      console.log(e, '--gg1')
+      if (e.detail.userInfo !== undefined) {
+        this.userInfo = e.detail.userInfo
+
+        if (this.phoneInfo) {
+          this.doLogin(this.userInfo)
         }
-        this.doLogin(e.detail.userInfo)
+      }
+      this.authVisible = false
+    },
+
+    getPhoneNumber(e) {
+      console.log(e, '--gg')
+      if (e.detail.errMsg !== "getPhoneNumber:ok") {
+        uni.$u.toast('微信登录失败')
+        // 拒绝授权
+        return;
+      }
+      this.phoneInfo = e.detail
+
+      if (this.userInfo) {
+        this.doLogin(this.userInfo)
+      } else {
+        this.authVisible = true
       }
     },
+
     doLogin: function(userInfo) {
-      user.checkLogin().catch(() => {
+      user.checkLogin().then(() => {
+        this.doBindPhone()
+      }).catch(() => {
         user.loginByWeixin(userInfo).then(res => {
-          console.log('登录成功111')
-          uni.showToast({
-            title: '微信登录成功'
-          });
-          uni.navigateBack({
-            delta: 1
-          })
+
+          this.doBindPhone()
         }).catch((err) => {
-          uni.showToast('微信登录失败');
+          uni.$u.toast('微信登录失败')
         });
 
       });
     },
+
+    doBindPhone() {
+      const { encryptedData, iv } = this.phoneInfo
+      bindPhone({
+        encryptedData,
+        iv
+      }).then((res) => {
+        console.log(res, '---gg2')
+        if (res.errno === 0) {
+          uni.$u.toast('微信登录成功')
+          uni.navigateBack({
+            delta: 1
+          })
+        } else {
+          uni.$u.toast('微信登录失败')
+        }
+      })
+    },
+
     accountLogin: function() {
       uni.navigateTo({
         url: "/pages/login/accountLogin"
       });
-    }
+    },
   }
 }
 </script>
@@ -178,6 +215,52 @@ export default {
       width: 292rpx;
       height: 214rpx;
       margin-bottom: 20rpx;
+    }
+  }
+}
+
+.popup-content {
+  width: 640rpx;
+
+  .popup-title {
+    margin-top: 80rpx;
+    margin-bottom: 60rpx;
+    font-size: 36rpx;
+    font-weight: 600;
+    text-align: center;
+    color: #333;
+  }
+
+  .popup-desc {
+    margin-bottom: 60rpx;
+    font-size: 30rpx;
+    line-height: 1.5;
+    color: #333;
+    text-align: center;
+  }
+
+  .popup-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 60rpx 60rpx;
+
+    .button-left, .button-right {
+      height: 72rpx;
+      line-height: 72rpx;
+      width: 180rpx;
+      border-radius: 36rpx;
+      text-align: center;
+      font-size: 30rpx;
+    }
+
+    .button-left {
+      border: 1rpx solid #ccc;
+      color: #333;
+    }
+
+    .button-right {
+      background: #2979ff;
+      color: #fff;
     }
   }
 }

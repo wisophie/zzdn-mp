@@ -21,9 +21,11 @@ export default {
 			.checkLogin()
 			.then(res => {
 				console.log(res, '--gg')
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
 			})
 			.catch(err => {
-				console.log(err, '--gg2')
 				uni.navigateTo({
 					url: '/pages/login/login'
 				})
