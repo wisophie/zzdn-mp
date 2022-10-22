@@ -14,7 +14,7 @@
         <div>请先登录账号</div>
 
         <div class="login-box">
-          <button type="primary" class="uni-login-btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信授权登录/注册</button>
+          <button type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">微信授权登录/注册</button>
           <button type="primary" class="account-login-btn" @click="accountLogin">账号登录</button>
         </div>
       </div>
@@ -35,31 +35,27 @@
 
 <script>
 import user from '@/utils/user'
-import { bindPhone } from '@/api/login'
+import { bindPhone, fetchUserInfo } from '@/api/login'
 export default {
   data() {
     return {
       userInfo: null,
       phoneInfo: null,
-      authVisible: true
+      authVisible: false
     }
   },
 
   methods: {
     getUserInfo(e) {
-      console.log(e, '--gg1')
+      console.log(e, this.phoneInfo, this.userInfo, '--gg1')
       if (e.detail.userInfo !== undefined) {
         this.userInfo = e.detail.userInfo
-
-        if (this.phoneInfo) {
-          this.doLogin(this.userInfo)
-        }
+        this.doLogin(this.userInfo)
       }
-      this.authVisible = false
+      // this.authVisible = false
     },
 
     getPhoneNumber(e) {
-      console.log(e, '--gg')
       if (e.detail.errMsg !== "getPhoneNumber:ok") {
         uni.$u.toast('微信登录失败')
         // 拒绝授权
@@ -74,13 +70,15 @@ export default {
       }
     },
 
-    doLogin: function(userInfo) {
+    doLogin(userInfo) {
       user.checkLogin().then(() => {
-        this.doBindPhone()
+        // this.doBindPhone()
+        this.fetchUserInfo()
       }).catch(() => {
         user.loginByWeixin(userInfo).then(res => {
 
-          this.doBindPhone()
+          this.fetchUserInfo()
+          // this.doBindPhone()
         }).catch((err) => {
           uni.$u.toast('微信登录失败')
         });
@@ -103,6 +101,23 @@ export default {
         } else {
           uni.$u.toast('微信登录失败')
         }
+      })
+    },
+
+    fetchUserInfo() {
+      return fetchUserInfo({}).then(res => {
+        // 校验手机号、省市区等个人信息是否存在
+        if (res.errno === 0) {
+          const data = res.data
+          if (!data.mobile || !data.province) {
+            uni.navigateTo({
+              url: '/pages/login/perfectInfo'
+            })
+            return
+          }
+        }
+        uni.navigateBack()
+        console.log(res)
       })
     },
 

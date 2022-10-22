@@ -29,6 +29,12 @@
 			"style": {
         "navigationBarTitleText": "重置密码"
       }
+    },
+    {
+			"path": "pages/login/perfectInfo",
+			"style": {
+        "navigationBarTitleText": "个人信息"
+      }
 		},
     {
       "path": "pages/goods/goods",

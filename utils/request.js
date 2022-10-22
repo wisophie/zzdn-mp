@@ -1,5 +1,5 @@
 module.exports = vm => {
-  const baseURL = 'http://7dgvmk.natappfree.cc/'
+  const baseURL = 'http://3j6fwe.natappfree.cc/'
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
       baseURL: baseURL,
@@ -31,6 +31,8 @@ module.exports = vm => {
       const custom = response.config?.custom
       if (data.errno === 0) {
         return data ?? {}
+      } else if (data.errno === 501) {
+        uni.removeStorageSync('token')
       } else {
         if (custom.toast === true) {
           uni.$u.toast(data.errmsg)

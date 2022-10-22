@@ -13,7 +13,7 @@
     	</div>
 
       <div class="button-login">
-        <u-button type="primary" text="账号登录" @click="accountLogin"></u-button>
+        <u-button type="primary" text="登录" @click="accountLogin"></u-button>
       </div>
 
      <div class="form-item-text">

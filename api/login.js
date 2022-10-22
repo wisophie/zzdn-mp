@@ -1,3 +1,5 @@
+// 登录与个人信息相关接口
+
 const http = uni.$u.http
 
 /** 不需要token => post  需要token则删除 auth:true */
@@ -41,3 +43,44 @@ export const bindPhone = (data = {}) =>
       auth: true
     }
   })
+
+// 账号密码重置
+export const resetPwd = (data = {}) =>
+  http.post('wx/auth/reset', data, {
+    custom: {
+      auth: true
+    }
+  })
+
+// 账号信息更新
+export const updateInfo = (data = {}) =>
+  http.post('wx/auth/profile', data, {
+    custom: {
+      auth: true
+    }
+  })
+
+// 请求验证码
+export const captcha = (data = {}) =>
+  http.post('wx/auth/captcha', data, {
+    custom: {
+      auth: false
+    }
+  })
+
+// 获取个人信息
+export const fetchUserInfo = (params = {}) =>
+  http.get('wx/auth/info', {
+    params,
+    custom: {
+      auth: true
+    }
+  })
+// export const fetchUserInfo = (data = {}) =>
+//   http.post('wx/auth/info', data, {
+//     custom: {
+//       auth: true
+//     }
+//   })
+
+// 

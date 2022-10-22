@@ -10,7 +10,8 @@
         <view class="form-item code-item">
           <input class="code" v-model="code" placeholder="验证码" />
         </view>
-        <view class="code-btn" @click="sendCode">获取验证码</view>
+        <view class="code-btn" @click="sendCode">{{ codeTips }}</view>
+        <u-code ref="uCode"	@change="codeChange"></u-code>
       </view>
 
       <view class="form-item">
@@ -28,99 +29,72 @@
 </template>
 
 <script>
+import { resetPwd, regCaptcha } from '@/api/login'
 export default {
   data() {
     return {
       mobile: '',
       code: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      codeTips: '获取验证码'
     }
   },
 
   methods: {
     sendCode() {
-      let that = this;
-      wx.request({
-        url: api.AuthRegisterCaptcha,
-        data: {
-          mobile: that.data.mobile
-        },
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function(res) {
-          if (res.data.errno == 0) {
-            wx.showModal({
-              title: '发送成功',
-              content: '验证码已发送',
-              showCancel: false
-            });
-          } else {
-            wx.showModal({
-              title: '错误信息',
-              content: res.data.errmsg,
-              showCancel: false
-            });
-          }
+      if (!this.mobile) {
+        uni.$u.toast('手机号不能为空')
+        return false;
+      }
+
+      regCaptcha({
+        mobile: this.mobile,
+        type: 'captcha'
+      }).then(res => {
+        if (res.errno == 0) {
+          uni.$u.toast('验证码已发送')
+          // 通知验证码组件内部开始倒计时
+          this.$refs.uCode.start();
+        } else {
+          uni.$u.toast(res.errmsg)
         }
-      });
+      })
+    },
+
+    codeChange(text) {
+      this.codeTips = text;
     },
 
     startReset() {
       var that = this;
 
-      if (this.data.mobile.length == 0 || this.data.code.length == 0) {
-        wx.showModal({
-          title: '错误信息',
-          content: '手机号和验证码不能为空',
-          showCancel: false
-        });
+      if (this.mobile.length == 0 || this.code.length == 0) {
+        uni.$u.toast('手机号和验证码不能为空')
         return false;
       }
 
-      if (this.data.password.length < 3) {
-        wx.showModal({
-          title: '错误信息',
-          content: '用户名和密码不得少于3位',
-          showCancel: false
-        });
+      if (this.password.length < 6) {
+        uni.$u.toast('密码不得少于6位')
         return false;
       }
 
-      if (this.data.password != this.data.confirmPassword) {
-        wx.showModal({
-          title: '错误信息',
-          content: '确认密码不一致',
-          showCancel: false
-        });
+      if (this.password != this.confirmPassword) {
+        uni.$u.toast('确认密码不一致')
         return false;
       }
 
-      wx.request({
-        url: api.AuthReset,
-        data: {
-          mobile: that.data.mobile,
-          code: that.data.code,
-          password: that.data.password
-        },
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function(res) {
-          if (res.data.errno == 0) {
-            wx.navigateBack();
-          } else {
-            wx.showModal({
-              title: '密码重置失败',
-              content: res.data.errmsg,
-              showCancel: false
-            });
-          }
+      resetPwd({
+        mobile: this.mobile,
+        code: this.code,
+        password: this.password
+      }).then(res => {
+        if (res.errno === 0) {
+          uni.navigateBack()
+        } else {
+          uni.$u.toast('密码重置失败')
         }
-      });
+      })
     }
   }
 }

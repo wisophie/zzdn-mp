@@ -3,38 +3,55 @@
     <div class="form-box">
 
       <div class="form-item">
-        <input class="username" v-model="username" placeholder="用户名" auto-focus/>
+        <input class="username" v-model="formData.username" placeholder="用户名" auto-focus/>
       </div>
 
       <div class="form-item">
-        <input class="password" v-model="password" password placeholder="密码" />
+        <input class="password" v-model="formData.password" password placeholder="密码" />
       </div>
 
       <div class="form-item">
-        <input class="password" v-model="confirmPassword" password placeholder="确认密码" />
-      </div>
-
-      <!-- <div class="form-item">
-        <input class="mobile" :value="genderValue" placeholder="性别" readonly  @click="genderShow = true" />
-        <u-picker :show="genderShow" :columns="genderOption" keyName="label" @confirm="handleGender" @cancel="genderShow=false"></u-picker>
-      </div> -->
-
-      <div class="form-item">
-        <input class="mobile" v-model="birthday" placeholder="生日（例：2022-02-02）" />
+        <input class="password" v-model="formData.confirmPassword" password placeholder="确认密码" />
       </div>
 
       <div class="form-item">
-        <input class="mobile" v-model="mobile" placeholder="手机号" />
+        <uni-data-picker
+          v-model="formData.gender"
+          :localdata="genderOption" 
+          placeholder="性别" 
+          popup-title="请选择"
+          :clear-icon="false"
+        ></uni-data-picker>
+      </div>
+
+      <div class="form-item">
+        <input class="mobile" v-model="formData.birthday" placeholder="生日（例：2022-02-02）" />
+      </div>
+
+      <div class="form-item">
+        <uni-data-picker 
+          :localdata="addressOptions" 
+          placeholder="地址" 
+          popup-title="请选择"
+          :map="{text: 'name', value: 'code'}"
+          :clear-icon="false"
+          @change="onchange"
+        ></uni-data-picker>
+      </div>
+
+      <div class="form-item">
+        <input class="mobile" v-model="formData.mobile" placeholder="手机号" />
       </div>
 
       <div class="form-item-code">
         <div class="form-item code-item">
-          <input class="code" v-model="code" placeholder="验证码" />
+          <input class="code" v-model="formData.code" placeholder="验证码" />
         </div>
-        <div class="code-btn" @click="sendCode">获取验证码</div>
+        <div class="code-btn" @click="sendCode">{{ codeTips }}</div>
+        <u-code ref="uCode"	@change="codeChange"></u-code>
       </div>
 
-      <button type="primary" open-type="getUserInfo" class="register-btn" @getuserinfo="startRegister">注册</button>
+      <button type="primary" class="register-btn" @click="startRegister">注册</button>
 
     </div>
   </div>
@@ -42,173 +59,134 @@
 
 <script>
 import { register, regCaptcha } from '@/api/login'
+import { regionList } from '@/api/address'
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      confirmPassword: '',
-      mobile: '',
-      code: '',
-      gender: 0,
-      birthday: '',
-      userInfo: {},
+      formData: {
+        username: '',
+        password: '',
+        confirmPassword: '',
+        mobile: '',
+        code: '',
+        gender: 0,
+        birthday: '',
+        province: '',
+        city: '',
+      },
 
-      genderShow: false,
       genderOption: [
-        [
-          { label: '男', id: 1 },
-          { label: '女', id: 2 },
-        ]
+        { text: '男', value: 1 },
+        { text: '女', value: 2 },
       ],
-      birthdayShow: false,
-      // minDate: new Date().getTime() - 100 * 365 * 12 * 30 * 24 * 60 * 60 * 1000
+      addressOptions: [],
+      codeTips: '获取验证码',
     }
   },
 
-  computed: {
-    genderValue() {
-      const genderMap = ['', '男', '女']
-      return genderMap[this.gender]
-    }
-  },
-
-  onReady() {
-    // 微信小程序需要用此写法
-    this.$refs.datetimePicker.setFormatter(this.formatter)
+  created() {
+    this.getRegionList()
   },
 
   methods: {
-    handleGender({ value }) {
-      this.gender = value[0].id
-      this.genderShow = false
+    getRegionList() {
+      regionList().then(res => {
+        this.addressOptions = res.data.list
+        console.log(this.addressOptions)
+      })
+    },
+
+    onchange(e) {
+      console.log(e)
+      const { value } = e.detail
+      const addressType = ['province', 'city']
+      value.forEach((item, index) => {
+        if (addressType[index]) {
+          this.formData[addressType[index]] = item.text
+        }
+      })
+    },
+    
+    codeChange(text) {
+      this.codeTips = text;
     },
 
     sendCode() {
       let that = this;
 
-      if (this.mobile.length == 0) {
-        uni.showModal({
-          title: '错误信息',
-          content: '手机号不能为空',
-          showCancel: false
-        });
+      if (this.formData.mobile.length == 0) {
+        uni.$u.toast('手机号不能为空')
         return false;
       }
 
       regCaptcha({
-        mobile: this.mobile
+        mobile: this.formData.mobile
       }).then(res => {
-        if (res.data.errno == 0) {
-          uni.showModal({
-            title: '发送成功',
-            content: '验证码已发送',
-            showCancel: false
-          });
+        if (res.errno == 0) {
+          uni.$u.toast('验证码已发送')
+          // 通知验证码组件内部开始倒计时
+          this.$refs.uCode.start();
         } else {
-          uni.showModal({
-            title: '错误信息',
-            content: res.data.errmsg,
-            showCancel: false
-          });
+          uni.$u.toast(res.errmsg)
         }
       })
     },
 
     requestRegister(wxCode) {
       let that = this;
-      const { country, province, city } = this.userInfo
       register({
-        username: that.username,
-        password: that.password,
-        mobile: that.mobile,
-        code: that.code,
-        wxCode: wxCode,
-        birthday: this.birthday,
-        country,
-        province,
-        city
+        ...this.formData,
+        wxCode: wxCode
       }).then(res => {
-        console.log(res, '---ggg')
-        if (res.data.errno == 0) {
-          app.globalData.hasLogin = true;
-          uni.setStorageSync('userInfo', res.data.data.userInfo);
+        if (res.errno == 0) {
+          uni.setStorageSync('userInfo', res.data.userInfo);
           uni.setStorage({
             key: "token",
-            data: res.data.data.token,
+            data: res.data.token,
             success: function() {
               uni.switchTab({
-                url: '/pages/ucenter/index/index'
+                url: '/pages/home/home'
               });
             }
           });
         } else {
-          uni.showModal({
-            title: '错误信息',
-            content: res.data.errmsg,
-            showCancel: false
-          });
+          uni.$u.toast(res.errmsg)
         }
       })
     },
 
-    startRegister(e) {
+    startRegister() {
       var that = this;
-      this.userInfo = e.detail.userInfo
-      if (this.password.length < 6 || this.username.length < 6) {
-        uni.showModal({
-          title: '错误信息',
-          content: '用户名和密码不得少于6位',
-          showCancel: false
-        });
+      if (this.formData.password.length < 6 || this.formData.username.length < 6) {
+        uni.$u.toast('用户名和密码不得少于6位')
         return false;
       }
 
-      if (this.password != this.confirmPassword) {
-        uni.showModal({
-          title: '错误信息',
-          content: '确认密码不一致',
-          showCancel: false
-        });
+      if (this.formData.password != this.formData.confirmPassword) {
+        uni.$u.toast('确认密码不一致')
         return false;
       }
 
-      if (this.mobile.length == 0 || this.code.length == 0) {
-        uni.showModal({
-          title: '错误信息',
-          content: '手机号和验证码不能为空',
-          showCancel: false
-        });
+      if (this.formData.mobile.length == 0 || this.formData.code.length == 0) {
+        uni.$u.toast('手机号和验证码不能为空')
         return false;
+      }
+
+      if (!this.formData.province) {
+        uni.$u.toast('地址不能为空')
+        return false
       }
 
       uni.login({
         success: function(res) {
           if (!res.code) {
-            uni.showModal({
-              title: '错误信息',
-              content: '注册失败',
-              showCancel: false
-            });
+            uni.$u.toast('注册失败')
           }
 
           that.requestRegister(res.code);
         }
       });
     },
-
-    formatter(type, value) {
-      if (type === 'year') {
-          return `${value}年`
-      }
-      if (type === 'month') {
-          return `${value}月`
-      }
-      if (type === 'day') {
-          return `${value}日`
-      }
-      return value
-  },
   }
 }
 </script>
@@ -287,4 +265,10 @@ export default {
   border-radius: 6rpx;
 }
 
+/deep/ {
+  .input-value-border {
+    padding: 0;
+    border: none;
+  }
+}
 </style>
