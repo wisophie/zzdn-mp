@@ -17,19 +17,19 @@ export default {
 		}
 	},
 	onLoad() {
-		user
-			.checkLogin()
-			.then(res => {
-				console.log(res, '--gg')
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
-			})
-			.catch(err => {
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
-			})
+		// user
+		// 	.checkLogin()
+		// 	.then(res => {
+		// 		console.log(res, '--gg')
+		// 		uni.navigateTo({
+		// 			url: '/pages/login/login'
+		// 		})
+		// 	})
+		// 	.catch(err => {
+		// 		uni.navigateTo({
+		// 			url: '/pages/login/login'
+		// 		})
+		// 	})
 	},
 	methods: {
 		toPage(url) {

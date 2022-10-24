@@ -6,40 +6,42 @@
         "navigationBarTitleText": "首页"
       }
     },
-		{
-			"path": "pages/login/login",
-			"style": {
+    {
+      "path": "pages/login/login",
+      "style": {
         "navigationBarTitleText": "登录"
       }
     },
     {
-			"path": "pages/login/accountLogin",
-			"style": {
+      "path": "pages/login/accountLogin",
+      "style": {
         "navigationBarTitleText": "账号登录"
       }
     },
     {
-			"path": "pages/login/register",
-			"style": {
+      "path": "pages/login/register",
+      "style": {
         "navigationBarTitleText": "注册"
       }
     },
     {
-			"path": "pages/login/reset",
-			"style": {
+      "path": "pages/login/reset",
+      "style": {
         "navigationBarTitleText": "重置密码"
       }
     },
     {
-			"path": "pages/login/perfectInfo",
-			"style": {
+      "path": "pages/login/perfectInfo",
+      "style": {
         "navigationBarTitleText": "个人信息"
       }
-		},
+    },
     {
       "path": "pages/goods/goods",
       "style": {
-        "navigationBarTitleText": "商品"
+        "navigationBarTitleText": "商品",
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
       }
     },
     {
@@ -63,7 +65,7 @@
     {
       "path": "pages/goods/order-list",
       "style": {
-        "navigationBarTitleText": "我的订单",
+        "navigationBarTitleText": "采购订单",
         "enablePullDownRefresh": true
       }
     },
@@ -74,19 +76,38 @@
       }
     },
     {
+      "path": "pages/goods/provider",
+      "style": {
+        "navigationBarTitleText": "供货商入驻"
+      }
+    },
+    {
+      "path": "pages/goods/upload",
+      "style": {
+        "navigationBarTitleText": "上传产品"
+      }
+    },
+    {
+      "path": "pages/goods/upload-list",
+      "style": {
+        "navigationBarTitleText": "我的产品",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
       "path": "pages/goods/order-submit",
       "style": {
         "navigationBarTitleText": "下单支付",
-				"navigationBarBackgroundColor": "#5d51ff",
-				"navigationBarTextStyle": "white"
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
       }
     },
     {
       "path": "pages/goods/order-detail",
       "style": {
         "navigationBarTitleText": "订单详情",
-				"navigationBarBackgroundColor": "#5d51ff",
-				"navigationBarTextStyle": "white"
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
       }
     },
     {

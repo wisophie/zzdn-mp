@@ -9,7 +9,7 @@
 		@up="upCallback"
 	>
 		<view class="top-wrap">
-			<u-input prefixIcon="search" shape="circle" placeholder="请输入订单号/货品编码/用户名">
+			<u-input prefixIcon="search" shape="circle" placeholder="请输入订单号/货品编码/用户名" confirmType="search">
 				<template slot="suffix">
 					<u-button
 						size="mini"

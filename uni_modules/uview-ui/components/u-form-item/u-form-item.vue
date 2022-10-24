@@ -196,7 +196,8 @@
 						align-items: center;
 						flex: 1;
 						color: $u-main-color;
-						font-size: 15px;
+						font-size: 14px;
+						font-weight: 500;
 					}
 				}
 			}
