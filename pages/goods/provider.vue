@@ -135,7 +135,7 @@
     </u-form>
     <base-footer>
       <view class="u-flex-fill px-4 pt-1">
-        <u-button type="primary" text="提交"></u-button>
+        <u-button type="primary" :loading="submitLoading" text="提交" @click="submit"></u-button>
       </view>
     </base-footer>
   </view>
@@ -178,7 +178,8 @@ export default {
         idCardValidTime: '' // 身份证有效期末
       },
       rules: {},
-      agree: false
+      agree: false,
+      submitLoading: false
     }
   },
   onReady() {
@@ -201,8 +202,6 @@ export default {
     },
     // 新增图片
     async afterRead(event, key) {
-      console.log('%c 【 event 】-204', 'font-size:14px; color:rgb(210, 110, 210);', event)
-      console.log('%c 【 key 】-204', 'font-size:14px; color:rgb(210, 110, 210);', key)
       let lists = [].concat(event.file)
       let fileListLen = this.form[key].length
       lists.map(item => {
@@ -213,76 +212,62 @@ export default {
         })
       })
       for (let i = 0; i < lists.length; i++) {
-        try {
-          let type = null
-          if (['idCardPortrait', 'idCardNational'].includes(key)) type = 'v3'
-          const result = await uploadApi(lists[i].url, type)
-          let item = this.form[key][fileListLen]
-          this.form[key].splice(
-            fileListLen,
-            1,
-            Object.assign(item, {
-              status: 'success',
-              message: '',
-              url: result
-            })
-          )
-          fileListLen++
-        } catch (error) {
-          this.form[key].splice(
-            fileListLen,
-            1,
-            Object.assign(item, {
-              status: 'fail',
-              message: '上传失败'
-            })
-          )
-          fileListLen++
+        let type = null
+        if (['idCardPortrait', 'idCardNational'].includes(key)) type = 'v3'
+        uploadApi(lists[i].url, type)
+          .then(res => {
+            const result = res.data
+            let item = this.form[key][fileListLen]
+            this.form[key].splice(
+              fileListLen,
+              1,
+              Object.assign(item, {
+                status: 'success',
+                message: '',
+                url: result
+              })
+            )
+            fileListLen++
+          })
+          .catch(err => {
+            this.form[key].splice(
+              fileListLen,
+              1,
+              Object.assign(item, {
+                status: 'fail',
+                message: '上传失败'
+              })
+            )
+            fileListLen++
+          })
+      }
+    },
+    submit() {
+      if (!this.agree) return uni.$u.toast('请阅读并同意《用户协议》')
+      this.loading = true
+      let data = {}
+      for (const key in this.form) {
+        if (Array.isArray(this.form[key])) {
+          data[key] = this.form[key].map(v => v.url).join(',')
+        } else {
+          if (key === 'organizationType') {
+            data[key] = this.form[key].id
+          } else {
+            data[key] = this.form[key]
+          }
         }
       }
-
-      // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
-
-      // let lists = [].concat(event.file)
-      // let fileListLen = this[`fileList${event.name}`].length
-      // lists.map(item => {
-      //   this[`fileList${event.name}`].push({
-      //     ...item,
-      //     status: 'uploading',
-      //     message: '上传中'
-      //   })
-      // })
-      // for (let i = 0; i < lists.length; i++) {
-      //   const result = await this.uploadFilePromise(lists[i].url)
-      //   let item = this[`fileList${event.name}`][fileListLen]
-      //   this[`fileList${event.name}`].splice(
-      //     fileListLen,
-      //     1,
-      //     Object.assign(item, {
-      //       status: 'success',
-      //       message: '',
-      //       url: result
-      //     })
-      //   )
-      //   fileListLen++
-      // }
-    },
-    uploadFilePromise(url) {
-      return new Promise((resolve, reject) => {
-        let a = uni.uploadFile({
-          url: 'http://192.168.2.21:7001/upload', // 仅为示例，非真实的接口地址
-          filePath: url,
-          name: 'file',
-          formData: {
-            user: 'test'
-          },
-          success: res => {
-            setTimeout(() => {
-              resolve(res.data.data)
-            }, 1000)
-          }
+      applyApi(data)
+        .then(res => {
+          this.loading = false
+          uni.$u.toast('提交成功')
+          setTimeout(() => {
+            uni.navigateBack()
+          }, 800)
         })
-      })
+        .catch(err => {
+          this.loading = false
+        })
     }
   }
 }

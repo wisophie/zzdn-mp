@@ -4,7 +4,7 @@ const http = uni.$u.http
 export const uploadApi = (path, type = null) => {
   const formData = {}
   if (type) formData['type'] = type
-  http.upload('/wx/storage/create', {
+  return http.upload('/wx/storage/create', {
     filePath: path,
     name: 'file',
     formData
