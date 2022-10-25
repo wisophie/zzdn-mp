@@ -7,6 +7,12 @@
       }
     },
     {
+      "path": "pages/home/mine",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"
@@ -33,7 +39,7 @@
     {
       "path": "pages/login/perfectInfo",
       "style": {
-        "navigationBarTitleText": "个人信息"
+        "navigationBarTitleText": "完善信息"
       }
     },
     {

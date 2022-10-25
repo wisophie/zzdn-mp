@@ -12,6 +12,14 @@ export const weixinLogin = (data = {}) =>
     }
   })
 
+// 退出登录
+export const logout = (data = {}) =>
+  http.post('wx/auth/logout', data, {
+    custom: {
+      auth: true
+    }
+  })
+
 // 注册接口
 export const register = (data = {}) =>
   http.post('wx/auth/register', data, {
