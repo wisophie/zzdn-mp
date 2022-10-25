@@ -12,7 +12,7 @@
 		<view class="top-bar">
 			<view class="search-bar">
 				<view class="search-div">
-					<image src="../../static/images/search/search.png" class="search-image"></image>
+					<image src="../../static/static/images/search.png" class="search-image"></image>
 					<input class="searchbar" type="search" @input="search" placeholder="搜索用户/群" placeholder-style="color:#ccc"/>
 				</view>
 			

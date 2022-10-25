@@ -5,7 +5,7 @@
 
     <view class="form-box">
       <view class="form-item">
-        <input class="username" v-model="formData.username" placeholder="用户名" />
+        <input class="username" v-model="formData.nickName" placeholder="用户名" />
       </view>
 
       <view class="form-item">
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       formData: {
-        username: '',
+        nickName: '',
         gender: '',
         province: '',
         city: ''

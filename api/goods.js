@@ -6,16 +6,11 @@ export const getCateApi = (params = {}) =>
     params
   })
 
-  /** 商品分类 */
+/** 商品分类 */
 export const getListApi = (params = {}) =>
-http.get('/wx/goods/list', {
-  params
-})
-
-// 注册接口
-export const register = (data = {}) =>
-  http.post('/wx/category/list  ', data, {
-    custom: {
-      auth: false
-    }
+  http.get('/wx/goods/list', {
+    params
   })
+
+/** 供货商入驻 */
+export const applyApi = (data = {}) => http.post('/wx/provider/apply  ', data)
