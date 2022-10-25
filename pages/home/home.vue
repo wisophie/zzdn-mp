@@ -4,6 +4,8 @@
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/goods-detail')">商品详情</u-button></view>
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/order-list')">订单列表</u-button></view>
 		<view class="mt-4"><u-button type="primary" @click="test">测试接口</u-button></view>
+		<view class="mt-4"><u-button  type="primary" @click="toPage('/pages/help/help-list')">跑腿订单列表</u-button></view>
+		<view class="mt-4"><u-button  type="primary" @click="toPage('/pages/TUI-Login/login')">IM登录</u-button></view>
 	</view>
 </template>
 
