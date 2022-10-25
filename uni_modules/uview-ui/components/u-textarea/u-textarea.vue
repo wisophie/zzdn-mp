@@ -221,7 +221,7 @@ export default {
 
     &__field {
         flex: 1;
-        font-size: 15px;
+        font-size: 14px;
         color: $u-content-color;
 		width: 100%;
     }
