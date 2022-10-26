@@ -8,11 +8,10 @@ export const resetPhone = (data = {}) =>
     }
   })
 
-// 上传图片
-export const uploadImg = (data = {}) =>
-  http.post('wx/storage/create', data, {
+// 添加或更新实名信息
+export const certifySave = (data = {}) =>
+  http.post('wx/certify/save', data, {
     custom: {
-      auth: true,
-      contentType: 'application/x-www-form-urlencoded'
+      auth: true
     }
   })
