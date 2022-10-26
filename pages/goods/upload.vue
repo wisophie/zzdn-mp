@@ -21,6 +21,7 @@
           count
           maxlength="18"
           height="24"
+          style="padding: 4px 9px"
         ></u-textarea>
       </u-form-item>
       <u-form-item label="产品价格" prop="retailPrice">
@@ -69,28 +70,27 @@
     </u-form>
     <base-footer>
       <view class="u-flex-fill px-4 pt-1">
-        <u-button type="primary" text="提交"></u-button>
+        <u-button type="primary" text="提交" @click="submit"></u-button>
       </view>
     </base-footer>
   </view>
 </template>
 
 <script>
+import { uploadApi } from '@/api/common'
+import { getCateApi, createApi, getInfoApi, updateApi } from '@/api/goods'
+
 const wayData = [
   { id: '0', name: '线上交易' },
   { id: '1', name: '线下交易' },
   { id: '2', name: '老客户下单延期支付' }
 ]
+
 export default {
   data() {
     return {
-      cateList: [
-        { name: '分类一', id: '1' },
-        { name: '分类二', id: '2' },
-        { name: '分类三', id: '3' },
-        { name: '分类四', id: '4' },
-        { name: '分类五', id: '5' }
-      ],
+      currentId: null,
+      cateList: [],
       showWay: false,
       ways: wayData,
       exchangeName: '',
@@ -107,10 +107,42 @@ export default {
       rules: {}
     }
   },
+  onLoad({ id }) {
+    this.getCate()
+    if (id) {
+			uni.setNavigationBarTitle({
+				title:'编辑产品'
+			})
+      this.currentId = id
+      this.getInfo(id)
+    }
+  },
   onReady() {
     this.$refs.formRef.setRules(this.rules)
   },
   methods: {
+    getCate() {
+      getCateApi({ page: 1, limit: 999 }).then(res => {
+        this.form.categoryId = res.data.list[0].id
+        this.cateList = res.data.list
+      })
+    },
+    getInfo(id) {
+      getInfoApi({ id }).then(res => {
+        const form = res.data
+        if (form.gallery) {
+          const imgs = form.gallery
+            .split(',')
+            .map(v => ({ status: 'success', message: '', url: v }))
+          form.gallery = imgs
+        }
+        if (form.exchange !== null) {
+          const exchange = wayData.find(v => v.id === form.exchange)
+          form.exchange = exchange
+        }
+        this.form = form
+      })
+    },
     changeCate(id) {
       if (this.form.categoryId === id) return
       this.form.categoryId = id
@@ -124,51 +156,70 @@ export default {
     },
     // 删除图片
     deletePic(event) {
-      this[`fileList${event.name}`].splice(event.index, 1)
+      const key = 'gallery'
+      this.form[key].splice(event.index, 1)
     },
-    // 新增图片
     async afterRead(event) {
-      // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+      const key = 'gallery'
       let lists = [].concat(event.file)
-      let fileListLen = this[`fileList${event.name}`].length
+      let fileListLen = this.form[key].length
       lists.map(item => {
-        this[`fileList${event.name}`].push({
+        this.form[key].push({
           ...item,
           status: 'uploading',
           message: '上传中'
         })
       })
       for (let i = 0; i < lists.length; i++) {
-        const result = await this.uploadFilePromise(lists[i].url)
-        let item = this[`fileList${event.name}`][fileListLen]
-        this[`fileList${event.name}`].splice(
-          fileListLen,
-          1,
-          Object.assign(item, {
-            status: 'success',
-            message: '',
-            url: result
+        uploadApi(lists[i].url)
+          .then(res => {
+            const result = res.data
+            let item = this.form[key][fileListLen]
+            this.form[key].splice(
+              fileListLen,
+              1,
+              Object.assign(item, {
+                status: 'success',
+                message: '',
+                url: result
+              })
+            )
+            fileListLen++
           })
-        )
-        fileListLen++
+          .catch(err => {
+            this.form[key].splice(
+              fileListLen,
+              1,
+              Object.assign(item, {
+                status: 'fail',
+                message: '上传失败'
+              })
+            )
+            fileListLen++
+          })
       }
     },
-    uploadFilePromise(url) {
-      return new Promise((resolve, reject) => {
-        let a = uni.uploadFile({
-          url: 'http://192.168.2.21:7001/upload', // 仅为示例，非真实的接口地址
-          filePath: url,
-          name: 'file',
-          formData: {
-            user: 'test'
-          },
-          success: res => {
-            setTimeout(() => {
-              resolve(res.data.data)
-            }, 1000)
-          }
+    submit() {
+      const data = {
+        ...this.form,
+        exchange: this.form.exchange.id || null,
+        gallery: this.form.gallery.map(v => v.url).join()
+      }
+      if (this.currentId) {
+        updateApi(data).then(res => {
+          uni.$u.toast('编辑成功')
+          setTimeout(() => {
+            uni.navigateBack()
+          }, 800)
         })
-      })
+      } else {
+        createApi(data).then(res => {
+          uni.$u.toast('上传成功')
+          setTimeout(() => {
+            uni.navigateBack()
+          }, 800)
+        })
+      }
     }
   }
 }
