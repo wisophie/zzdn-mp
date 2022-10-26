@@ -192,7 +192,7 @@ export default {
 
 <style lang="scss" scoped>
 .top-wrap {
-	z-index: 9990;
+	z-index: 99;
 	position: sticky;
 	// position: fixed;
 	top: var(--window-top); /* css变量 */

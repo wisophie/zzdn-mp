@@ -1,11 +1,15 @@
 const http = uni.$u.http
 
 /** 文件上传 */
-export const uploadApi = path =>
-  http.upload('/upload', {
+export const uploadApi = (path, type = null) => {
+  const formData = {}
+  if (type) formData['type'] = type
+  return http.upload('/wx/storage/create', {
     filePath: path,
-    name: 'file'
+    name: 'file',
+    formData
   })
+}
 
 /** get */
 export const getDemo = (params = {}) =>

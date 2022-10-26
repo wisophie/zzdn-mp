@@ -143,6 +143,12 @@
       "style": {
         "navigationBarTitleText": "物流详情"
       }
+    },
+    {
+      "path": "pages/agreement/agreement",
+      "style": {
+        "navigationBarTitleText": "用户协议"
+      }
     }
   ],
   "tabBar": {
