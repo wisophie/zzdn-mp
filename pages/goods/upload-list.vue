@@ -15,6 +15,7 @@
         shape="circle"
         placeholder="请输入关键词"
         confirmType="search"
+        @confirm="doSearch"
       >
         <template slot="suffix">
           <u-button
@@ -22,23 +23,24 @@
             text="搜索"
             shape="circle"
             color="linear-gradient(to right, #C5C1FF, #473AFF)"
+            @click="doSearch"
           ></u-button>
         </template>
       </u-input>
     </view>
     <view class="up-list">
-      <view class="up-item" v-for="item in goods" :key="item">
+      <view class="up-item" v-for="item in goods" :key="item.id">
         <view class="up-item__avatar">
-          <u-avatar :src="item" shape="square" size="64"></u-avatar>
+          <u-avatar :src="item.img" shape="square" size="64"></u-avatar>
         </view>
         <view class="up-item__content">
-          <view class="text-bold u-line-1">标题标题</view>
+          <view class="text-bold u-line-1">{{ item.name }}</view>
           <view class="mt-1 u-content-color u-line-1 text-smm">
-            内容内容内容内容内容内容内容内容内容内容内容内容内容内容
+            {{ item.detail }}
           </view>
           <view class="mt-1 u-content-color text-smm">
             <text>价格：</text>
-            <text class="u-warning text-bold">￥20.00</text>
+            <text class="u-warning text-bold">￥{{ item.retailPrice }}</text>
           </view>
         </view>
         <view class="up-item__btn">
@@ -52,6 +54,7 @@
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
+import { getListApi1, removeById } from '@/api/goods'
 
 export default {
   mixins: [MescrollMixin],
@@ -64,7 +67,7 @@ export default {
         noMoreSize: 0
       },
       goods: [], // 数据列表
-      name: '' //当前搜索关键词
+      name: null //当前搜索关键词
     }
   },
   computed: {
@@ -99,37 +102,42 @@ export default {
     //   }, 300)
     // },
     // 搜索
-    doSearch(word) {
-      this.name = word
-      this.goods = [] // 先清空列表,显示加载进度
+    doSearch() {
+      this.goods = []
       this.mescroll.resetUpScroll()
     },
     /*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
     upCallback(page) {
-      const list = [
-        'https://cdn.uviewui.com/uview/album/1.jpg',
-        'https://cdn.uviewui.com/uview/album/2.jpg',
-        'https://cdn.uviewui.com/uview/album/3.jpg',
-        'https://cdn.uviewui.com/uview/album/4.jpg',
-        'https://cdn.uviewui.com/uview/album/5.jpg',
-        'https://cdn.uviewui.com/uview/album/6.jpg',
-        'https://cdn.uviewui.com/uview/album/7.jpg',
-        'https://cdn.uviewui.com/uview/album/8.jpg',
-        'https://cdn.uviewui.com/uview/album/9.jpg',
-        'https://cdn.uviewui.com/uview/album/10.jpg'
-      ]
-      this.mescroll.endBySize(list.length, 10)
-      if (page.num == 1) this.goods = []
-      this.goods = this.goods.concat(list)
-      // this.mescroll.endErr()
+      const params = {
+        name: this.name,
+        page: page.num,
+        limit: page.size
+      }
+      getListApi1(params)
+        .then(res => {
+          const { list: listData, total } = res.data
+          const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
+          this.mescroll.endBySize(list.length, total)
+          if (page.num == 1) this.goods = []
+          this.goods = this.goods.concat(list)
+        })
+        .catch(() => {
+          this.mescroll.endErr()
+        })
     },
-    toEdit(item) {},
+    toEdit(item) {
+      uni.$u.route('/pages/goods/upload', { id: item.id })
+    },
     remove(item) {
       uni.showModal({
         title: '提示',
         content: '是否确认删除该产品？',
         success: res => {
           if (res.confirm) {
+            getListApi1({ id: item.id }).then(() => {
+              this.mescroll.resetUpScroll()
+              uni.$u.toast('删除成功')
+            })
           }
         }
       })

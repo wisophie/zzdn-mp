@@ -13,6 +13,28 @@
       }
     },
     {
+      "path": "pages/home/bindMobile",
+      "style": {
+        "navigationBarTitleText": "绑定手机号"
+      }
+    },
+    {
+      "path": "pages/home/realName",
+      "style": {
+        "navigationBarTitleText": "实名认证",
+        "navigationBarBackgroundColor": "#5c4ffe",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/address/list",
+      "style": {
+        "navigationBarTitleText": "收货地址",
+        "navigationBarBackgroundColor": "#5c4ffe",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"
@@ -85,7 +107,7 @@
     {
       "path": "pages/goods/order-list",
       "style": {
-        "navigationBarTitleText": "采购订单",
+        "navigationBarTitleText": "我的订单",
         "enablePullDownRefresh": true
       }
     },

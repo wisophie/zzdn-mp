@@ -1,11 +1,11 @@
 // 完善信息
 <template>
   <view class="container">
-    <view>请完善个人信息</view>
+    <view class="container-title">请完善个人信息</view>
 
     <view class="form-box">
       <view class="form-item">
-        <input class="username" v-model="formData.nickName" placeholder="用户名" />
+        <input class="username" v-model="formData.nickname" placeholder="用户名" />
       </view>
 
       <view class="form-item">
@@ -34,11 +34,18 @@
       </view>
 
       <button
+        v-if="isBindMobile"
         type="primary"
         class="register-btn" 
-        :open-type="isBindMobile ? '' : 'getPhoneNumber'"
-        @getPhoneNumber="getPhoneNumber"
         @click="handleSubmit"
+      >保存</button>
+
+      <button
+        v-else
+        type="primary"
+        class="register-btn" 
+        open-type="getPhoneNumber"
+        @getphonenumber="getPhoneNumber"
       >保存</button>
 
     </view>
@@ -52,7 +59,7 @@ export default {
   data() {
     return {
       formData: {
-        nickName: '',
+        nickname: '',
         gender: '',
         province: '',
         city: ''
@@ -79,6 +86,7 @@ export default {
         for(let key in this.formData) {
           this.formData[key] = res.data[key]
         }
+        this.formData.nickname = res.data.nickName
         this.isBindMobile = !!res.data.mobile
       })
     },
@@ -101,9 +109,11 @@ export default {
     },
 
     getPhoneNumber(e) {
+      console.log(e, '--gg1')
       if (e.detail.errMsg !== "getPhoneNumber:ok") {
         return;
       }
+      console.log(e, '--gg')
       this.phoneInfo = e.detail
       this.doBindPhone()
     },
@@ -137,13 +147,18 @@ export default {
   min-height: 100vh;
   background: #fff;
   overflow: auto;
+
+  .container-title {
+    margin: 40rpx;
+    font-size: 36rpx;
+    font-weight: 600;
+  }
 }
 .form-box {
   width: 100%;
   height: auto;
   overflow: hidden;
   padding: 0 40rpx;
-  margin-top: 96rpx;
   background: #fff;
 }
 

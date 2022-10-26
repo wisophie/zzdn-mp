@@ -144,12 +144,12 @@ export default {
 
 .form-item-code .form-item {
   float: left;
-  width: 350rpx;
+  width: 420rpx;
 }
 
 .form-item-code .code-btn {
   float: right;
-  padding: 20rpx 40rpx;
+  padding: 10rpx 20rpx;
   border: 1px solid #d9d9d9;
   border-radius: 10rpx;
 }
