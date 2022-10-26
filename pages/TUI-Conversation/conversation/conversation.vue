@@ -69,6 +69,7 @@ export default {
 	methods: {
 		handleRoute(id) {
 			const url = `../../TUI-Chat/chat?conversationID=${id}`;
+			console.log(id)
 			uni.navigateTo({
 				url
 			});

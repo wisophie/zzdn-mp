@@ -5,7 +5,7 @@ export default{
 				id:1,
 				imgurl:'one.png',
 				tip:3,
-				name:'滞销货物',
+				name:'商品标题',
 				time:new Date(),
 				chatcontent:'有的是偶收费斯蒂芬斯山东粉丝十分的水淀粉闪电'
 			},
@@ -13,7 +13,7 @@ export default{
 				id:2,
 				imgurl:'three.png',
 				tip:23,
-				name:'滞销货物',
+				name:'商品标题',
 				time:new Date(),
 				chatcontent:'A爱妃山东粉丝顺丰速递费谁付上分收费说分手'
 			},
@@ -21,7 +21,7 @@ export default{
 				id:3,
 				imgurl:'four.png',
 				tip:30,
-				name:'滞销货物',
+				name:'商品标题',
 				time:new Date(),
 				chatcontent:'欢迎提问，为交流创建qq群：1108775122'
 			},
@@ -29,7 +29,7 @@ export default{
 				id:4,
 				imgurl:'five.png',
 				tip:3,
-				name:'滞销货物',
+				name:'商品标题',
 				time:new Date(),
 				chatcontent:'编写中有问题欢迎提问，为交流创建qq群：1108775122（或满）、801207724（或满）'
 			},

@@ -66,7 +66,8 @@
 	{
 	  "path": "pages/help/help-list",
 	  "style": {
-	    "navigationBarTitleText": "跑腿订单"
+	    "navigationBarTitleText": "跑腿订单",
+		"enablePullDownRefresh": true
 	  }
 	},
     {
@@ -205,7 +206,16 @@
         "navigationBarTitleText": "用户协议"
       }
     }
-  ],
+      ,{
+            "path" : "pages/help/help-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "任务详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "tabBar": {
     "color": "#606266",
     "selectedColor": "#5d51ff",
@@ -230,7 +240,7 @@
         "text": "共享"
       },
       {
-        "pagePath": "pages/TUI-Index/index",
+        "pagePath": "pages/TUI-Conversation/conversation/conversation",
         "iconPath": "static/tabbar/tab4.png",
         "selectedIconPath": "static/tabbar/tab4_a.png",
         "text": "沟通"

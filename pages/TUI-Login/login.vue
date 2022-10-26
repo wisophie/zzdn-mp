@@ -224,7 +224,7 @@ export default {
 				});
 			} else {
 				uni.switchTab({
-					url: '../TUI-Index/index'
+					url: '../TUI-Conversation/conversation/conversation'
 				});
 			}
 		}
