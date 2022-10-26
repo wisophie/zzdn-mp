@@ -9,6 +9,7 @@
         placeholder="请输入关键词"
         confirmType="search"
         :customStyle="{ background: '#fff' }"
+        @confirm="doSearch"
       >
         <template slot="suffix">
           <u-button
@@ -17,7 +18,6 @@
             shape="circle"
             color="linear-gradient(to right, #C5C1FF, #473AFF)"
             @click="doSearch"
-            @confirm="doSearch"
           />
         </template>
       </u-input>
@@ -80,13 +80,14 @@ export default {
   },
   watch: {
     sortIndex() {
+      this.goods = []
       this.mescroll.resetUpScroll(true)
     }
   },
   methods: {
     upCallback(page) {
       if (this.tabs.length === 0) {
-        getCateApi({ page: 1, limit: 100 })
+        getCateApi({ page: 1, limit: 999 })
           .then(res => {
             this.tabs = res.data.list
             this.mescroll.resetUpScroll()
@@ -102,7 +103,7 @@ export default {
         name: this.name,
         page: page.num,
         limit: page.size,
-				order:'desc',
+        order: 'desc',
         categoryId,
         sort
       }
@@ -119,6 +120,7 @@ export default {
         })
     },
     doSearch() {
+      this.goods = []
       this.mescroll.resetUpScroll(true)
     },
     tabChange(i) {
@@ -131,7 +133,7 @@ export default {
     showAction() {
       const isGHS = true // 是否是供货商
       uni.showActionSheet({
-        itemList: ['供货商入驻', '上传产品', '我的产品', '采购订单'],
+        itemList: ['供货商入驻', '上传产品', '我的产品', '我的订单'],
         success: res => {
           if (isGHS) {
             switch (res.tapIndex) {

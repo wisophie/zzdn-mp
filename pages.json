@@ -71,7 +71,7 @@
     {
       "path": "pages/goods/order-list",
       "style": {
-        "navigationBarTitleText": "采购订单",
+        "navigationBarTitleText": "我的订单",
         "enablePullDownRefresh": true
       }
     },
