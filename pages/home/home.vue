@@ -1,5 +1,6 @@
 <template>
 	<view class="content full">
+		<view @click="toPage('/pages/home/mine')">个人信息</view>
 		<view class="text-sm u-primary">{{ title }}</view>
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/goods-detail')">商品详情</u-button></view>
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/order-list')">订单列表</u-button></view>
@@ -19,12 +20,6 @@ export default {
 	onLoad() {
 		user
 			.checkLogin()
-			.then(res => {
-				console.log(res, '--gg')
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
-			})
 			.catch(err => {
 				uni.navigateTo({
 					url: '/pages/login/login'

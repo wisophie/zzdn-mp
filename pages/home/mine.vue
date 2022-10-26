@@ -13,24 +13,23 @@
       </view>
     </view>
     <view class="content">
-      <view class="content-item">
+      <view class="content-item" @click="toPage(`/pages/home/bindMobile?mobile=${mineInfo.mobile}`)">
         <text class="item-label">绑定手机号</text>
         <text class="item-info">{{ mineInfo.mobile }}</text>
         <u-icon name="arrow-right"></u-icon>
       </view>
-      <view class="content-item">
+      <!-- <view class="content-item">
         <text class="item-label">登录微信号</text>
         <text class="item-info">sdfsdf</text>
         <u-icon name="arrow-right"></u-icon>
-      </view>
-      <view class="content-item">
+      </view> -->
+      <view class="content-item" @click="toPage('/pages/home/realName')">
         <text class="item-label">实名认证</text>
-        <text class="item-info">未实名</text>
+        <text class="item-info">{{ mineInfo.certify ? '已实名' : '未实名' }}</text>
         <u-icon name="arrow-right"></u-icon>
       </view>
-      <view class="content-item">
+      <view class="content-item" @click="toPage('/pages/address/list')">
         <text class="item-label">地址</text>
-        <text class="item-info">{{ `${mineInfo.province}/${mineInfo.city}` }}</text>
         <u-icon name="arrow-right"></u-icon>
       </view>
     </view>
@@ -56,7 +55,8 @@ export default {
         nickName: '',
         mobile: '',
         province: '',
-        city: ''
+        city: '',
+        certify: false
       }
     }
   },
@@ -80,6 +80,13 @@ export default {
            url: '/pages/login/login'
         });
       })
+    },
+
+    toPage(url) {
+      console.log(url)
+      uni.navigateTo({
+         url: url
+      });
     }
   }
 }
