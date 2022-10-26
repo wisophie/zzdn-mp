@@ -14,7 +14,8 @@
         <div>请先登录账号</div>
 
         <div class="login-box">
-          <button type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">微信授权登录/注册</button>
+          <button v-if="canIUseGetUserProfile" type="primary" class="uni-login-btn" @click="getUserInfo">微信授权登录/注册</button>
+          <button v-else type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">微信授权登录/注册</button>
           <button type="primary" class="account-login-btn" @click="accountLogin">账号登录</button>
         </div>
       </div>
@@ -39,20 +40,38 @@ import { bindPhone, fetchUserInfo } from '@/api/login'
 export default {
   data() {
     return {
+      canIUseGetUserProfile: false,
       userInfo: null,
       phoneInfo: null,
       authVisible: false
     }
   },
 
+  created() {
+    if (uni.getUserProfile) {
+      this.canIUseGetUserProfile = true
+    }
+  },
+
   methods: {
     getUserInfo(e) {
-      console.log(e, this.phoneInfo, this.userInfo, '--gg1')
+      if (this.canIUseGetUserProfile) {
+        uni.getUserProfile({
+          desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+          success: (res) => {
+            this.userInfo = res.userInfo
+            this.doLogin(res.userInfo)
+          },
+          fail: () => {
+            util.showErrorToast('微信登录失败');
+          }
+        })
+        return
+      }
       if (e.detail.userInfo !== undefined) {
         this.userInfo = e.detail.userInfo
         this.doLogin(this.userInfo)
       }
-      // this.authVisible = false
     },
 
     getPhoneNumber(e) {
