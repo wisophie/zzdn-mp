@@ -6,6 +6,10 @@ Vue.prototype.$store = store
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
+// 全局mixins，用于实现setData等功能';
+import Mixin from './polyfill/mixins';
+Vue.mixin(Mixin);
+
 import BaseFooter from '@/components/BaseFooter'
 import MeTabs from '@/components/MeTabs'
 Vue.component('BaseFooter', BaseFooter)

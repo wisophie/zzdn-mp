@@ -18,50 +18,61 @@
       <view class="content-image">
         <u-upload
           :fileList="fileList"
-          @afterRead="afterRead"
+          @afterRead="e => afterRead(e, 'portraitUrl')"
           name="1"
           :maxCount="1"
         >
-          <image src="/static/home/img-portrait.png" 
+          <image :src="formData.portraitUrl || '/static/home/img-portrait.png'" 
           mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
         </u-upload>
-        <img src="/static/home/img-national.png" alt="" @click="handleChoose">
-        <input v-show="false" ref="upload" type="file" @change="handleUpload">
+        <u-upload
+          :fileList="fileList1"
+          @afterRead="e => afterRead(e, 'nationalUrl')"
+          name="1"
+          :maxCount="1"
+        >
+          <image :src="formData.nationalUrl || '/static/home/img-national.png'" 
+          mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
+        </u-upload>
       </view>
+    </view>
+
+    <view class="bottom">
+      <u-button type="primary" @click="handleSubmit">提交</u-button>
     </view>
   </view>
 </template>
 
 <script>
-import { uploadImg } from '@/api/home'
+import { uploadApi } from '@/api/common'
+import { certifySave } from '@/api/home'
 export default {
   data() {
     return {
-      fileList: []
+      fileList: [],
+      fileList1: [],
+      formData: {
+        realName: '',
+        idCard: '',
+        portraitUrl: '',
+        nationalUrl: ''
+      }
     }
   },
 
   methods: {
-    handleChoose() {
-      // uni.chooseImage({
-      //   success: (chooseImageRes) => {
-      //     console.log(chooseImageRes)
-      //   }
-      // });
-    },
-
-    handleUpload(e) {
+    afterRead(e, key) {
       console.log(e)
+      uploadApi(e.file.url, '').then(res => {
+        console.log(res)
+        this.formData[key] = res.data
+      })
     },
 
-    afterRead(e) {
-      // console.log(e)
-      // uploadImg({
-      //   file: e.file,
-      //   type: ''
-      // }).then(res => {
-      //   console.log(res)
-      // })
+    handleSubmit() {
+      certifySave(this.formData).then(res => {
+        console.log(res)
+      })
     }
   }
 }
@@ -101,6 +112,10 @@ export default {
         height: 200rpx;
       }
     }
+  }
+
+  .bottom {
+    margin: 80rpx 40rpx;
   }
 }
 </style>
