@@ -23,7 +23,7 @@
           :maxCount="1"
         >
           <image :src="formData.portraitUrl || '/static/home/img-portrait.png'" 
-          mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
+         style="width: 300rpx;height: 200rpx;"></image>
         </u-upload>
         <u-upload
           :fileList="fileList1"
@@ -32,7 +32,7 @@
           :maxCount="1"
         >
           <image :src="formData.nationalUrl || '/static/home/img-national.png'" 
-          mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
+         style="width: 300rpx;height: 200rpx;"></image>
         </u-upload>
       </view>
     </view>
@@ -45,7 +45,7 @@
 
 <script>
 import { uploadApi } from '@/api/common'
-import { certifySave } from '@/api/home'
+import { certifySave, certifyDetail } from '@/api/home'
 export default {
   data() {
     return {
@@ -60,7 +60,23 @@ export default {
     }
   },
 
+  created() {
+    this.fetchCertifyDetail()
+  },
+
   methods: {
+    fetchCertifyDetail() {
+      console.log('ggg')
+      certifyDetail({}).then(res => {
+        const data = res.data
+        for(let key in this.formData) {
+          if (data[key]) {
+            this.formData[key] = data[key]
+          }
+        }
+      })
+    },
+
     afterRead(e, key) {
       console.log(e)
       uploadApi(e.file.url, '').then(res => {

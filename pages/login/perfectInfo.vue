@@ -113,7 +113,6 @@ export default {
       if (e.detail.errMsg !== "getPhoneNumber:ok") {
         return;
       }
-      console.log(e, '--gg')
       this.phoneInfo = e.detail
       this.doBindPhone()
     },
