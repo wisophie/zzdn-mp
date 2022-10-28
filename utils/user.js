@@ -10,14 +10,11 @@ const util = require('../utils/util.js');
  */
 function checkSession() {
   return new Promise(function(resolve, reject) {
-    console.log('gg3')
     uni.checkSession({
       success: function() {
-        console.log('gg4')
         resolve(true);
       },
       fail: function() {
-        console.log('gg5')
         reject(false);
       }
     })
@@ -65,7 +62,6 @@ function loginByWeixin(userInfo) {
           reject(res);
         }
       }).catch((err) => {
-        console.log(err, '--gg123')
         reject(err);
       });
     }).catch((err) => {
@@ -79,10 +75,9 @@ function loginByWeixin(userInfo) {
  */
 function checkLogin() {
   return new Promise(function(resolve, reject) {
-    console.log('gg1', uni.getStorageSync('userInfo') && uni.getStorageSync('token'))
     if (uni.getStorageSync('userInfo') && uni.getStorageSync('token')) {
-      console.log('gg2')
       checkSession().then(() => {
+        console.log('gg')
         resolve(true);
       }).catch(() => {
         reject(false);

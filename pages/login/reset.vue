@@ -136,6 +136,7 @@ export default {
 }
 
 .form-item-code {
+  position: relative;
   margin-top: 32rpx;
   height: auto;
   overflow: hidden;
@@ -144,14 +145,16 @@ export default {
 
 .form-item-code .form-item {
   float: left;
-  width: 420rpx;
+  width: 100%;
 }
 
 .form-item-code .code-btn {
-  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 16rpx;
   padding: 10rpx 20rpx;
-  border: 1px solid #d9d9d9;
-  border-radius: 10rpx;
+  color: #5d51ff;
+  z-index: 10;
 }
 
 .form-item .clear {
@@ -170,7 +173,7 @@ export default {
   color: #fff;
   font-size: 30rpx;
   width: 100%;
-  background: #b4282d;
+  background: #5d51ff;
   border-radius: 6rpx;
 }
 

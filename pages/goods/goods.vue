@@ -131,11 +131,19 @@ export default {
       }
     },
     showAction() {
-      const isGHS = true // 是否是供货商
+      const userInfo = uni.getStorageSync('userInfo')
+      const { isProvider, isBuyer } = userInfo
+      const itemList = isProvider 
+        ? ['供货商入驻', '上传产品', '我的产品', '我的订单'] 
+        : isBuyer 
+        ? ['采购商入驻', '提交采购需求 智能匹配', '采购需求列表', '我的订单']
+        : ['供货商入驻', '采购商入驻', '提交采购需求 智能匹配', '我上传的商品']
+      // const isGHS = true // 是否是供货商
       uni.showActionSheet({
-        itemList: ['供货商入驻', '上传产品', '我的产品', '我的订单'],
+        // itemList: ['供货商入驻', '上传产品', '我的产品', '我的订单'],
+        itemList,
         success: res => {
-          if (isGHS) {
+          if (isProvider) {
             switch (res.tapIndex) {
               case 0:
                 uni.$u.route('/pages/goods/provider')
@@ -152,13 +160,43 @@ export default {
               default:
                 break
             }
+          } else if(isBuyer) {
+            switch (res.tapIndex) {
+              case 0:
+                uni.$u.route('/pages/buyer/apply')
+                break
+              case 1:
+                uni.$u.route('/pages/buyer/demand')
+                break
+              case 2:
+                uni.$u.route('/pages/goods/upload-list')
+                break
+              case 3:
+                uni.$u.route('/pages/goods/order-list')
+                break
+              default:
+                break
+            }
           } else {
             switch (res.tapIndex) {
               case 0:
                 uni.$u.route('/pages/goods/provider')
                 break
               case 1:
+                uni.$u.route('/pages/buyer/apply')
+                break
               case 2:
+                uni.showModal({
+                  title: '提示',
+                  content: '抱歉，你未成为采购商',
+                  confirmText: '立即申请',
+                  success: function (res) {
+                    if (res.confirm) {
+                      uni.$u.route('/pages/buyer/apply')
+                    }
+                  }
+                })
+                break
               case 3:
                 uni.showModal({
                   title: '提示',

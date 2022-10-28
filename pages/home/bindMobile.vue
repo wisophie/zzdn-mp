@@ -6,7 +6,8 @@
       </u-form-item>
       <u-form-item label="验证码" borderBottom>
         <u-input v-model="formData.code" placeholder="请输入您的验证码" border="none" type="number">
-          <u-button slot="suffix" type="success" size="mini" @click="sendCode">{{codeTips}}</u-button>
+          <view slot="suffix" class="code-btn" @click="sendCode">{{codeTips}}</view>
+          <!-- <u-button slot="suffix" type="success" size="mini" @click="sendCode">{{codeTips}}</u-button> -->
           <u-code ref="uCode"	@change="codeChange"></u-code>
         </u-input>
       </u-form-item>
@@ -92,7 +93,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  height: 100vh;
   padding: 48rpx 24rpx;
+  box-sizing: border-box;
+  background: #fff;
+
+  .code-btn {
+    color: #5d51ff;
+  }
 
   .bottom {
     margin-top: 80rpx;

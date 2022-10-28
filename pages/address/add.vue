@@ -64,7 +64,7 @@ export default {
       if (province && city && county) {
         return `${province}/${city}/${county}`
       }
-      return 'gg'
+      return ''
     }
   },
 
