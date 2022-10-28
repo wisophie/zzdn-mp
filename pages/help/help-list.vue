@@ -13,7 +13,7 @@
 		<u-tabs :list="list1" @click="click"></u-tabs>
 		</view>
 		<view class="bt">
-			<u-button class="mt-4" type="primary" @click="toPage('/pages/help/help-detail')">发布跑腿订单</u-button>
+			<u-button class="mt-4" type="primary" @click="toPage('/pages/help/help-edit')">发布跑腿订单</u-button>
 		</view>
 		
 		

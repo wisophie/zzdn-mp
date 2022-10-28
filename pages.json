@@ -80,9 +80,9 @@
       }
     },
 	{
-      "path": "pages/share/share-detail",
+      "path": "pages/share/share-edit",
       "style": {
-        "navigationBarTitleText": "共享详情"
+        "navigationBarTitleText": "编辑共享商品"
       }
     },
 	{
@@ -233,6 +233,24 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "任务详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/share/share-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "共享商品详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/help/help-edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "编辑跑腿订单",
                 "enablePullDownRefresh": false
             }
             
