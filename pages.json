@@ -35,6 +35,14 @@
       }
     },
     {
+      "path": "pages/address/add",
+      "style": {
+        "navigationBarTitleText": "添加/编辑地址",
+        "navigationBarBackgroundColor": "#5c4ffe",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "登录"

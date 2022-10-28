@@ -97,7 +97,6 @@ export default {
     },
 
     onchange(e) {
-      console.log(e)
       const { value } = e.detail
       const addressType = ['province', 'city']
       value.forEach((item, index) => {
