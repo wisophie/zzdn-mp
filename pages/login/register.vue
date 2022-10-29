@@ -35,6 +35,7 @@
           popup-title="请选择"
           :map="{text: 'name', value: 'code'}"
           :clear-icon="false"
+          preload
           @change="onchange"
         ></uni-data-picker>
       </div>
@@ -270,6 +271,10 @@ export default {
   .input-value-border {
     padding: 0;
     border: none;
+  }
+
+  .uni-data-tree, .selected-area.placeholder {
+    font-size: 30rpx !important;
   }
 }
 </style>

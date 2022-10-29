@@ -40,6 +40,7 @@
         </view>
       </u-list-item>
     </u-list>
+    <u-empty v-else mode="list" marginTop="300rpx"></u-empty>
   </view>
 </template>
 

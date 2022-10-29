@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="list">
+    <view v-if="list.length" class="list">
       <view class="list-item" v-for="(item, index) in list" :key="index">
         <view class="item-name">{{ item.name }}</view>
         <view class="item-address">{{ `${item.province}${item.city}${item.county}${item.addressDetail}` }}</view>
@@ -18,6 +18,7 @@
         </view>
       </view>
     </view>
+    <u-empty v-else mode="list" marginTop="300rpx"></u-empty>
     <view class="bottom">
       <u-button type="primary" @click="handleAdd">添加地址</u-button>
     </view>

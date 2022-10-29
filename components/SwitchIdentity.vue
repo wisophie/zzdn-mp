@@ -71,10 +71,6 @@ export default {
       fetchUserInfo({
         id
       }).then(res => {
-        uni.setStorageSync('userInfo', {
-          ...this.userInfo,
-          ...res.data
-        })
         uni.$u.toast('切换成功')
         this.$emit('success', this.userLevel)
         this.close()
