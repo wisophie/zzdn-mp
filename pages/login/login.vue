@@ -83,16 +83,14 @@ export default {
 
     doLogin(userInfo) {
       user.checkLogin().then(() => {
-        // this.doBindPhone()
         this.fetchUserInfo()
       }).catch(() => {
-        user.loginByWeixin(userInfo).then(res => {
-
-          this.fetchUserInfo()
-          // this.doBindPhone()
-        }).catch((err) => {
-          uni.$u.toast('微信登录失败')
-        });
+        user.loginByWeixin(userInfo)
+          .then(res => {
+            this.fetchUserInfo()
+          }).catch((err) => {
+            uni.$u.toast('微信登录失败')
+          });
 
       });
     },

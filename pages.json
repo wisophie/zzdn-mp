@@ -3,105 +3,79 @@
     {
       "path": "pages/home/home",
       "style": {
-        "navigationBarTitleText": "首页",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "首页"
       }
     },
     {
       "path": "pages/home/mine",
       "style": {
-        "navigationBarTitleText": "个人信息",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "个人信息"
       }
     },
     {
       "path": "pages/home/afterService",
       "style": {
-        "navigationBarTitleText": "售后服务",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "售后服务"
       }
     },
     {
       "path": "pages/home/moreFunction",
       "style": {
-        "navigationBarTitleText": "更多功能",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "更多功能"
       }
     },
     {
       "path": "pages/home/bindMobile",
       "style": {
-        "navigationBarTitleText": "绑定手机号",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "绑定手机号"
       }
     },
     {
       "path": "pages/home/realName",
       "style": {
-        "navigationBarTitleText": "实名认证",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "实名认证"
       }
     },
     {
       "path": "pages/address/list",
       "style": {
-        "navigationBarTitleText": "收货地址",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "收货地址"
       }
     },
     {
       "path": "pages/address/add",
       "style": {
-        "navigationBarTitleText": "添加/编辑地址",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "添加/编辑地址"
       }
     },
     {
       "path": "pages/login/login",
       "style": {
-        "navigationBarTitleText": "登录",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "登录"
       }
     },
     {
       "path": "pages/login/accountLogin",
       "style": {
-        "navigationBarTitleText": "账号登录",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "账号登录"
       }
     },
     {
       "path": "pages/login/register",
       "style": {
-        "navigationBarTitleText": "注册",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "注册"
       }
     },
     {
       "path": "pages/login/reset",
       "style": {
-        "navigationBarTitleText": "重置密码",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "重置密码"
       }
     },
     {
       "path": "pages/login/perfectInfo",
       "style": {
-        "navigationBarTitleText": "完善信息",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "完善信息"
       }
     },
     {
@@ -358,8 +332,8 @@
     ]
   },
   "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarBackgroundColor": "#5c4ffe",
+    "navigationBarTextStyle": "white"
   },
   "uniIdRouter": {}
 }
