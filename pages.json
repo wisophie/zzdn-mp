@@ -168,6 +168,24 @@
         "navigationBarTitleText": "平台"
       }
     },
+	{
+	  "path": "pages/platform/myvote",
+	  "style": {
+	    "navigationBarTitleText": "我的投票"
+	  }
+	},
+	{
+	  "path": "pages/platform/vote-edit",
+	  "style": {
+	    "navigationBarTitleText": "发起投票"
+	  }
+	},
+	{
+	  "path": "pages/platform/vote-detail",
+	  "style": {
+	    "navigationBarTitleText": "投票详情"
+	  }
+	},
     {
       "path": "pages/goods/order-list",
       "style": {
