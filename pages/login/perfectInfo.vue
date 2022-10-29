@@ -82,13 +82,12 @@ export default {
 
   methods: {
     fetchUserInfo() {
-      fetchUserInfo({}).then(res => {
-        for(let key in this.formData) {
-          this.formData[key] = res.data[key]
-        }
-        this.formData.nickname = res.data.nickName
-        this.isBindMobile = !!res.data.mobile
-      })
+      const userInfo = uni.getStorageSync('userInfo')
+      for(let key in this.formData) {
+        this.formData[key] = userInfo[key]
+      }
+      this.formData.nickname = userInfo.nickName
+      this.isBindMobile = !!userInfo.mobile
     },
 
     getRegionList() {
@@ -113,7 +112,6 @@ export default {
       if (e.detail.errMsg !== "getPhoneNumber:ok") {
         return;
       }
-      console.log(e, '--gg')
       this.phoneInfo = e.detail
       this.doBindPhone()
     },

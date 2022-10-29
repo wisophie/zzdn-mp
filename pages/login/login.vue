@@ -1,14 +1,6 @@
 <template>
   <div class="container">
     <div class="login">
-      <!-- <div class="login-header">
-        <div class="login-avatar">
-          <open-data type="userAvatarUrl"></open-data>
-        </div>
-        <div class="login-nickname">
-          <open-data type="userNickName"></open-data>
-        </div>
-      </div> -->
       <div class="login-content">
         <image class="login-image" src="/static/home/image-login.png"></image>
         <div>请先登录账号</div>
@@ -91,16 +83,14 @@ export default {
 
     doLogin(userInfo) {
       user.checkLogin().then(() => {
-        // this.doBindPhone()
         this.fetchUserInfo()
       }).catch(() => {
-        user.loginByWeixin(userInfo).then(res => {
-
-          this.fetchUserInfo()
-          // this.doBindPhone()
-        }).catch((err) => {
-          uni.$u.toast('微信登录失败')
-        });
+        user.loginByWeixin(userInfo)
+          .then(res => {
+            this.fetchUserInfo()
+          }).catch((err) => {
+            uni.$u.toast('微信登录失败')
+          });
 
       });
     },
@@ -111,7 +101,6 @@ export default {
         encryptedData,
         iv
       }).then((res) => {
-        console.log(res, '---gg2')
         if (res.errno === 0) {
           uni.$u.toast('微信登录成功')
           uni.navigateBack({
@@ -136,7 +125,6 @@ export default {
           }
         }
         uni.navigateBack()
-        console.log(res)
       })
     },
 
@@ -152,8 +140,9 @@ export default {
 <style lang="scss" scoped>
 .container {
   box-sizing: border-box;
-  background-color: #f4f4f4;
+  background-color: #fff;
   font-family: PingFangSC-Light, helvetica, 'Heiti SC';
+  height: 100vh;
 }
 
 .login-box {
@@ -214,7 +203,7 @@ export default {
   border-top-right-radius: 50rpx;
   border-bottom-right-radius: 50rpx;
   letter-spacing: 3rpx;
-  background-image: linear-gradient(to right, #9a9ba1 0%, #9a9ba1 100%);
+  background  : #5c4ffe;
 }
 
 .login {

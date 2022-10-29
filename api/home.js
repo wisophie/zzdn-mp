@@ -15,3 +15,12 @@ export const certifySave = (data = {}) =>
       auth: true
     }
   })
+
+// 个人实名信息
+export const certifyDetail = (params = {}) =>
+  http.get('wx/certify/detail', {
+    params,
+    custom: {
+      auth: true
+    }
+  })

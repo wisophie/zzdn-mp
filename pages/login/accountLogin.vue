@@ -41,7 +41,7 @@ export default {
       var that = this;
 
       if (this.password.length < 1 || this.username.length < 1) {
-        uni.$u.toast('请输入用户名和密码')
+        uni.$u.toast('请输入账号和密码')
         return false;
       }
 

@@ -14,7 +14,7 @@
         </u-form-item>
       </u-form>
 
-      <view class="content-title">填写个人信息</view>
+      <view class="content-title">上传手持证件照</view>
       <view class="content-image">
         <u-upload
           :fileList="fileList"
@@ -23,7 +23,8 @@
           :maxCount="1"
         >
           <image :src="formData.portraitUrl || '/static/home/img-portrait.png'" 
-          mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
+         style="width: 300rpx;height: 200rpx;"></image>
+         <view class="image-tips">身份证头像面</view>
         </u-upload>
         <u-upload
           :fileList="fileList1"
@@ -32,7 +33,8 @@
           :maxCount="1"
         >
           <image :src="formData.nationalUrl || '/static/home/img-national.png'" 
-          mode="widthFix" style="width: 300rpx;height: 200rpx;"></image>
+         style="width: 300rpx;height: 200rpx;"></image>
+         <view class="image-tips">身份证国徽面</view>
         </u-upload>
       </view>
     </view>
@@ -45,7 +47,7 @@
 
 <script>
 import { uploadApi } from '@/api/common'
-import { certifySave } from '@/api/home'
+import { certifySave, certifyDetail } from '@/api/home'
 export default {
   data() {
     return {
@@ -60,7 +62,23 @@ export default {
     }
   },
 
+  created() {
+    this.fetchCertifyDetail()
+  },
+
   methods: {
+    fetchCertifyDetail() {
+      console.log('ggg')
+      certifyDetail({}).then(res => {
+        const data = res.data
+        for(let key in this.formData) {
+          if (data[key]) {
+            this.formData[key] = data[key]
+          }
+        }
+      })
+    },
+
     afterRead(e, key) {
       console.log(e)
       uploadApi(e.file.url, '').then(res => {
@@ -72,6 +90,10 @@ export default {
     handleSubmit() {
       certifySave(this.formData).then(res => {
         console.log(res)
+        uni.$u.toast('提交成功')
+        uni.navigateBack({
+           delta: 1
+        });
       })
     }
   }
@@ -100,6 +122,7 @@ export default {
       margin-top: 60rpx;
       color: #5c4ffe;
       font-size: 32rpx;
+      font-weight: bold;
     }
 
     .content-image {
@@ -116,6 +139,13 @@ export default {
 
   .bottom {
     margin: 80rpx 40rpx;
+  }
+
+  .image-tips {
+    margin-top: 20rpx;
+    text-align: center;
+    color: #666;
+    font-size: 28rpx;
   }
 }
 </style>

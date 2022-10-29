@@ -13,6 +13,18 @@
       }
     },
     {
+      "path": "pages/home/afterService",
+      "style": {
+        "navigationBarTitleText": "售后服务"
+      }
+    },
+    {
+      "path": "pages/home/moreFunction",
+      "style": {
+        "navigationBarTitleText": "更多功能"
+      }
+    },
+    {
       "path": "pages/home/bindMobile",
       "style": {
         "navigationBarTitleText": "绑定手机号"
@@ -21,17 +33,19 @@
     {
       "path": "pages/home/realName",
       "style": {
-        "navigationBarTitleText": "实名认证",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "实名认证"
       }
     },
     {
       "path": "pages/address/list",
       "style": {
-        "navigationBarTitleText": "收货地址",
-        "navigationBarBackgroundColor": "#5c4ffe",
-        "navigationBarTextStyle": "white"
+        "navigationBarTitleText": "收货地址"
+      }
+    },
+    {
+      "path": "pages/address/add",
+      "style": {
+        "navigationBarTitleText": "添加/编辑地址"
       }
     },
     {
@@ -73,6 +87,30 @@
       }
     },
     {
+      "path": "pages/buyer/apply",
+      "style": {
+        "navigationBarTitleText": "采购商申请",
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/buyer/demand",
+      "style": {
+        "navigationBarTitleText": "采购需求",
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/buyer/list",
+      "style": {
+        "navigationBarTitleText": "采购需求列表",
+        "navigationBarBackgroundColor": "#5d51ff",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/share/share",
       "style": {
         "navigationBarTitleText": "共享",
@@ -80,9 +118,9 @@
       }
     },
 	{
-      "path": "pages/share/share-detail",
+      "path": "pages/share/share-edit",
       "style": {
-        "navigationBarTitleText": "共享详情"
+        "navigationBarTitleText": "编辑共享商品"
       }
     },
 	{
@@ -237,6 +275,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/share/share-detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "共享商品详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/help/help-edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "编辑跑腿订单",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "tabBar": {
     "color": "#606266",
@@ -276,8 +332,8 @@
     ]
   },
   "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarBackgroundColor": "#5c4ffe",
+    "navigationBarTextStyle": "white"
   },
   "uniIdRouter": {}
 }

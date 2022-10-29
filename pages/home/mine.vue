@@ -9,7 +9,7 @@
 
       <view class="user-info">
         <view class="name">{{ mineInfo.nickName }}</view>
-        <view>游客</view>
+        <view>{{ userLevelText }}</view>
       </view>
     </view>
     <view class="content">
@@ -38,16 +38,23 @@
         <u-button @click="handleLogout">退出</u-button>
       </view>
       <view class="bottom-right">
-        <u-button type="primary">切换身份</u-button>
+        <u-button type="primary" @click="handleSwitch">切换身份</u-button>
       </view>
     </view>
+
+    <SwitchIdentity ref="identity" @success="val => userLevel = val"></SwitchIdentity>
   </view>
 </template>
 
 <script>
 import { logout, bindPhone, fetchUserInfo, updateInfo } from '@/api/login'
+import SwitchIdentity from '@/components/SwitchIdentity'
 
 export default {
+  components: {
+		SwitchIdentity
+  },
+  
   data() {
     return {
       mineInfo: {
@@ -57,11 +64,22 @@ export default {
         province: '',
         city: '',
         certify: false
-      }
+      },
+      userLevel: 0
     }
   },
 
-  created() {
+  computed: {
+    userLevelText() {
+			return this.userLevel === 0 
+				? '游客' 
+				: this.userLevel === 1
+				? '供货商'
+				: '采购商'
+		}
+  },
+
+  onShow() {
     this.fetchUserInfo()
   },
 
@@ -69,6 +87,7 @@ export default {
     fetchUserInfo() {
       fetchUserInfo({}).then(res => {
         this.mineInfo = res.data
+        this.userLevel = res.data.userLevel
       })
     },
 
@@ -87,7 +106,11 @@ export default {
       uni.navigateTo({
          url: url
       });
-    }
+    },
+
+    handleSwitch() {
+			this.$refs.identity.show()
+		}
   }
 }
 </script>

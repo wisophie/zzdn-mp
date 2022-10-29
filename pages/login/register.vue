@@ -35,6 +35,7 @@
           popup-title="请选择"
           :map="{text: 'name', value: 'code'}"
           :clear-icon="false"
+          preload
           @change="onchange"
         ></uni-data-picker>
       </div>
@@ -51,7 +52,9 @@
         <u-code ref="uCode"	@change="codeChange"></u-code>
       </div>
 
-      <button type="primary" class="register-btn" @click="startRegister">注册</button>
+      <view class="register-btn">
+        <u-button type="primary" @click="startRegister">注册</u-button>
+      </view>
 
     </div>
   </div>
@@ -97,7 +100,6 @@ export default {
     },
 
     onchange(e) {
-      console.log(e)
       const { value } = e.detail
       const addressType = ['province', 'city']
       value.forEach((item, index) => {
@@ -226,6 +228,7 @@ export default {
 }
 
 .form-item-code {
+  position: relative;
   margin-top: 32rpx;
   height: auto;
   overflow: hidden;
@@ -233,17 +236,16 @@ export default {
 }
 
 .form-item-code .form-item {
-  float: left;
-  width: 390rpx;
+  width: 100%;
 }
 
 .form-item-code .code-btn {
-  float: right;
+  position: absolute;
+  right: 0;
+  bottom: 16rpx;
   padding: 10rpx 20rpx;
-  border: 1px solid #d9d9d9;
-  border-radius: 8rpx;
-  color: #fff;
-  background: green;
+  color: #5d51ff;
+  z-index: 10;
 }
 
 .form-item .clear {
@@ -269,6 +271,10 @@ export default {
   .input-value-border {
     padding: 0;
     border: none;
+  }
+
+  .uni-data-tree, .selected-area.placeholder {
+    font-size: 30rpx !important;
   }
 }
 </style>
