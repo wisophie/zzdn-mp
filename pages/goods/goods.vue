@@ -132,11 +132,13 @@ export default {
     },
     showAction() {
       const userInfo = uni.getStorageSync('userInfo')
-      const { isProvider, isBuyer } = userInfo
+      const { userLevel, id } = userInfo
+      const isProvider = userLevel === 1,
+        isBuyer = userLevel === 2
       const itemList = isProvider 
-        ? ['供货商入驻', '上传产品', '我的产品', '我的订单'] 
+        ? ['上传产品', '我的产品', '我的订单', '资料变更'] 
         : isBuyer 
-        ? ['采购商入驻', '提交采购需求 智能匹配', '采购需求列表', '我的订单']
+        ? ['提交采购需求 智能匹配', '采购需求列表', '我的订单', '资料变更']
         : ['供货商入驻', '采购商入驻', '提交采购需求 智能匹配', '我上传的商品']
       // const isGHS = true // 是否是供货商
       uni.showActionSheet({
@@ -146,16 +148,16 @@ export default {
           if (isProvider) {
             switch (res.tapIndex) {
               case 0:
-                uni.$u.route('/pages/goods/provider')
-                break
-              case 1:
                 uni.$u.route('/pages/goods/upload')
                 break
-              case 2:
+              case 1:
                 uni.$u.route('/pages/goods/upload-list')
                 break
-              case 3:
+              case 2:
                 uni.$u.route('/pages/goods/order-list')
+                break
+              case 3:
+                uni.$u.route(`/pages/goods/provider?id=${id}`)
                 break
               default:
                 break
@@ -163,16 +165,16 @@ export default {
           } else if(isBuyer) {
             switch (res.tapIndex) {
               case 0:
-                uni.$u.route('/pages/buyer/apply')
-                break
-              case 1:
                 uni.$u.route('/pages/buyer/demand')
                 break
+              case 1:
+                uni.$u.route('/pages/buyer/list')
+                break
               case 2:
-                uni.$u.route('/pages/goods/upload-list')
+                uni.$u.route('/pages/goods/order-list')
                 break
               case 3:
-                uni.$u.route('/pages/goods/order-list')
+                uni.$u.route(`/pages/buyer/apply?id=${id}`)
                 break
               default:
                 break
