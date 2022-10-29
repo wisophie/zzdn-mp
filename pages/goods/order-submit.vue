@@ -24,26 +24,21 @@
     <view class="os-content">
       <view class="os-goods">
         <view class="os-goods__img">
-          <u--image
-            src="https://cdn.uviewui.com/uview/album/1.jpg"
-            width="81"
-            height="81"
-            radius="4"
-          />
+          <u--image :src="goodsInfo.picUrl" width="81" height="81" radius="4" />
         </view>
         <view class="os-goods__content">
           <view class="os-goods__content__row">
-            <text class="text-bold">这是一个商品名称</text>
+            <text class="text-bold">{{ goodsInfo.name }}</text>
           </view>
-          <view class="os-goods__content__row">
+          <!-- <view class="os-goods__content__row">
             <text class="label">规格：</text>
             <text>xxxx</text>
             <text class="label ml-3">型号：</text>
             <text>xxxx</text>
-          </view>
+          </view> -->
           <view class="os-goods__content__row">
             <text class="label">单价：</text>
-            <text>￥99.00</text>
+            <text>￥{{ goodsInfo.retailPrice }}</text>
           </view>
           <view class="os-goods__content__row num">
             <text class="label">数量：</text>
@@ -64,15 +59,15 @@
       <view class="os-price u-border-top u-border-bottom">
         <view class="os-price__row">
           <text class="os-price__row__label">商品总价</text>
-          <text class="os-price__row__value">￥99.00</text>
+          <text class="os-price__row__value">￥{{ totalPrice }}</text>
         </view>
-        <view class="os-price__row">
+        <!-- <view class="os-price__row">
           <text class="os-price__row__label">运费(快递)</text>
           <text class="os-price__row__value">￥12.00</text>
-        </view>
+        </view> -->
         <view class="os-price__row">
           <text class="os-price__row__label">应付款</text>
-          <text class="os-price__row__value u-warning">￥200.00</text>
+          <text class="os-price__row__value u-warning">￥{{ actualPrice }}</text>
         </view>
       </view>
       <view class="os-remark">
@@ -104,10 +99,10 @@
     <base-footer>
       <view class="b-footer">
         <view class="b-footer__left u-border">
-          <text>实付101.22</text>
+          <text>实付￥{{ actualPrice }}</text>
         </view>
         <view class="b-footer__right">
-          <u-button type="primary" text="去支付" @click="toOrderDetail" />
+          <u-button type="primary" text="去支付" @click="toPay" />
         </view>
       </view>
     </base-footer>
@@ -116,19 +111,63 @@
 
 <script>
 import BaseFooter from '@/components/BaseFooter'
+import { createApi } from '@/api/order'
+import { getInfoApi } from '@/api/goods'
+import Big from 'big.js'
+
 export default {
   components: { BaseFooter },
   data() {
     return {
+      goodsId: null,
+      goodsInfo: {},
       num: 1,
       remark: '',
       pay: 'wxpay',
-      payList: [{ name: '微信支付', value: 'wxpay' }]
+      payList: [{ name: '微信支付', value: 'wxpay' }],
+      retailPrice: 0,
+      freightPrice: 0
+    }
+  },
+  onLoad({ id }) {
+    const userInfo = uni.getStorageSync('userInfo')
+    console.log('%c 【 userInfo 】-134', 'font-size:14px; color:rgb(210, 110, 210);', userInfo)
+    const token = uni.getStorageSync('token')
+    console.log('%c 【 token 】-136', 'font-size:14px; color:rgb(210, 110, 210);', token)
+    this.goodsId = id
+    getInfoApi({ id }).then(res => {
+      this.retailPrice = res.data.retailPrice
+      this.goodsInfo = res.data
+    })
+  },
+  computed: {
+    totalPrice() {
+      const p = Big(this.retailPrice)
+      const n = this.num
+      return p.times(n)
+    },
+    actualPrice() {
+      const p = Big(this.totalPrice)
+      const f = this.freightPrice
+      return p.plus(f)
     }
   },
   methods: {
-    toOrderDetail(){
-      uni.$u.route('/pages/goods/order-detail')
+    toPay() {
+      const data = {
+        addressId: 1,
+        message: this.remark,
+        price: this.retailPrice,
+        number: this.num,
+        freightPrice: this.freightPrice,
+        goodsId: this.goodsId,
+        actualPrice: this.actualPrice,
+        payType: this.goodsInfo.exchange
+      }
+      createApi(data).then(res => {
+        console.log('%c 【 res 】-164', 'font-size:14px; color:rgb(210, 110, 210);', res)
+      })
+      // uni.$u.route('/pages/goods/order-detail')
     }
   }
 }
