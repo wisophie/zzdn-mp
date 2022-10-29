@@ -1,5 +1,4 @@
 module.exports = vm => {
-
   const baseURL = 'http://dtmq7b.natappfree.cc/'
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
@@ -36,6 +35,9 @@ module.exports = vm => {
       } else {
         if (data.errno === 501) {
           uni.removeStorageSync('token')
+          uni.navigateTo({
+             url: '/pages/login/login'
+          });
         }
         if (custom.toast === true) {
           uni.$u.toast(data.errmsg)

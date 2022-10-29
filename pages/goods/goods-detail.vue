@@ -15,32 +15,32 @@
     </u-swiper>
 
     <view class="g-section">
-      <view class="text-md text-bold">标题标题标题标题标题标题标题标题</view>
-      <view class="mt-1 u-tips-color text-sm">副标题副标题副标题副标题副标题</view>
+      <view class="text-md text-bold">{{ info.name }}</view>
+      <view class="mt-1 u-tips-color text-sm">{{ info.keywords }}</view>
       <view class="mt-1 u-tips-color text-xs">
         <text>现价</text>
         <text class="u-warning">￥</text>
-        <text class="u-warning text-bold text-md">20</text>
+        <text class="u-warning text-bold text-md">{{ info.retailPrice }}</text>
       </view>
     </view>
 
     <view class="g-section bg-gray">
       <view class="g-sku">
-        <view class="g-sku-item">
-          <text class="g-sku-item__label">品牌</text>
-          <text class="g-sku-item__value">DIOR</text>
+        <view class="g-sku-item mb-2">
+          <text class="g-sku-item__label">分类</text>
+          <text class="g-sku-item__value">{{ getCateText(info.categoryId) }}</text>
         </view>
-        <view class="g-sku-item">
+        <!-- <view class="g-sku-item">
           <text class="g-sku-item__label">型号</text>
           <text class="g-sku-item__value">xxxxxx</text>
-        </view>
-        <view class="g-sku-item mt-2">
+        </view> -->
+        <view class="g-sku-item mb-2">
           <text class="g-sku-item__label">规格</text>
-          <text class="g-sku-item__value">30x20x40</text>
+          <text class="g-sku-item__value">{{ info.unit }}</text>
         </view>
-        <view class="g-sku-item mt-2">
-          <text class="g-sku-item__label">成色</text>
-          <text class="g-sku-item__value">全新</text>
+        <view class="g-sku-item">
+          <text class="g-sku-item__label">交易方式</text>
+          <text class="g-sku-item__value">{{ getWayText(info.exchange) }}</text>
         </view>
       </view>
     </view>
@@ -48,7 +48,7 @@
     <view class="g-section">
       <view class="pb-4 text-md text-bold">详细内容</view>
       <view>
-        这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容
+        {{ info.detail }}
       </view>
     </view>
 
@@ -67,21 +67,48 @@
 
 <script>
 import BaseFooter from '@/components/BaseFooter'
+import { getCateApi, getInfoApi } from '@/api/goods'
+
+const wayData = [
+  { id: '0', name: '线上交易' },
+  { id: '1', name: '线下交易' },
+  { id: '2', name: '老客户下单延期支付' }
+]
+
 export default {
   components: { BaseFooter },
   data() {
     return {
+      goodsId: null,
       current: 0,
-      banner: [
-        'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper3.png',
-        'https://cdn.uviewui.com/uview/swiper/swiper1.png'
-      ]
+      cateList: [],
+      banner: [],
+      info: {}
     }
   },
+  onLoad({ id }) {
+    this.goodsId = id
+    getCateApi({ page: 1, limit: 999 }).then(res => {
+      this.cateList = res.data.list
+    })
+    this.getInfo(id)
+  },
   methods: {
+    getInfo(id) {
+      getInfoApi({ id }).then(res => {
+        const { gallery, ...rest } = res.data
+        this.banner = gallery.split(',')
+        this.info = rest
+      })
+    },
+    getCateText(id) {
+      return this.cateList.find(v => v.id === id)?.name
+    },
+    getWayText(id) {
+      return wayData.find(v => v.id === id)?.name
+    },
     toOrder() {
-      uni.$u.route('/pages/goods/order-submit')
+      uni.$u.route('/pages/goods/order-submit', { id: this.goodsId })
     }
   }
 }

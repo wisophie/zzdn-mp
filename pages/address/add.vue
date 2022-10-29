@@ -75,6 +75,7 @@ export default {
   onLoad(options) {
     if (options.id) {
       this.formData.id = options.id
+      this.fetchAddressDetail(options.id)
     }
   },
 
@@ -159,6 +160,7 @@ export default {
 
   .bottom {
     position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
     padding: 40rpx;

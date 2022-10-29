@@ -14,41 +14,53 @@
 		</view>
 
 		<view class="content-navigate">
-			<view class="navigate-item" @click="toPage('/pages/home/mine')">个人信息</view>
-			<view class="navigate-item" @click="toPage('/pages/goods/order-list')">我的订单</view>
-			<view class="navigate-item" @click="toPage('/pages/share/share', 'switchTab')">我的共享</view>
-			<view class="navigate-item" @click="toPage('/pages/TUI-Conversation/conversation/conversation', 'switchTab')">我的沟通</view>
-			<view class="navigate-item" @click="toPage('/pages/platform/platform', 'switchTab')">我的平台</view>
+			<view class="navigate-item" @click="toPage('/pages/home/mine')">个人<br>信息</view>
+			<view class="navigate-item" @click="toPage('/pages/goods/order-list')">我的<br>订单</view>
+			<view class="navigate-item" @click="toPage('/pages/share/share', 'switchTab')">我的<br>共享</view>
+			<view class="navigate-item" @click="toPage('/pages/TUI-Conversation/conversation/conversation', 'switchTab')">我的<br>沟通</view>
+			<view class="navigate-item" @click="toPage('/pages/platform/platform', 'switchTab')">我的<br>平台</view>
 		</view>
 
 		<view class="content-more">
 			<view class="more-item" @click="toPage('/pages/goods/goods', 'switchTab')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="shopping-cart" size="70rpx" color="red"></u-icon>
+				</view>
 				<view class="item-title">本地采购</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/share/share', 'switchTab')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="share" size="70rpx" color="green"></u-icon>
+				</view>
 				<view class="item-title">共享</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/help/help-list')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="car" size="70rpx" color="blue"></u-icon>
+				</view>
 				<view class="item-title">跑腿/帮忙</view>
 			</view>
 			<view class="more-item"  @click="toPage('/pages/home/afterService')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="server-man" size="70rpx" color="pink"></u-icon>
+				</view>
 				<view class="item-title">售后服务</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/platform/platform', 'switchTab')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="home" size="70rpx" color="gold"></u-icon>
+				</view>
 				<view class="item-title">平台共建</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/home/moreFunction')">
-				<view class="item-icon">图标</view>
+				<view class="item-icon">
+					<u-icon name="more-circle" size="70rpx" color="black"></u-icon>
+				</view>
 				<view class="item-title">更多功能</view>
 			</view>
 		</view>
 
-		<SwitchIdentity ref="identity"></SwitchIdentity>
+		<SwitchIdentity ref="identity" @success="val => userLevel = val"></SwitchIdentity>
 
 		<!-- <view @click="toPage('/pages/home/mine')">个人信息</view>
 		<view class="text-sm u-primary">{{ title }}</view>
@@ -152,7 +164,7 @@ page {
 	}
 
 	.content-navigate {
-		margin-top: 20rpx;
+		margin-top: 40rpx;
 		display: flex;
 		align-items: center;
 
@@ -160,10 +172,14 @@ page {
 			flex: 1;
 			padding: 20rpx;
 			margin-right: 20rpx;
-			border: 1rpx solid #fff;
+			// border: 1rpx solid #fff;
+			// color: #fff;
 			border-radius: 16rpx;
-			color: #fff;
 			text-align: center;
+			background: #fff;
+			color: #333;
+			box-shadow: 0px 4rpx 6rpx 1rpx #fff;
+			font-weight: bold;
 
 			&:last-child {
 				margin-right: 0;
@@ -194,6 +210,7 @@ page {
 				margin-top: 30rpx;
 				color: #333;
 				font-size: 32rpx;
+				font-weight: bold;
 			}
 		}
 	}

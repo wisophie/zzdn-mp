@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="list">
+    <view v-if="list.length" class="list">
       <view class="list-item" v-for="(item, index) in list" :key="index">
         <view class="item-name">{{ item.name }}</view>
         <view class="item-address">{{ `${item.province}${item.city}${item.county}${item.addressDetail}` }}</view>
@@ -11,13 +11,14 @@
             <view class="item-handle-item" @click="clickDel(item)">
               <u-icon name="trash" color="#fa3534"></u-icon>
             </view>
-            <view class="item-handle-item">
-              <u-icon name="edit-pen" color="#5c4ffe" @click="handleEdit(item.id)"></u-icon>
+            <view class="item-handle-item"  @click="handleEdit(item.id)">
+              <u-icon name="edit-pen" color="#5c4ffe"></u-icon>
             </view>
           </view>
         </view>
       </view>
     </view>
+    <u-empty v-else mode="list" marginTop="300rpx"></u-empty>
     <view class="bottom">
       <u-button type="primary" @click="handleAdd">添加地址</u-button>
     </view>
@@ -34,7 +35,7 @@ export default {
       list: [],
       queryParams: {
         page: 1,
-        limit: 10,
+        limit: 20,
         sort: '',
         order: ''
       },
@@ -95,12 +96,13 @@ export default {
         id: item.id
       }).then(() => {
         this.list = this.list.filter(it => it.id !== item.id)
+        this.total -= 1
       })
     },
 
-    handleEdit(item) {
+    handleEdit(id) {
       uni.navigateTo({
-         url: `/pages/address/add?id=${item.id}`
+         url: `/pages/address/add?id=${id}`
       });
     },
 
@@ -191,6 +193,7 @@ export default {
 
   .bottom {
     position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
     padding: 40rpx;

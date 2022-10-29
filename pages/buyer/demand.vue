@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { buyNeedCreate } from '@/api/goods'
+import { buyNeedCreate, buyNeedDetail, buyNeedUpdate } from '@/api/goods'
 
 export default {
   data() {
@@ -45,10 +45,40 @@ export default {
     }
   },
 
+  onLoad({id}) {
+    if (id) {
+      this.form.id = id
+      this.fetchDetail(id)
+    }
+  },
+
   methods: {
+    fetchDetail(id) {
+      buyNeedDetail({
+        id
+      }).then(res => {
+        const data = res.data
+        for(let key in this.form) {
+          if (data[key]) {
+            this.form[key] = data[key]
+          }
+        }
+      })
+    },
+
     handleSubmit() {
-      buyNeedCreate(this.form).then(res => {
-        console.log(res)
+      const isEdit = !!this.form.id
+      const requestFunc = isEdit ? buyNeedUpdate : buyNeedCreate
+      requestFunc(this.form).then(res => {
+        if (isEdit) {
+          uni.navigateBack({
+             delta: 1
+          });
+        } else {
+          uni.redirectTo({
+             url: '/pages/buyer/list'
+          });
+        }
       })
     }
   }
@@ -57,10 +87,12 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  padding: 40rpx 32rpx 160rpx;
 
   .bottom {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     padding: 40rpx;
     background: #fff;

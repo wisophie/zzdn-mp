@@ -54,11 +54,7 @@ export const bindPhone = (data = {}) =>
 
 // 账号密码重置
 export const resetPwd = (data = {}) =>
-  http.post('wx/auth/reset', data, {
-    custom: {
-      auth: true
-    }
-  })
+  http.post('wx/auth/reset', data)
 
 // 账号信息更新
 export const updateInfo = (data = {}) =>
@@ -77,18 +73,18 @@ export const captcha = (data = {}) =>
   })
 
 // 获取个人信息
-export const fetchUserInfo = (params = {}) =>
-  http.get('wx/auth/info', {
+export const fetchUserInfo = (params = {}) => {
+  return http.get('wx/auth/info', {
     params,
     custom: {
       auth: true
     }
+  }).then(res => {
+    const userInfo = uni.getStorageSync('userInfo') || {}
+    uni.setStorageSync('userInfo', {
+      ...userInfo,
+      ...res.data
+    })
+    return res
   })
-// export const fetchUserInfo = (data = {}) =>
-//   http.post('wx/auth/info', data, {
-//     custom: {
-//       auth: true
-//     }
-//   })
-
-// 
+}
