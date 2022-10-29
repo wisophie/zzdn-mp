@@ -54,11 +54,7 @@ export const bindPhone = (data = {}) =>
 
 // 账号密码重置
 export const resetPwd = (data = {}) =>
-  http.post('wx/auth/reset', data, {
-    custom: {
-      auth: true
-    }
-  })
+  http.post('wx/auth/reset', data)
 
 // 账号信息更新
 export const updateInfo = (data = {}) =>
@@ -84,11 +80,3 @@ export const fetchUserInfo = (params = {}) =>
       auth: true
     }
   })
-// export const fetchUserInfo = (data = {}) =>
-//   http.post('wx/auth/info', data, {
-//     custom: {
-//       auth: true
-//     }
-//   })
-
-// 

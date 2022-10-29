@@ -1,5 +1,5 @@
 <template>
-  <u-popup :show="visible" mode="center" closeable>
+  <u-popup :show="visible" mode="center" closeable @close="close">
     <view class="identity-wrap">
       <view class="title">请选择要切换的身份</view>
       <view class="radio-group">
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { fetchUserInfo, loginByAccount } from '@/api/login'
 export default {
   data() {
     return {
@@ -44,11 +45,8 @@ export default {
         const otherLevel = this.userInfo.otherLevel
         const item = otherLevel.find(item => item.userLevel === this.userLevel)
         if (item) {
-          uni.setStorageSync('userInfo', {
-            ...this.userInfo,
-            ...item
-          })
-          uni.$u.toast('切换成功')
+          this.handleLogin(item)
+          return
         } else {
           uni.showModal({
             title: '提示',
@@ -67,6 +65,31 @@ export default {
       } else {
         uni.$u.toast('请选择您要切换的身份')
       }
+    },
+
+    fetchUserInfo(id){
+      fetchUserInfo({
+        id
+      }).then(res => {
+        uni.setStorageSync('userInfo', {
+          ...this.userInfo,
+          ...res.data
+        })
+        uni.$u.toast('切换成功')
+        this.$emit('success', this.userLevel)
+        this.close()
+      })
+    },
+
+    handleLogin(item) {
+      loginByAccount({
+        username: item.username,
+        password: item.password,
+        noPwd: true
+      }).then(res => {
+        uni.setStorageSync('token', res.data.token)
+        this.fetchUserInfo(item.id)
+      })
     }
   }
 }

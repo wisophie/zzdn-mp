@@ -90,7 +90,7 @@
 
 <script>
 import { uploadApi } from '@/api/common'
-import { buyerApply } from '@/api/goods'
+import { buyerApply, buyerFindById, buyerUpdate } from '@/api/goods'
 
 export default {
   data() {
@@ -110,10 +110,37 @@ export default {
       submitLoading: false
     }
   },
+
   onReady() {
     this.$refs.formRef.setRules(this.rules)
   },
+
+  onLoad() {
+    const userInfo = uni.getStorageSync('userInfo')
+    const { id } = userInfo
+    this.fetchDetail(id)
+  },
+
   methods: {
+    fetchDetail(id) {
+      buyerFindById({
+        id: id
+      }).then(res => {
+        const data = res.data
+        if (data && data.progress !== 1) {
+          this.form.id = id
+          for (const key in this.form) {
+            if (data[key]) {
+              if (Array.isArray(this.form[key])) {
+                this.form[key] = [{url: data[key]}]
+              } else {
+                this.form[key] = data[key]
+              }
+            }
+          }
+        }
+      })
+    },
     toAgreement() {
       uni.$u.route('/pages/agreement/agreement')
     },
@@ -178,14 +205,12 @@ export default {
         if (Array.isArray(this.form[key])) {
           data[key] = this.form[key].map(v => v.url).join(',')
         } else {
-          if (key === 'organizationType') {
-            data[key] = this.form[key].id
-          } else {
-            data[key] = this.form[key]
-          }
+          data[key] = this.form[key]
         }
       }
-      buyerApply(data)
+      const isUpdate = !!this.form.id
+      const requestFunc = isUpdate ? buyerUpdate : buyerApply
+      requestFunc(data)
         .then(res => {
           this.loading = false
           uni.$u.toast('提交成功')

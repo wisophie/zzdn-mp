@@ -34,7 +34,7 @@ export default {
       list: [],
       queryParams: {
         page: 1,
-        limit: 10,
+        limit: 20,
         sort: '',
         order: ''
       },
@@ -95,6 +95,7 @@ export default {
         id: item.id
       }).then(() => {
         this.list = this.list.filter(it => it.id !== item.id)
+        this.total -= 1
       })
     },
 

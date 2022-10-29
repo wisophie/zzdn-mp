@@ -45,6 +45,9 @@ export const buyerApply = (data = {}) => http.post('/wx/buyer/apply', data)
 /** 采购商资料变更 */
 export const buyerUpdate = (data = {}) => http.post('/wx/buyer/update', data)
 
+/** 采购商申请记录查询 */
+export const buyerFindById = (data = {}) => http.post('/wx/buyer/findById', data)
+
 /** 发布采购需求 */
 export const buyNeedCreate = (data = {}) => http.post('/wx/buyer/buyNeed/create', data)
 
@@ -52,7 +55,7 @@ export const buyNeedCreate = (data = {}) => http.post('/wx/buyer/buyNeed/create'
 export const buyNeedUpdate = (data = {}) => http.post('/wx/buyer/buyNeed/update', data)
 
 /** 删除采购需求 */
-export const buyNeedDelete = (data = {}) => http.post('/wx/buyer/buyNeed/delete/delete', data)
+export const buyNeedDelete = (data = {}) => http.post('/wx/buyer/buyNeed/delete', data)
 
 /** 采购需求列表 */
 export const buyNeedList = (params = {}) =>
