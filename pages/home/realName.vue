@@ -7,10 +7,10 @@
       <view class="content-title">填写个人信息</view>
       <u-form labelWidth="80px">
         <u-form-item label="您的姓名" borderBottom>
-          <u-input v-model="formData.realName" placeholder="请输入真实姓名" border="none"></u-input>
+          <u-input v-model="formData.realName" placeholder="请输入真实姓名" border="none" :readonly="certify"></u-input>
         </u-form-item>
         <u-form-item label="证件号码" borderBottom>
-          <u-input v-model="formData.idCard" placeholder="请输入证件号码" border="none"></u-input>
+          <u-input v-model="formData.idCard" placeholder="请输入证件号码" border="none" :readonly="certify"></u-input>
         </u-form-item>
       </u-form>
 
@@ -21,6 +21,7 @@
           @afterRead="e => afterRead(e, 'portraitUrl')"
           name="1"
           :maxCount="1"
+          :disabled="certify"
         >
           <image :src="formData.portraitUrl || '/static/home/img-portrait.png'" 
          style="width: 300rpx;height: 200rpx;"></image>
@@ -31,6 +32,7 @@
           @afterRead="e => afterRead(e, 'nationalUrl')"
           name="1"
           :maxCount="1"
+          :disabled="certify"
         >
           <image :src="formData.nationalUrl || '/static/home/img-national.png'" 
          style="width: 300rpx;height: 200rpx;"></image>
@@ -39,7 +41,7 @@
       </view>
     </view>
 
-    <view class="bottom">
+    <view v-if="!certify" class="bottom">
       <u-button type="primary" @click="handleSubmit">提交</u-button>
     </view>
   </view>
@@ -58,18 +60,22 @@ export default {
         idCard: '',
         portraitUrl: '',
         nationalUrl: ''
-      }
+      },
+      certify: false
     }
   },
 
   created() {
-    this.fetchCertifyDetail()
+    const { certify } = uni.getStorageSync('userInfo')
+    if (certify) {
+      this.certify = true
+      this.fetchCertifyDetail()
+    }
   },
 
   methods: {
     fetchCertifyDetail() {
-      console.log('ggg')
-      certifyDetail({}).then(res => {
+      certifyDetail().then(res => {
         const data = res.data
         for(let key in this.formData) {
           if (data[key]) {

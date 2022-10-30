@@ -2,27 +2,28 @@
   <view class="container">
     <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
       <u-form-item label="商品名" prop="goodsName" borderBottom>
-        <u-input v-model="form.goodsName" border="none" placeholder="请输入"></u-input>
+        <u-input v-model="form.goodsName" border="none" placeholder="请输入" :readonly="isDetail"></u-input>
       </u-form-item>
       <u-form-item label="材质" prop="texture" borderBottom>
-        <u-input v-model="form.texture" border="none" placeholder="请输入"></u-input>
+        <u-input v-model="form.texture" border="none" placeholder="请输入" :readonly="isDetail"></u-input>
       </u-form-item>
       <u-form-item label="规格" prop="specification" borderBottom>
-        <u-input v-model="form.specification" border="none" placeholder="请输入"></u-input>
+        <u-input v-model="form.specification" border="none" placeholder="请输入" :readonly="isDetail"></u-input>
       </u-form-item>
       <u-form-item label="需求数量" prop="num" borderBottom>
-        <u-input v-model="form.num" border="none" placeholder="请输入" type="number"></u-input>
+        <u-input v-model="form.num" border="none" placeholder="请输入" type="number" :readonly="isDetail"></u-input>
       </u-form-item>
-      <u-form-item label="工期" prop="duration" borderBottom>
-        <u-input v-model="form.duration" border="none" placeholder="请输入" type="number"></u-input>
+      <u-form-item label="工期（日）" prop="duration" borderBottom>
+        <u-input v-model="form.duration" border="none" placeholder="请输入" type="number" :readonly="isDetail"></u-input>
       </u-form-item>
       <u-form-item label="其他要求" prop="extra" borderBottom>
-        <u-input v-model="form.extra" border="none" placeholder="请输入"></u-input>
+        <u-input v-model="form.extra" border="none" placeholder="请输入" :readonly="isDetail"></u-input>
       </u-form-item>
     </u-form>
 
     <view class="bottom">
-      <u-button type="primary" @click="handleSubmit">提交</u-button>
+      <u-button v-if="!isDetail" type="primary" @click="handleSubmit">提交</u-button>
+      <u-button v-else type="primary" @click="handleConnect">在线沟通</u-button>
     </view>
   </view>
 </template>
@@ -41,14 +42,16 @@ export default {
         duration: '',
         extra: ''
       },
-      rules: {}
+      rules: {},
+      isDetail: false
     }
   },
 
-  onLoad({id}) {
+  onLoad({id, detail}) {
     if (id) {
       this.form.id = id
       this.fetchDetail(id)
+      this.isDetail = +detail === 1
     }
   },
 
@@ -80,7 +83,9 @@ export default {
           });
         }
       })
-    }
+    },
+
+    handleConnect() {}
   }
 }
 </script>

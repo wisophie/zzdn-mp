@@ -1,6 +1,12 @@
 <template>
   <view>
     <view class="os-addr">
+      <view class="os-status">
+        <u-text color="#fff" bold text="已取消"></u-text>
+        <view class="ml-4">
+          <u-button type="warning" size="small" text="去支付" />
+        </view>
+      </view>
       <view class="os-addr-box u-border" @click="showP = true">
         <view class="os-addr-box__icon"><image src="/static/img/icon-wuliu.png" /></view>
         <view class="os-addr-box__content">
@@ -15,7 +21,6 @@
             <text class="ml-2">营通街66号10栋1单元4楼</text>
           </view>
         </view>
-        <view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#fff" size="18" /></view>
       </view>
     </view>
 
@@ -94,15 +99,25 @@
 
 <script>
 // import BaseFooter from '@/components/BaseFooter'
+import { getOrderInfoApi } from '@/api/order'
 
 export default {
   // components: { BaseFooter },
   data() {
     return {
-     
+      orderId: null
     }
   },
+  onLoad({ id }) {
+    this.orderId = id
+    this.getOrderInfo()
+  },
   methods: {
+    getOrderInfo() {
+      getOrderInfoApi({ orderId: this.orderId }).then(res => {
+        console.log('%c 【 res 】-118', 'font-size:14px; color:rgb(210, 110, 210);', res)
+      })
+    },
     toWuliu() {
       uni.$u.route('/pages/goods/wuliu')
     }
@@ -146,6 +161,12 @@ page {
       justify-content: center;
     }
   }
+}
+.os-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
 }
 .os-content {
   padding: 16px;

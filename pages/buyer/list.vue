@@ -22,15 +22,15 @@
     </view>
     <u-list v-if="list.length">
       <u-list-item v-for="(item, index) in list" :key="index">
-        <view class="list-item">
+        <view class="list-item" @click="handleDetail(item.id)">
           <view class="item-title">
             <view class="title">{{ item.goodsName }}</view>
             <view class="item-handle">
-              <view class="item-handle-item" @click="handleDelete(item)">
+              <view class="item-handle-item" @click.stop="handleDelete(item)">
                 <u-icon name="trash" color="#fa3534"></u-icon>
               </view>
-              <view class="item-handle-item">
-                <u-icon name="edit-pen" color="#5c4ffe" @click="handleEdit(item.id)"></u-icon>
+              <view class="item-handle-item" @click.stop="handleEdit(item.id)">
+                <u-icon name="edit-pen" color="#5c4ffe"></u-icon>
               </view>
             </view>
           </view>
@@ -110,6 +110,12 @@ export default {
     handleEdit(id) {
       uni.navigateTo({
          url: `/pages/buyer/demand?id=${id}`
+      });
+    },
+
+    handleDetail(id) {
+      uni.navigateTo({
+         url: `/pages/buyer/demand?id=${id}&detail=1`
       });
     }
   }

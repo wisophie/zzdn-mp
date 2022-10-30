@@ -1,6 +1,7 @@
 module.exports = vm => {
 
   const baseURL = 'https://www.zhizaodainan.com'
+
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
       baseURL: baseURL,
