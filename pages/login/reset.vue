@@ -3,12 +3,12 @@
     <view class="form-box">
 
       <view class="form-item">
-        <input class="mobile" v-model="mobile" placeholder="手机号" />
+        <input class="mobile" v-model="mobile" type="number" placeholder="手机号" />
       </view>
 
       <view class="form-item-code">
         <view class="form-item code-item">
-          <input class="code" v-model="code" placeholder="验证码" />
+          <input class="code" v-model="code" type="number" placeholder="验证码" />
         </view>
         <view class="code-btn" @click="sendCode">{{ codeTips }}</view>
         <u-code ref="uCode"	@change="codeChange"></u-code>

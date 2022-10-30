@@ -1,5 +1,10 @@
 <template>
   <view class="content">
+    <view
+      v-if="[0, 2].includes(progress)"
+      class="content-tag"
+      :class="{'is-reject': progress === 2}"
+    >{{ progress === 0 ? '已申请' : '已拒绝' }}</view>
     <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
       <view class="form-section">手持身份证照片</view>
       <view>
@@ -82,7 +87,7 @@
     </u-form>
     <base-footer>
       <view class="u-flex-fill px-4 pt-1">
-        <u-button type="primary" :loading="submitLoading" text="提交" @click="submit"></u-button>
+        <u-button type="primary" :loading="submitLoading" :text="progress === 2 ? '重新申请' : '提交申请'" @click="submit"></u-button>
       </view>
     </base-footer>
   </view>
@@ -107,7 +112,8 @@ export default {
       },
       rules: {},
       agree: false,
-      submitLoading: false
+      submitLoading: false,
+      progress: null, // null-未申请, 0-申请中, 1-已申请，2-已拒绝 
     }
   },
 
@@ -123,9 +129,7 @@ export default {
 
   methods: {
     fetchDetail(id) {
-      buyerFindById({
-        id: id
-      }).then(res => {
+      buyerFindById().then(res => {
         const data = res.data
         if (data && data.progress !== 1) {
           this.form.id = id
@@ -138,6 +142,7 @@ export default {
               }
             }
           }
+          this.progress = data.progress
         }
       })
     },
@@ -235,6 +240,24 @@ page {
 <style lang="scss" scoped>
 .content {
   padding: 0 32rpx;
+
+  .content-tag {
+    position: absolute;
+    right: 24rpx;
+    top: 20rpx;
+    width: 160rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    border-radius: 40rpx;
+    text-align: center;
+    color: #5d51ff;
+    border: 1rpx solid #5d51ff;
+
+    &.is-reject {
+      color: #fa3534;
+      border-color: #fa3534;
+    }
+  }
 }
 .form-section {
   position: relative;
