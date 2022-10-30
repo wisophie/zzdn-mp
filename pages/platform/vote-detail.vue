@@ -77,6 +77,7 @@
 </template>
 
 <script>
+	import { getVoteDetail,deleteVote} from '@/api/vote'
 	export default {
 		data() {
 			return {
@@ -95,7 +96,26 @@
 			show2: false,
 			};
 		},
+		onLoad({ id }){
+			this.togetVoteDetail(id)
+		},
 		methods:{
+			togetVoteDetail(id){
+				const params={
+					id:id
+				}
+				getVoteDetail(params).then(res=>{
+					console.log(res)
+				})
+			},
+			Vote(){
+				const data={
+					id:2
+				}
+				toVote(data).then(res=>{
+					console.log(res)
+				})
+			},
 			handleRoute(id) {
 				const url = `../TUI-Chat/chat?conversationID=${id}`;
 				uni.navigateTo({
@@ -106,6 +126,14 @@
 				uni.$u.route(url)
 			},
 			selectClick(index){
+				if(index=='删除商品'){
+					const data={
+						id:1
+					}
+					deleteVote(data).then(res=>{
+						console.log(res)
+					})
+				}
 						console.log(index)
 					}
 		}

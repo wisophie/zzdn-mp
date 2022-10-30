@@ -90,14 +90,14 @@
 		  </view>
 		</view>
 			
-			<!-- <view class="bt2" v-if="id==uid"@tap="edit">编辑商品</view> -->
+			<view class="bt2" v-if="id==uid"@tap="toeditVote">保存修改</view>
 			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
 			<view class="func">
 				<view class="f">
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
 				</view>
 				<view class="f">
-					<u-button class="mt-4" type="primary" @click="createhelp">发布投票</u-button>
+					<u-button class="mt-4" type="primary" @click="tocreateVote">发布投票</u-button>
 				</view>
 			</view>
 		</view>
@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import { createVote,editVote} from '@/api/vote'
 	export default {
 		data() {
 			return {
@@ -154,6 +155,45 @@
 			this.getShare();
 		},
 		methods:{
+			tocreateVote(){
+				const data={
+					orderId:'',
+					progress:'',
+					topic:'',
+					feedbackType:'',
+					pics:'',
+					type:'',
+					options:[{
+						content:'',
+					}
+					]
+				}
+				createVote(data).then(res=>{
+					
+				})
+			},
+			toeditVote(){
+				const data={
+					id:0,
+					orderId:'',
+					progress:'',
+					topic:'',
+					feedbackType:'',
+					pics:'',
+					type:'',
+					options:[
+						{
+						id:0,
+						count:0,
+						content:'',
+						}
+					]
+				}
+				
+				editVote(data).then(res=>{
+					
+				})
+			},
 			edit(){
 				this.editable=false
 			},
@@ -193,25 +233,9 @@
 						sex='female';
 					}
 			},
-			getShare() {
-			  
-			    uni.request({
-			    	url: 'http://z8h3dz.natappfree.cc/wx/share/goods/list',
-			    	data: {
-			    		
-			    	},
-					header:{"X-Litemall-Token":this.token},
-			    	method: 'GET',
-			    	success: (res) => {
-			    		let status = res.data.errno;
-			    		if (status == 0) {
-						this.list=res.data.data.list
-						this.cropFilePath=this.list[0].gallery
-							console.log(res)
-							}
-						}
-			  })
-			},
+			canceldingdan(){
+				uni.navigateBack()
+			}
 			
 		}
 	}
@@ -309,7 +333,7 @@
 		}
 
 		.bt2 {
-			margin-top: 50rpx;
+			margin-top: 200rpx;
 			text-align: center;
 			font-size: 32rpx;
 			color: $uni-color-error;
