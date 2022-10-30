@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
 		
-	
 		<view class="main">
 			<view class="column heads">
 				<view class="row head">
@@ -99,14 +98,14 @@
 		  </view>
 		</view>
 			
-			<!-- <view class="bt2" v-if="id==uid"@tap="edit">编辑商品</view> -->
+			<view class="bt2" v-if="id==uid"@tap="toeditshare">保存商品</view>
 			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
 			<view class="func">
 				<view class="f">
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
 				</view>
 				<view class="f">
-					<u-button class="mt-4" type="primary" @click="createhelp">发布商品</u-button>
+					<u-button class="mt-4" type="primary" @click="tocreateshare">发布商品</u-button>
 				</view>
 			</view>
 		</view>
@@ -135,6 +134,7 @@
 
 <script>
 	import myfunction from './myfunction.js'
+	import { editShare,createShare} from '@/api/share'
 	export default {
 		data() {
 			return {
@@ -160,7 +160,7 @@
 			};
 		},
 		onLoad(){
-			this.getShare();
+			
 		},
 		methods:{
 			edit(){
@@ -207,25 +207,45 @@
 					}
 				//this.update(sex,'sex')
 			},
-			getShare() {
-			  
-			    uni.request({
-			    	url: 'http://z8h3dz.natappfree.cc/wx/share/goods/list',
-			    	data: {
-			    		
-			    	},
-					header:{"X-Litemall-Token":this.token},
-			    	method: 'GET',
-			    	success: (res) => {
-			    		let status = res.data.errno;
-			    		if (status == 0) {
-						this.list=res.data.data.list
-						this.cropFilePath=this.list[0].gallery
-							console.log(res)
-							}
-						}
-			  })
+			toeditshare(){
+				const data = {
+				  id: 1,
+				  exchange: 0,   //0提供货物1需求货物
+				  category: '',
+				  title: '',
+				  gallery: '',
+				  specification: '',
+				  detail: '',
+				  tel: '',
+				  province:'',
+				  city:'',
+				  country:'',
+				}
+				editShare(data).then(res=>{
+					console.log(res)
+				})
 			},
+			tocreateshare(){
+				const data = {
+				  id: 1,
+				  exchange: 0,   //0提供货物1需求货物
+				  category: '',
+				  title: '',
+				  gallery: '',
+				  specification: '',
+				  detail: '',
+				  tel: '',
+				  province:'',
+				  city:'',
+				  country:'',
+				}
+				createShare(data).then(res=>{
+					console.log(res)
+				})
+			},
+			canceldingdan(){
+				uni.navigateBack()
+			}
 			
 		}
 	}
@@ -383,7 +403,7 @@
 		}
 	.func{
 		display: flex;
-		margin-top: 120rpx;
+		margin-top: 20rpx;
 		padding:0 20rpx;
 		.f{
 			flex:1;

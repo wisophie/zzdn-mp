@@ -67,7 +67,7 @@
 		    <text class="bt" >取消任务</text>
 		  </view> -->
 		  <view class="b-footer1__left1">
-		  			  <view @tap="handleRoute('C2Cyanli')" class="u">
+		  			  <view @tap="tofulfillHelp" class="u">
 		  				  
 		  				  <text>完成任务</text>
 		  			  </view>
@@ -82,7 +82,7 @@
 			  </view>
 		    
 		  </view>
-		  <view class="b-footer__right" @click="toOrder">
+		  <view class="b-footer__right" @click="totakeHelp">
 		    <text class="bt" >我要接单</text>
 		  </view>
 		</view>
@@ -101,6 +101,7 @@
 </template>
 
 <script>
+	import { getHelpDetail,takeHelp,fulfillHelp,agreeHelp,unagreeHelp} from '@/api/help'
 	export default {
 		data() {
 			return {
@@ -117,7 +118,52 @@
 				
 			};
 		},
+		onLoad({ id }){
+			this.togetHelpDetail(id)
+		},
 		methods:{
+			tounagreeHelp(){
+				const data={
+					orderId:1
+				}
+					unagreeHelp(data).then(res=>{
+						console.log(res)
+					})
+			},
+			toagreeHelp(){
+				const data={
+					orderId:1
+				}
+					agreeHelp(data).then(res=>{
+						console.log(res)
+					})
+			},
+			tofulfillHelp(){
+				const data={
+					orderId:1,
+					afterRepairPhoto:'',
+					beforeRepairPhoto:'',
+				}
+				fulfillHelp(data).then(res=>{
+					console.log(res)
+					})
+			},
+			totakeHelp(){
+			const data={
+				orderId:1
+			}
+				takeHelp(data).then(res=>{
+					console.log(res)
+				})
+			},
+			togetHelpDetail(id){
+				const params={
+					orderId:id
+				}
+				getHelpDetail(params).then(res=>{
+					console.log(res)
+				})
+			},
 			handleRoute(id) {
 				const url = `../TUI-Chat/chat?conversationID=${id}`;
 				uni.navigateTo({
@@ -125,6 +171,14 @@
 				});
 			},
 			selectClick(index){
+				// if(index=='删除商品'){
+				// 	const data={
+				// 		id:1
+				// 	}
+				// 	deleteShare(data).then(res=>{
+				// 		console.log(res)
+				// 	})
+				// }
 						console.log(index)
 					}
 		}
@@ -251,4 +305,4 @@ page {
 	margin-left: 25rpx;
 	margin-bottom:10rpx;
 }
-</style>
+</style>g

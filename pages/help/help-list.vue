@@ -18,7 +18,7 @@
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in friends" :key="item.id" @click="toPage('/pages/help/help-detail')">
+				<view class="friends-list" v-for="(item,index) in friends" :key="item.id" @click="toPage('/pages/help/help-detail',item.id)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
@@ -50,6 +50,7 @@
 <script>
 	import datas from './datas.js';
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
+	import { getHelplist} from '@/api/help'
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
@@ -71,30 +72,45 @@
 			};
 		},
 		onLoad(){
-			this.getHelpList()
+			// this.getHelpList()
 			this.getFriends1()
 		},
 		methods:{
+			upCallback(page){
+				const params = {
+				  status:'', //1：发起订单，未支付，2：已支付，等待接单，3：已接单，正在赶往现场，4：完成，5：取消订单
+				  page: '',
+				  limit: '',
+				  order: 'desc',
+				  sort:'',
+				  relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  orderType:'',  //0跑腿订单 1帮忙订单
+				  role:'',  //接单人角色，我是发起人 0 我是接单人1
+				}
+				getHelplist(params).then(res =>{
+					console.log(res)
+				})
+			},
 			click(item) {
 			                console.log('item', item);
 			            },
-			toPage(url) {
-			  uni.$u.route(url)
+			toPage(url,id) {
+			  uni.$u.route(url, { id })
 			},
-			getHelpList(){
-				uni.request({
-				  	url: this.serverUrl+'/wx/errand/order/list',
-				  	data: {
+			// getHelpList(){
+			// 	uni.request({
+			// 	  	url: this.serverUrl+'/wx/errand/order/list',
+			// 	  	data: {
 				  		
-				  	},
-					header:{"X-Litemall-Token":this.token},
-				  	method: 'GET',
-				  	success: (res) => {
-				  		console.log(res)
+			// 	  	},
+			// 		header:{"X-Litemall-Token":this.token},
+			// 	  	method: 'GET',
+			// 	  	success: (res) => {
+			// 	  		console.log(res)
 						
-						}
-				})
-			}, 
+			// 			}
+			// 	})
+			// }, 
 			getFriends1: function() {
 			  	this.friends = datas.friends();
 			  	for(let i=0;i<10;i++){

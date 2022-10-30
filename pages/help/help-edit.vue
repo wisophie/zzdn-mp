@@ -47,7 +47,7 @@
 				</view> -->
 				<view class="row cc">
 					<view class="lm">
-						<view class="title">类目</view>
+						<view class="title">任务类型</view>
 						<view class="cont">
 							<picker @change="bindPickerChange" :value="index1" :range="array" v-if="id==uid">
 								<view class="uni-input">{{array[index1]}}</view>
@@ -59,7 +59,7 @@
 						</view> -->
 					</view>
 					
-					<view class="lm">
+					<!-- <view class="lm">
 						<view class="title">规格</view>
 						<view class="cont">
 							<picker @change="bindPickerChange2" :value="index2" :range="specification" v-if="id==uid">
@@ -67,10 +67,8 @@
 							</picker>
 							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
 						</view>
-						<!-- <view class="more" v-if="id==uid">
-							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-						</view> -->
-					</view>
+						
+					</view> -->
 				</view>
 				
 				
@@ -86,7 +84,7 @@
 				
 			</view>
 		<view class="os-remark">
-		  <view class="os-remark__title">商品详情</view>
+		  <view class="os-remark__title">任务详情</view>
 		  <view class="os-remark__content">
 		    <u--textarea
 		      v-model="remark"
@@ -106,7 +104,7 @@
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
 				</view>
 				<view class="f">
-					<u-button class="mt-4" type="primary" @click="createhelp">发布商品</u-button>
+					<u-button class="mt-4" type="primary" @click="tocreateHelp">发布任务</u-button>
 				</view>
 			</view>
 		</view>
@@ -134,6 +132,7 @@
 </template>
 
 <script>
+	import { createHelp} from '@/api/help'
 	export default {
 		data() {
 			return {
@@ -146,7 +145,7 @@
 				data:'',
 				show: false,
 				remark: '这里是商品详情这里是商品详情这里是商品详情',
-				array: ['滞销', '共享', '未知'],
+				array: ['跑腿任务', '帮忙任务'],
 				index1: 0,
 				index2: 0,
 				specification:['金属', '不锈钢', '未知'],
@@ -162,6 +161,21 @@
 			this.getShare();
 		},
 		methods:{
+			tocreateHelp(){
+				const data = {
+				  amount: 1,
+				  mobile: '',   
+				  topic: '',
+				  content: '',
+				  orderType: '',  //0跑腿订单 1帮忙订单
+				  province:'',
+				  city:'',
+				  country:'',
+				}
+				createHelp(data).then(res=>{
+					console.log(res)
+				})
+			},
 			edit(){
 				this.editable=false
 			},
@@ -202,25 +216,9 @@
 					}
 				//this.update(sex,'sex')
 			},
-			getShare() {
-			  
-			    uni.request({
-			    	url: 'http://z8h3dz.natappfree.cc/wx/share/goods/list',
-			    	data: {
-			    		
-			    	},
-					header:{"X-Litemall-Token":this.token},
-			    	method: 'GET',
-			    	success: (res) => {
-			    		let status = res.data.errno;
-			    		if (status == 0) {
-						this.list=res.data.data.list
-						this.cropFilePath=this.list[0].gallery
-							console.log(res)
-							}
-						}
-			  })
-			},
+			canceldingdan(){
+				uni.navigateBack()
+			}
 			
 		}
 	}

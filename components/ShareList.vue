@@ -1,6 +1,6 @@
 <template>
   <view class="o-list">
-    <view class="o-list__item" v-for="item in list" :key="item">
+    <view class="o-list__item" v-for="item in list" :key="item.id" @click="toDetail(item.id)">
       <view class="o-list__item__header u-border-bottom">
         <view class="u-flex u-flex-fill">
           <u-icon name="order" color="#5d51ff" size="18" />
@@ -8,7 +8,7 @@
         </view>
         <u--text type="warning" text="滞销货物" />
       </view>
-      <view class="o-list__item__content" @click="toDetail">
+      <view class="o-list__item__content" >
         <view class="o-list__item__content__img">
           <u--image :src="item" width="48" height="48" radius="4" />
         </view>
@@ -54,8 +54,8 @@ export default {
     return {}
   },
   methods: {
-    toDetail() {
-      uni.$u.route('/pages/share/share-detail')
+    toDetail(id) {
+      uni.$u.route('/pages/share/share-detail', { id })
     },
   }
 }

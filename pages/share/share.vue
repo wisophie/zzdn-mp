@@ -30,8 +30,10 @@
 </template>
 <script>
 	import myfunction from './myfunction.js';
-	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
-	import ShareList from '@/components/ShareList'
+	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js';
+	import ShareList from '@/components/ShareList';
+	import { getShareApi} from '@/api/share'
+	
 	export default {
 		mixins: [MescrollMixin], 
 		components: { ShareList },
@@ -46,8 +48,7 @@
 				upOption: {
 					noMoreSize: 0
 				},
-				//list:[],
-				token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aGlzIGlzIGxpdGVtYWxsIHRva2VuIiwiYXVkIjoiTUlOSUFQUCIsImlzcyI6IkxJVEVNQUxMIiwiZXhwIjoxNjY2Mzc1ODQ4LCJ1c2VySWQiOjIsImlhdCI6MTY2NjM1NDI0OH0.AjbgXECwUfHdhMmNGotgVeg453-s2C4gx7ODXHR7dZ0',
+				
 				tabs: [
 				  {
 				    id: 1,
@@ -66,27 +67,27 @@
 		},
 		
 		onLoad() {
-		 this.getShare();
+		 // this.getShare();
 		},
 		methods:{
-			getShare() {
+			// getShare() {
 			  
-			    uni.request({
-			    	url: 'http://7dgvmk.natappfree.cc/wx/share/goods/list',
-			    	data: {
+			//     uni.request({
+			//     	url: 'http://7dgvmk.natappfree.cc/wx/share/goods/list',
+			//     	data: {
 			    		
-			    	},
-					header:{"X-Litemall-Token":this.token},
-			    	method: 'GET',
-			    	success: (res) => {
-			    		let status = res.data.errno;
-			    		if (status == 0) {
-						this.list=res.data.data.list
-							console.log(this.list)
-							}
-						}
-			  })
-			},
+			//     	},
+			// 		header:{"X-Litemall-Token":this.token},
+			//     	method: 'GET',
+			//     	success: (res) => {
+			//     		let status = res.data.errno;
+			//     		if (status == 0) {
+			// 			this.list=res.data.data.list
+			// 				console.log(this.list)
+			// 				}
+			// 			}
+			//   })
+			// },
 			upCallback(page) {
 				const list = [
 					'https://cdn.uviewui.com/uview/swiper/1.jpg',
@@ -100,11 +101,22 @@
 					'https://cdn.uviewui.com/uview/album/9.jpg',
 					'https://cdn.uviewui.com/uview/album/10.jpg'
 				]
+				const params = {
+				  category:this.mealnum ,
+				  page: '',
+				  limit: '',
+				  order: 'desc',
+				  sort:''
+				}
+				getShareApi(params).then(res =>{
+					console.log(res)
+				})
 				this.mescroll.endBySize(list.length, 10)
 				if (page.num == 1) this.goods = []
 				this.goods = this.goods.concat(list)
 				// this.mescroll.endErr()
 			},
+			
 			//点击餐次生成菜单
 			clickMeal(e){
 				this.mealnum=e.name;		
@@ -190,7 +202,7 @@
 		   		padding-bottom:10rpx;
 		   		//border-bottom:2px solid #ffbd14;
 		   		color:#ffffff;
-		   	}
+		   	  }
 		   }
 		}
 			

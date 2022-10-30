@@ -83,9 +83,11 @@
 </template>
 
 <script>
+	import { deleteShare} from '@/api/share'
 	export default {
 		data() {
 			return {
+				shareId:null,
 				current: 0,
 				banner: [
 				  'https://cdn.uviewui.com/uview/swiper/swiper2.png',
@@ -98,7 +100,14 @@
 			show2: false,
 			};
 		},
+		onLoad({id}){
+			this.shareId = id
+			this.getShareInfo(id)
+		},
 		methods:{
+			getShareInfo(id){
+				console.log(id)
+			},
 			handleRoute(id) {
 				const url = `../TUI-Chat/chat?conversationID=${id}`;
 				uni.navigateTo({
@@ -109,7 +118,15 @@
 				uni.$u.route(url)
 			},
 			selectClick(index){
-						console.log(index)
+					if(index=='删除商品'){
+						const data={
+							id:1
+						}
+						deleteShare(data).then(res=>{
+							console.log(res)
+						})
+					}
+						console.log(this.shareId)
 					}
 		}
 	}
