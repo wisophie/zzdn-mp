@@ -75,35 +75,24 @@
 				</view>
 			</view>
 		</view>
-		<base-footer>
+		<!-- <base-footer>
 			<view class="b-footer">
 				<view class="b-footer__item"><u-button size="mini" text="删除订单" @click="onRemove" /></view>
 				<view class="b-footer__item"><u-button size="mini" text="物流详情" @click="toWuliu" /></view>
 				<view class="b-footer__item"><u-button size="mini" text="联系客服" /></view>
 			</view>
-		</base-footer>
+		</base-footer> -->
 	</view>
 </template>
 
 <script>
-import BaseFooter from '@/components/BaseFooter'
+// import BaseFooter from '@/components/BaseFooter'
 export default {
-	components: { BaseFooter },
+	// components: { BaseFooter },
 	data() {
 		return {}
 	},
 	methods: {
-		onRemove() {
-			uni.showModal({
-				title: '提示',
-				content: '是否确认删除该订单？',
-				success: res => {
-					if (res.confirm) {
-						uni.navigateBack()
-					}
-				}
-			})
-		},
 		toWuliu() {
 			uni.$u.route('/pages/goods/wuliu')
 		}
