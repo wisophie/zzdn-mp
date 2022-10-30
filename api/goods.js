@@ -39,6 +39,12 @@ export const updateApi = (data = {}) => http.post('/wx/goods/update', data)
 /** 供货商入驻 */
 export const applyApi = (data = {}) => http.post('/wx/provider/apply ', data)
 
+/** 供货商信息变更 */
+export const applyUpdateApi = (data = {}) => http.post('/wx/provider/update', data)
+
+/** 供货商申请信息查询 */
+export const getApplyInfoApi = (data = {}) => http.post('/wx/provider/findById', data)
+
 /** 采购商入驻 */
 export const buyerApply = (data = {}) => http.post('/wx/buyer/apply', data)
 

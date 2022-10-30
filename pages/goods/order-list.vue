@@ -84,7 +84,7 @@
         </view>
       </view>
     </view>
-    <order-list :list="goods" />
+    <order-list :userInfo="userInfo" :list="goods" />
     <u-datetime-picker
       v-model="initDate"
       :show="showDate"
@@ -171,6 +171,7 @@ export default {
       deep: true
     }
   },
+  onLoad() {},
   methods: {
     // 输入监听
     // inputWord(e) {
@@ -200,13 +201,13 @@ export default {
     confirmDate(e) {
       const date = uni.$u.timeFormat(e.value, 'yyyy-mm-dd')
       if (this.dateType === 'start') {
-				this.startDate = date
-				this.startDateText = date
-			}
+        this.startDate = date
+        this.startDateText = date
+      }
       if (this.dateType === 'end') {
-				this.endDate = date
-				this.endDateText = date
-			}
+        this.endDate = date
+        this.endDateText = date
+      }
       this.showDate = false
     },
     /*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
@@ -222,9 +223,7 @@ export default {
       getOrderApi(params)
         .then(res => {
           // const { list, total } = res.data
-          // const { list, total } = res.data
-          const list = [1,2,3,4]
-					const total = 10
+          const { list, total } = res.data
           this.mescroll.endBySize(list.length, total)
           if (page.num == 1) this.goods = []
           this.goods = this.goods.concat(list)

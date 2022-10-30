@@ -38,10 +38,10 @@
           <text class="g-sku-item__label">规格</text>
           <text class="g-sku-item__value">{{ info.unit }}</text>
         </view>
-        <view class="g-sku-item">
+        <!-- <view class="g-sku-item">
           <text class="g-sku-item__label">交易方式</text>
           <text class="g-sku-item__value">{{ getWayText(info.exchange) }}</text>
-        </view>
+        </view> -->
       </view>
     </view>
 
@@ -51,8 +51,15 @@
         {{ info.detail }}
       </view>
     </view>
-
-    <base-footer>
+    <u-action-sheet
+      :actions="list"
+      :title="title"
+      :show="show"
+      closeOnClickOverlay
+      @close="show = false"
+      @select="selectClick"
+    ></u-action-sheet>
+    <base-footer v-if="userInfo && userInfo.userLevel == 2">
       <view class="b-footer shadow-top">
         <view class="b-footer__left">
           <u-icon name="chat" color="#303133" size="22" />
@@ -79,14 +86,23 @@ export default {
   components: { BaseFooter },
   data() {
     return {
+      userInfo: null,
       goodsId: null,
       current: 0,
       cateList: [],
       banner: [],
-      info: {}
+      info: {},
+      title: '请选择',
+      list: [
+        { id: '0', name: '线上交易' },
+        { id: '1', name: '线下交易' },
+        { id: '2', name: '老客户下单延期支付' }
+      ],
+      show: false
     }
   },
   onLoad({ id }) {
+    this.userInfo = uni.getStorageSync('userInfo')
     this.goodsId = id
     getCateApi({ page: 1, limit: 999 }).then(res => {
       this.cateList = res.data.list
@@ -104,11 +120,14 @@ export default {
     getCateText(id) {
       return this.cateList.find(v => v.id === id)?.name
     },
-    getWayText(id) {
-      return wayData.find(v => v.id === id)?.name
-    },
+    // getWayText(id) {
+    //   return wayData.find(v => v.id === id)?.name
+    // },
     toOrder() {
-      uni.$u.route('/pages/goods/order-submit', { id: this.goodsId })
+      this.show = true
+    },
+    selectClick(e) {
+      uni.$u.route('/pages/goods/order-submit', { id: this.goodsId, payType: e.id })
     }
   }
 }

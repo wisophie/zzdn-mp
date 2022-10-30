@@ -27,10 +27,13 @@
       <u-form-item label="产品价格" prop="retailPrice">
         <u-input v-model="form.retailPrice" type="number" placeholder="请输入价格"></u-input>
       </u-form-item>
+      <u-form-item label="配送费" prop="freightPrice">
+        <u-input v-model="form.freightPrice" type="number" placeholder="请输入配送费"></u-input>
+      </u-form-item>
       <u-form-item label="产品数量" prop="number">
         <u-input v-model="form.number" type="number" placeholder="请输入数量"></u-input>
       </u-form-item>
-      <u-form-item label="交易方式" prop="exchange" @click="changeWay">
+      <!-- <u-form-item label="交易方式" prop="exchange" @click="changeWay">
         <u-input
           v-model="form.exchange.name"
           disabled
@@ -39,7 +42,7 @@
           suffixIcon="arrow-right"
           suffixIconStyle="color: #909399"
         ></u-input>
-      </u-form-item>
+      </u-form-item> -->
       <u-form-item label="产品详情" prop="detail">
         <u-textarea
           v-model="form.detail"
@@ -93,15 +96,16 @@ export default {
       cateList: [],
       showWay: false,
       ways: wayData,
-      exchangeName: '',
+      // exchangeName: '',
       form: {
         categoryId: null,
         name: '',
         detail: '',
         retailPrice: '',
+        freightPrice:'',
         gallery: [],
         number: '',
-        exchange: {},
+        // exchange: {},
         isOnSale: true
       },
       rules: {}
@@ -136,10 +140,10 @@ export default {
             .map(v => ({ status: 'success', message: '', url: v }))
           form.gallery = imgs
         }
-        if (form.exchange !== null) {
-          const exchange = wayData.find(v => v.id === form.exchange)
-          form.exchange = exchange
-        }
+        // if (form.exchange !== null) {
+        //   const exchange = wayData.find(v => v.id === form.exchange)
+        //   form.exchange = exchange
+        // }
         this.form = form
       })
     },
@@ -151,9 +155,9 @@ export default {
       this.showWay = true
       uni.hideKeyboard()
     },
-    selectWay(e) {
-      this.form.exchange = e
-    },
+    // selectWay(e) {
+    //   this.form.exchange = e
+    // },
     // 删除图片
     deletePic(event) {
       const key = 'gallery'
@@ -202,7 +206,7 @@ export default {
     submit() {
       const data = {
         ...this.form,
-        exchange: this.form.exchange.id || null,
+        // exchange: this.form.exchange.id || null,
         gallery: this.form.gallery.map(v => v.url).join()
       }
       if (this.currentId) {

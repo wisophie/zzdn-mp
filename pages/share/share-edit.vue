@@ -28,11 +28,35 @@
 					</view>
 				</view>
 				<view class="row">
-					<view class="title">发布时间</view>
-					<view class="cont">
-						{{changeTime(new Date())}}
+					<view class="title">选择地点</view>
+					<view class="fff">
+						<view class="form-item">
+						  <uni-data-picker 
+						    :localdata="addressOptions" 
+						    placeholder="地址" 
+						    popup-title="请选择"
+						    :map="{text: 'name', value: 'code'}"
+						    :clear-icon="false"
+						    @change="onchange"
+						  ></uni-data-picker>
+						</view>
 					</view>
 				</view>
+				<view class="row">
+					<view class="lm">
+						<view class="title">交易类型</view>
+						<view class="cont">
+							<picker @change="bindPickerChange3" :value="index3" :range="exchangetype" v-if="id==uid">
+								<view class="uni-input">{{exchangetype[index3]}}</view>
+							</picker>
+							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
+						</view>
+						<!-- <view class="more" v-if="id==uid">
+							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
+						</view> -->
+					</view>
+				</view>
+				
 			</view>
 			<view class="column heads">
 				<!-- <view class="row" @tap="modify('name','昵称',user.name,false)">
@@ -135,9 +159,15 @@
 <script>
 	import myfunction from './myfunction.js'
 	import { editShare,createShare} from '@/api/share'
+	import { regionList } from '@/api/address'
 	export default {
 		data() {
 			return {
+				formData: {
+				  province: '',
+				  city: '',
+				  country:'',
+				},
 				fileList3: [{
 							url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
 						}],
@@ -147,22 +177,45 @@
 				data:'',
 				show: false,
 				remark: '这里是商品详情这里是商品详情这里是商品详情',
-				array: ['滞销', '共享', '未知'],
+				array: ['滞销货物', '共享信息', '未知'],
 				index1: 0,
 				index2: 0,
-				specification:['金属', '不锈钢', '未知'],
+				index3: 0,
+				extype:false,
+				specification:['金属', '不锈钢'],
+				exchangetype:['提供货物', '需求货物'],
 				list:{
 					'title':'商品标题',
 					'tel':'13202125125'
 				},
-				
-				token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aGlzIGlzIGxpdGVtYWxsIHRva2VuIiwiYXVkIjoiTUlOSUFQUCIsImlzcyI6IkxJVEVNQUxMIiwiZXhwIjoxNjY2NjM5MjU2LCJ1c2VySWQiOjYsImlhdCI6MTY2NjYxNzY1Nn0.3LDrT2DyOOXYPeel8PWYvlEh3hJa_BrbgKhPQSoNUKc"
+				addressOptions: [],
 			};
 		},
 		onLoad(){
 			
 		},
+		created() {
+		  
+		  this.getRegionList()
+		},
 		methods:{
+			getRegionList() {
+			  regionList().then(res => {
+			    this.addressOptions = res.data.list
+			  })
+			},
+			onchange(e) {
+			  console.log(e)
+			  const { value } = e.detail
+			  const addressType = ['province', 'city','country']
+			  value.forEach((item, index) => {
+			    if (addressType[index]) {
+			      this.formData[addressType[index]] = item.text
+			    }
+			  })
+			  console.log(this.formData)
+			},
+			
 			edit(){
 				this.editable=false
 			},
@@ -207,6 +260,15 @@
 					}
 				//this.update(sex,'sex')
 			},
+			bindPickerChange3: function(e) {
+					this.index3 = e.target.value
+					if(this.index3==0){
+						this.extype=false
+					}else if(this.index3==1){
+						this.extype=true
+					}
+				console.log(this.index3)
+			},
 			toeditshare(){
 				const data = {
 				  id: 1,
@@ -227,17 +289,16 @@
 			},
 			tocreateshare(){
 				const data = {
-				  id: 1,
-				  exchange: 0,   //0提供货物1需求货物
-				  category: '',
-				  title: '',
-				  gallery: '',
-				  specification: '',
-				  detail: '',
-				  tel: '',
-				  province:'',
-				  city:'',
-				  country:'',
+				  exchange: this.extype,   //0提供货物1需求货物
+				  category: this.array[this.index1],
+				  title: '商品标题',
+				  gallery: 'https://cdn.uviewui.com/uview/swiper/1.jpg,https://cdn.uviewui.com/uview/swiper/1.jpg',
+				  specification: this.specification[this.index2],
+				  detail: this.remark,
+				  tel: '13120212152',
+				  province:this.formData.province,
+				  city:this.formData.city,
+				  country:this.formData.country,
 				}
 				createShare(data).then(res=>{
 					console.log(res)
@@ -264,13 +325,14 @@
 			//border:1px solid red;
 			border-bottom: 1px dashed #ccc;
 			margin:0 40rpx;
+			
 			.row {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
 				.lm{
 					display: flex;
-					flex:1;
+					flex:0.62;
 					flex-direction: row;
 					.cont{
 						margin-left: 80rpx;
@@ -286,7 +348,7 @@
 				font-size: 32rpx;
 				font-weight: 520;
 				color: #333;
-				line-height: 112rpx;
+				line-height: 80rpx;
 			}
 
 			.user-head {
@@ -313,7 +375,7 @@
 				margin-left: 40rpx;
 				font-size: 30rpx;
 				color: gray;
-				line-height: 112rpx;
+				line-height: 80rpx;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -321,11 +383,12 @@
 					font-size: 30rpx;
 				}
 				
+				
 			}
 
 			.more {
 				flex: none;
-				height: 112rpx;
+				height: 80rpx;
 				display: flex;
 				align-items: center;
 				image {
@@ -410,5 +473,62 @@
 			padding:0 20rpx;
 		}
 	}
+	.fff{
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top:300rpx;
+		left:240rpx;
+		 
+	}
+	.form-item {
+	  position: relative;
+	  background: #fff;
+	  height: 56rpx;
+	  //border-bottom: 1px solid #d9d9d9;
 	
+	}
+	
+	.form-item .username, .form-item .password, .form-item .mobile, .form-item .code {
+	  position: absolute;
+	  top: 26rpx;
+	  left: 0rpx;
+	  display: block;
+	  width: 100%;
+	  height: 44rpx;
+	  background: #fff;
+	  color: #333;
+	  font-size: 30rpx;
+	}
+	
+	.form-item-code {
+	  margin-top: 32rpx;
+	  height: auto;
+	  overflow: hidden;
+	  width: 100%;
+	}
+	
+	.form-item-code .form-item {
+	  float: left;
+	  width: 350rpx;
+	}
+	
+	.form-item-code .code-btn {
+	  float: right;
+	  padding: 20rpx 40rpx;
+	  //border: 1px solid #d9d9d9;
+	  border-radius: 10rpx;
+	  color: #fff;
+	  background: green;
+	}
+	
+	.form-item .clear {
+	  position: absolute;
+	  top: 32rpx;
+	  right: 18rpx;
+	  z-index: 2;
+	  display: block;
+	  background: #fff;
+	 
+	}
 </style>

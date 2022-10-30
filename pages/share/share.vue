@@ -39,7 +39,7 @@
 		components: { ShareList },
 		data() {
 			return {
-				mealnum:'全部内容',
+				mealnum:'',
 				arr1:[],
 				goods: [],
 				downOption: {
@@ -89,35 +89,28 @@
 			//   })
 			// },
 			upCallback(page) {
-				const list = [
-					'https://cdn.uviewui.com/uview/swiper/1.jpg',
-					'https://cdn.uviewui.com/uview/album/2.jpg',
-					'https://cdn.uviewui.com/uview/album/3.jpg',
-					'https://cdn.uviewui.com/uview/album/4.jpg',
-					'https://cdn.uviewui.com/uview/album/5.jpg',
-					'https://cdn.uviewui.com/uview/album/6.jpg',
-					'https://cdn.uviewui.com/uview/album/7.jpg',
-					'https://cdn.uviewui.com/uview/album/8.jpg',
-					'https://cdn.uviewui.com/uview/album/9.jpg',
-					'https://cdn.uviewui.com/uview/album/10.jpg'
-				]
 				const params = {
 				  category:this.mealnum ,
 				  page: '',
 				  limit: '',
-				  order: 'desc',
+				  order: '',
 				  sort:''
 				}
 				getShareApi(params).then(res =>{
-					console.log(res)
+					const { list: listData, total } = res.data
+					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
+					this.mescroll.endBySize(list.length, total)
+					if (page.num == 1) this.goods = []
+					this.goods = this.goods.concat(list)
+					console.log(this.goods)
+				}).catch(() => {
+				  this.mescroll.endErr()
 				})
-				this.mescroll.endBySize(list.length, 10)
-				if (page.num == 1) this.goods = []
-				this.goods = this.goods.concat(list)
+				
 				// this.mescroll.endErr()
 			},
 			
-			//点击餐次生成菜单
+			//点击餐次生成列表
 			clickMeal(e){
 				this.mealnum=e.name;		
 			},

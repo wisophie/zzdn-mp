@@ -31,19 +31,56 @@
           </view>
         </view>
       </view>
-      <view class="o-list__item__footer u-border-top">
-        <view class="u-flex u-flex-between">
-          <view>
-            用户：
-            <text>{{ item.nickname }}</text>
-          </view>
-          <u--text type="primary" text="查看物流" @click="toWuliu" />
+      <view class="o-list__item__footer">
+        <view>
+          用户：
+          <text>{{ item.nickname }}</text>
         </view>
-        <view class="mt-2">
+        <view>
           合计：
           <text>￥{{ item.actualPrice }}</text>
           <text>(含运费{{ item.freightPrice }})</text>
         </view>
+      </view>
+      <view class="o-list__item__btns u-border-top">
+        <!-- 101 -->
+        <template v-if="item.orderStatusText == 101">
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="立即支付" />
+          </view>
+          <view class="o-list__item__btns__item"><u-button size="small" text="取消订单" /></view>
+        </template>
+        <!-- 201 -->
+        <template v-if="item.orderStatusText == 201">
+          <view class="o-list__item__btns__item"><u-button size="small" text="申请退款" /></view>
+        </template>
+        <!-- 301 -->
+        <template v-if="item.orderStatusText == 301">
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="确认收货" />
+          </view>
+        </template>
+        <!-- 401 -->
+        <template v-if="item.orderStatusText == 401">
+          <view class="o-list__item__btns__item"><u-button size="small" text="退货" /></view>
+          <view class="o-list__item__btns__item"><u-button size="small" text="删除" /></view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="去评价" />
+          </view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="再次购买" />
+          </view>
+        </template>
+        <!-- 402 -->
+        <template v-if="item.orderStatusText == 402">
+          <view class="o-list__item__btns__item"><u-button size="small" text="删除" /></view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="去评价" />
+          </view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="再次购买" />
+          </view>
+        </template>
       </view>
     </view>
   </view>
@@ -70,6 +107,10 @@ const statusMap = {
   401: '确认收货',
   402: '确认收货(系统)'
 }
+// userInfo {
+// 	certify: 是否已实名 false 未实名 true 已实名
+// 	userLevel: 账户身份 0 游客，1 供货商，2 采购商
+// }
 export default {
   props: {
     list: {
@@ -87,8 +128,15 @@ export default {
     toDetail() {
       uni.$u.route('/pages/goods/order-detail')
     },
-    toWuliu() {
-      uni.$u.route('/pages/goods/wuliu')
+    onRemove() {
+      uni.showModal({
+        title: '提示',
+        content: '是否确认删除该订单？',
+        success: res => {
+          if (res.confirm) {
+          }
+        }
+      })
     }
   }
 }
@@ -112,6 +160,14 @@ export default {
     &__footer {
       padding: 20rpx 32rpx;
       color: $u-content-color;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &__btns {
+      padding: 20rpx 32rpx;
+      display: flex;
+      justify-content: flex-end;
     }
     &__content {
       padding: 32rpx;
@@ -127,5 +183,8 @@ export default {
       }
     }
   }
+}
+.o-list__item__btns__item + .o-list__item__btns__item {
+  margin-left: 10px;
 }
 </style>

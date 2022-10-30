@@ -1,25 +1,25 @@
 <template>
   <view class="o-list">
-    <view class="o-list__item" v-for="item in list" :key="item.id" @click="toDetail(item.id)">
+    <view class="o-list__item" v-for="item in list" :key="item.id" @click="toDetail(item)">
       <view class="o-list__item__header u-border-bottom">
         <view class="u-flex u-flex-fill">
           <u-icon name="order" color="#5d51ff" size="18" />
           <text class="ml-1">发布者：xxxxx</text>
         </view>
-        <u--text type="warning" text="滞销货物" />
+        <u--text type="warning" :text="extype" />
       </view>
       <view class="o-list__item__content" >
         <view class="o-list__item__content__img">
-          <u--image :src="item" width="48" height="48" radius="4" />
+          <u--image :src="item.img" width="48" height="48" radius="4" />
         </view>
         <view class="o-list__item__content__detail">
           <view class="u-flex">
-            <view class="u-flex-fill">标题：这里写标题内容</view>
+            <view class="u-flex-fill">{{item.title}}</view>
           
           </view>
           <view class="u-flex mt-2">
             <view class="u-flex-fill miaoshu">
-              <text>明细：这里写详细描述，这里写详细描述，这里写详细描述</text>
+              <text>{{item.detail}}</text>
             </view>
           </view>
         </view>
@@ -27,7 +27,7 @@
       <view class="o-list__item__footer u-border-top">
         <view class="u-flex u-flex-between">
 			<view>
-				地址：xxxx
+				{{item.province}}/{{item.city}}/{{item.country}}
 			</view>
 			
           <view>
@@ -50,12 +50,23 @@ export default {
       default: () => []
     }
   },
-  data() {
-    return {}
+  data(){
+	  return{
+		  extype:'提供货物',
+	  }
+  },
+  computed:{
+	  extype:function(){
+		 
+		  return  {'false':'提供货物','true':'需求货物'}[this.list.exchange]
+	  		  
+	  },
+	  
   },
   methods: {
+	  
     toDetail(id) {
-      uni.$u.route('/pages/share/share-detail', { id })
+      uni.$u.route('/pages/share/share-detail', id)
     },
   }
 }

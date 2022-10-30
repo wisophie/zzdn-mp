@@ -20,7 +20,7 @@
 			   </view>
 		</u-swiper>
 		<view class="g-section">
-		  <view class="text-md text-bold">标题标题标题标题标题标题标题标题</view>
+		  <view class="text-md text-bold">{{list.title}}</view>
 		  <view class='mt-2 u-tips-color text-s'>
 			  <text >发布人：xxx</text>
 		  </view>
@@ -29,23 +29,24 @@
 		</view>
 		<view class="g-section os-price u-border-top u-border-bottom">
 			<view class="os-price__row">
-				<text class="os-price__row__label">类型</text>
-				<text class="os-price__row__value">帮忙</text>
+				<text class="os-price__row__label">交易类型</text>
+				<!-- <text class="os-price__row__value">{{extype}}</text> -->
+				<u--text type="warning" :text="extype" />
 			</view>
 			<view class="os-price__row">
 				<text class="os-price__row__label">所在地点</text>
-				<text class="os-price__row__value">xxx</text>
+				<text class="os-price__row__value">{{list.province}}/{{list.city}}/{{list.country}}</text>
 			</view>
 			<view class="os-price__row">
 				<text class="os-price__row__label">发布时间</text>
-				<text class="os-price__row__value">22：22</text>
+				<text class="os-price__row__value">{{list.updateTime}}</text>
 			</view>
 			
 		</view>
 		<view class="g-section">
 		  <view class="pb-4 text-md text-bold">商品详情</view>
 		  <view>
-		    这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容这是详情内容
+		    {{list.detail}}
 		  </view>
 		  <view class="mission mt-1 u-tips-color text-md">
 		    <text>商品价格</text>
@@ -84,14 +85,14 @@
 
 <script>
 	import { deleteShare} from '@/api/share'
+	
 	export default {
 		data() {
 			return {
-				shareId:null,
+				list:{},
+				extype:'提供货物',
 				current: 0,
-				banner: [
-				  'https://cdn.uviewui.com/uview/swiper/swiper2.png',
-				],
+				banner: [],
 			actions2: [{
 							name: '删除商品',
 						},
@@ -100,13 +101,15 @@
 			show2: false,
 			};
 		},
-		onLoad({id}){
-			this.shareId = id
-			this.getShareInfo(id)
+		onLoad(id){
+			this.list = id
+			this.getShareInfo()
 		},
 		methods:{
-			getShareInfo(id){
-				console.log(id)
+			getShareInfo(){
+				console.log(this.list)
+				this.banner=this.list.gallery.split(",")
+				this.extype={'false':'提供货物','true':'需求货物'}[this.list.exchange]
 			},
 			handleRoute(id) {
 				const url = `../TUI-Chat/chat?conversationID=${id}`;
