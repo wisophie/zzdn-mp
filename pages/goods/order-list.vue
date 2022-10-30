@@ -84,7 +84,7 @@
         </view>
       </view>
     </view>
-    <order-list :userInfo="userInfo" :list="goods" />
+    <order-list :userInfo="userInfo" :list="goods" @refresh="refresh" />
     <u-datetime-picker
       v-model="initDate"
       :show="showDate"
@@ -231,6 +231,9 @@ export default {
         .catch(() => {
           this.mescroll.endErr()
         })
+    },
+    refresh() {
+      this.mescroll.resetUpScroll()
     }
   }
 }

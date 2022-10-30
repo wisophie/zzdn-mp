@@ -42,47 +42,99 @@
           <text>(含运费{{ item.freightPrice }})</text>
         </view>
       </view>
-      <view class="o-list__item__btns u-border-top">
+      <!-- 采购商 -->
+      <view class="o-list__item__btns u-border-top" v-if="userInfo.userLevel === 2">
         <!-- 101 -->
         <template v-if="item.orderStatusText == 101">
           <view class="o-list__item__btns__item">
             <u-button type="primary" size="small" text="立即支付" />
           </view>
-          <view class="o-list__item__btns__item"><u-button size="small" text="取消订单" /></view>
+          <view class="o-list__item__btns__item">
+            <u-button size="small" text="取消订单" @click="cancel(item.id)" />
+          </view>
         </template>
         <!-- 201 -->
         <template v-if="item.orderStatusText == 201">
-          <view class="o-list__item__btns__item"><u-button size="small" text="申请退款" /></view>
+          <view class="o-list__item__btns__item">
+            <u-button size="small" text="申请退款" @click="commentRefund(item)" />
+          </view>
         </template>
         <!-- 301 -->
         <template v-if="item.orderStatusText == 301">
           <view class="o-list__item__btns__item">
-            <u-button type="primary" size="small" text="确认收货" />
+            <u-button type="primary" size="small" text="确认收货" @click="receive(item.id)" />
           </view>
         </template>
         <!-- 401 -->
         <template v-if="item.orderStatusText == 401">
-          <view class="o-list__item__btns__item"><u-button size="small" text="退货" /></view>
-          <view class="o-list__item__btns__item"><u-button size="small" text="删除" /></view>
+          <!-- <view class="o-list__item__btns__item"><u-button size="small" text="申请退货" /></view> -->
           <view class="o-list__item__btns__item">
-            <u-button type="primary" size="small" text="去评价" />
+            <u-button size="small" text="申请售后" @click="toAftersale(item.id)" />
           </view>
           <view class="o-list__item__btns__item">
-            <u-button type="primary" size="small" text="再次购买" />
+            <u-button size="small" text="删除订单" @click="remove(item.id)" />
+          </view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="去评价" @click="comment(item)" />
           </view>
         </template>
         <!-- 402 -->
         <template v-if="item.orderStatusText == 402">
-          <view class="o-list__item__btns__item"><u-button size="small" text="删除" /></view>
           <view class="o-list__item__btns__item">
-            <u-button type="primary" size="small" text="去评价" />
+            <u-button size="small" text="申请售后" @click="toAftersale(item.id)" />
           </view>
           <view class="o-list__item__btns__item">
-            <u-button type="primary" size="small" text="再次购买" />
+            <u-button size="small" text="删除订单" @click="remove(item.id)" />
+          </view>
+          <view class="o-list__item__btns__item">
+            <u-button type="primary" size="small" text="去评价" @click="comment(item)" />
+          </view>
+        </template>
+      </view>
+      <!-- 供应商 -->
+      <view class="o-list__item__btns u-border-top" v-if="userInfo.userLevel === 1">
+        <template v-if="item.orderStatusText == 201">
+          <view class="o-list__item__btns__item">
+            <u-button size="small" text="发货" @click="delivery(item.id)" />
+          </view>
+        </template>
+        <template v-if="item.orderStatusText == 202">
+          <view class="o-list__item__btns__item">
+            <u-button size="small" text="拒绝退款" @click="refuse(item)" />
+          </view>
+          <view class="o-list__item__btns__item">
+            <u-button size="small" text="同意退款" @click="agree(item)" />
           </view>
         </template>
       </view>
     </view>
+    <u-popup :show="showC" mode="bottom" closeOnClickOverlay @close="showC = false">
+      <view class="comment">
+        <u-textarea v-model="comment" placeholder="请输入评论" count></u-textarea>
+        <view class="mt-4">
+          <u-button type="primary" text="发表评论" @click="commentSubmit" />
+        </view>
+      </view>
+    </u-popup>
+    <u-popup :show="showR" mode="bottom" closeOnClickOverlay @close="showR = false">
+      <view class="comment">
+        <u-textarea v-model="commentR" placeholder="请输入退款理由" count></u-textarea>
+        <view class="mt-4">
+          <u-button type="primary" text="申请退款" @click="commentRSubmit" />
+        </view>
+      </view>
+    </u-popup>
+    <u-popup :show="showMoney" mode="bottom" closeOnClickOverlay @close="showMoney = false">
+      <view class="comment">
+        <u-input
+          v-model="money"
+          :placeholder="agree ? '请输入退款金额' : '请输入拒绝理由'"
+        ></u-input>
+        <view class="mt-4">
+          <u-button type="primary" text="确认" @click="confirmMoney" />
+        </view>
+      </view>
+    </u-popup>
   </view>
 </template>
 
@@ -111,6 +163,7 @@ const statusMap = {
 // 	certify: 是否已实名 false 未实名 true 已实名
 // 	userLevel: 账户身份 0 游客，1 供货商，2 采购商
 // }
+import { commentApi, removeApi, cancelApi, refundApi, agreeApi, refuseApi } from '@/api/order'
 export default {
   props: {
     list: {
@@ -119,24 +172,125 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      userInfo: null,
+      showC: false,
+      comment: '',
+      current: null,
+      showR: '',
+      commentR: '',
+      agree: false,
+      showMoney: false,
+      money: ''
+    }
+  },
+  mounted() {
+    this.userInfo = uni.getStorageSync('userInfo')
   },
   methods: {
+    refresh() {
+      this.$emit('refresh')
+    },
     getStatus(s) {
       return statusMap[s] || ''
     },
     toDetail() {
       uni.$u.route('/pages/goods/order-detail')
     },
-    onRemove() {
+    comment(item) {
+      this.current = item
+      this.showC = true
+    },
+    commentSubmit() {
+      const data = {
+        orderGoodsId: this.current.id,
+        content: this.comment
+      }
+      commentApi(data).then(res => {
+        uni.$u.toast('评论成功！')
+        this.comment = ''
+        this.showC = false
+      })
+    },
+    commentRefund(item) {
+      this.current = item
+      this.showR = true
+    },
+    commentRSubmit() {
+      const data = {
+        orderId: this.current.id,
+        refundContent: this.comment
+      }
+      refundApi(data).then(res => {
+        uni.$u.toast('申请成功！')
+        this.commentR = ''
+        this.showR = false
+      })
+    },
+    remove(id) {
       uni.showModal({
         title: '提示',
         content: '是否确认删除该订单？',
         success: res => {
           if (res.confirm) {
+            removeApi({ orderId: id }).then(res => {
+              uni.$u.toast('删除成功！')
+              this.refresh()
+            })
           }
         }
       })
+    },
+    cancel(id) {
+      uni.showModal({
+        title: '提示',
+        content: '是否确认取消该订单？',
+        success: res => {
+          if (res.confirm) {
+            cancelApi({ orderId: id }).then(res => {
+              uni.$u.toast('取消成功！')
+              this.refresh()
+            })
+          }
+        }
+      })
+    },
+    receive(id) {
+      receiveApi({ orderId: id }).then(res => {
+        this.refresh()
+      })
+    },
+    delivery(id) {
+      deliveryApi({ orderId: id }).then(res => {
+        uni.$u.toast('发货成功！')
+        this.refresh()
+      })
+    },
+    agree(item) {
+      this.agree = true
+      this.current = item
+      this.showMoney = true
+    },
+    refuse(item) {
+      this.agree = false
+      this.current = item
+      this.showMoney = true
+    },
+    confirmMoney() {
+      if (this.agree) {
+        agreeApi({ orderId: id, refundMoney: this.money }).then(res => {
+          uni.$u.toast('已同意退款')
+          this.refresh()
+        })
+      } else {
+        refuseApi({ orderId: id, rejectReason: this.money }).then(res => {
+          uni.$u.toast('已拒绝退款')
+          this.refresh()
+        })
+      }
+    },
+    toAftersale(id) {
+      uni.$u.route('/pages/goods/aftersale')
     }
   }
 }
@@ -186,5 +340,8 @@ export default {
 }
 .o-list__item__btns__item + .o-list__item__btns__item {
   margin-left: 10px;
+}
+.comment {
+  padding: 32rpx;
 }
 </style>
