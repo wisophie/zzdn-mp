@@ -1,20 +1,20 @@
 <template>
   <view>
     <view class="os-addr">
-      <view class="os-addr-box u-border">
+      <view class="os-addr-box u-border" @click="showP = true">
         <view class="os-addr-box__icon">
           <image src="/static/img/icon-wuliu.png" />
         </view>
-        <view class="os-addr-box__content">
+        <view class="os-addr-box__content" v-if="currentAd">
           <view>
-            <text>张小三</text>
-            <text class="ml-3">13348840101</text>
+            <text>{{ currentAd.name }}</text>
+            <text class="ml-3">{{ currentAd.tel }}</text>
           </view>
           <view class="mt-1">
-            <text>四川省</text>
-            <text class="ml-2">成都市</text>
-            <text class="ml-2">金牛区</text>
-            <text class="ml-2">营通街66号10栋1单元4楼</text>
+            <text>{{ currentAd.province }}</text>
+            <text class="ml-2">{{ currentAd.city }}</text>
+            <text class="ml-2">{{ currentAd.county }}</text>
+            <text class="ml-2">{{ currentAd.addressDetail }}</text>
           </view>
         </view>
         <view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#fff" size="18" /></view>
@@ -61,10 +61,10 @@
           <text class="os-price__row__label">商品总价</text>
           <text class="os-price__row__value">￥{{ totalPrice }}</text>
         </view>
-        <!-- <view class="os-price__row">
+        <view class="os-price__row">
           <text class="os-price__row__label">运费(快递)</text>
-          <text class="os-price__row__value">￥12.00</text>
-        </view> -->
+          <text class="os-price__row__value">￥{{freightPrice}}</text>
+        </view>
         <view class="os-price__row">
           <text class="os-price__row__label">应付款</text>
           <text class="os-price__row__value u-warning">￥{{ actualPrice }}</text>
@@ -96,13 +96,30 @@
         </view>
       </view>
     </view>
+    <u-popup :show="showP" round @close="showP = false" closeOnClickOverlay>
+      <scroll-view scroll-y="true" class="scroll-view">
+        <view class="list">
+          <view
+            class="list-item u-border-bottom"
+            v-for="(item, index) in adList"
+            :key="index"
+            @click="changeAd(item)"
+          >
+            <view class="item-name">{{ item.name }}</view>
+            <view class="item-address">
+              {{ `${item.province}${item.city}${item.county}${item.addressDetail}` }}
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </u-popup>
     <base-footer>
       <view class="b-footer">
         <view class="b-footer__left u-border">
           <text>实付￥{{ actualPrice }}</text>
         </view>
         <view class="b-footer__right">
-          <u-button type="primary" text="去支付" @click="toPay" />
+          <u-button type="primary" text="立即下单" @click="toPay" />
         </view>
       </view>
     </base-footer>
@@ -113,6 +130,7 @@
 import BaseFooter from '@/components/BaseFooter'
 import { createApi } from '@/api/order'
 import { getInfoApi } from '@/api/goods'
+import { addressList } from '@/api/address'
 import Big from 'big.js'
 
 export default {
@@ -126,17 +144,23 @@ export default {
       pay: 'wxpay',
       payList: [{ name: '微信支付', value: 'wxpay' }],
       retailPrice: 0,
-      freightPrice: 0
+      freightPrice: 0,
+      payType: null,
+      showP: false,
+      currentAd: null,
+      adList: []
     }
   },
-  onLoad({ id }) {
-    const userInfo = uni.getStorageSync('userInfo')
-    console.log('%c 【 userInfo 】-134', 'font-size:14px; color:rgb(210, 110, 210);', userInfo)
-    const token = uni.getStorageSync('token')
-    console.log('%c 【 token 】-136', 'font-size:14px; color:rgb(210, 110, 210);', token)
+  onLoad({ id, payType }) {
     this.goodsId = id
+    this.payType = payType
+    addressList({ page: 1, limit: 999 }).then(res => {
+      this.adList = res.data.list
+      this.currentAd = this.adList[0]
+    })
     getInfoApi({ id }).then(res => {
       this.retailPrice = res.data.retailPrice
+      this.freightPrice = +res.data.freightPrice
       this.goodsInfo = res.data
     })
   },
@@ -147,22 +171,33 @@ export default {
       return p.times(n)
     },
     actualPrice() {
-      const p = Big(this.totalPrice)
-      const f = this.freightPrice
-      return p.plus(f)
+      if (this.payType == 0) {
+        const p = Big(this.totalPrice)
+        const f = this.freightPrice
+        return p.plus(f)
+      } else {
+        return 0
+      }
     }
   },
   methods: {
+    changeAd(item) {
+      if (item === this.currentAd) {
+        this.showP = false
+      } else {
+        this.currentAd = item
+        this.showP = false
+      }
+    },
     toPay() {
       const data = {
-        addressId: 1,
+        addressId: this.currentAd.id,
         message: this.remark,
         price: this.retailPrice,
         number: this.num,
-        freightPrice: this.freightPrice,
         goodsId: this.goodsId,
         actualPrice: this.actualPrice,
-        payType: this.goodsInfo.exchange
+        payType: this.payType
       }
       createApi(data).then(res => {
         console.log('%c 【 res 】-164', 'font-size:14px; color:rgb(210, 110, 210);', res)
@@ -314,6 +349,50 @@ page {
   }
   &__right {
     width: 50%;
+  }
+}
+.scroll-view {
+  height: 640rpx;
+}
+.list {
+  padding-top: 16px;
+  .list-item {
+    background: #fff;
+    padding: 20rpx 20rpx;
+    .item-name {
+      font-size: 36rpx;
+      color: #333;
+    }
+
+    .item-address {
+      font-size: 28rpx;
+      color: #333;
+    }
+
+    .item-operation {
+      margin-top: 30rpx;
+      display: flex;
+      align-items: center;
+
+      .item-radio {
+        transform: scale(0.7);
+      }
+
+      .item-text {
+        flex: 1;
+        color: #333;
+        font-size: 28rpx;
+      }
+
+      .item-handle {
+        display: flex;
+
+        .item-handle-item {
+          padding: 10rpx;
+          margin-left: 20rpx;
+        }
+      }
+    }
   }
 }
 </style>
