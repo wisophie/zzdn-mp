@@ -1,7 +1,10 @@
 <template>
   <view class="content">
     <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
-      <view class="form-section">基本信息</view>
+      <view class="form-section">
+        基本信息
+        <text class="form-section__status">{{ progressText }}</text>
+      </view>
       <u-form-item label="公司名称" prop="companyName" borderBottom>
         <u-input v-model="form.companyName" border="none" placeholder="请输入"></u-input>
       </u-form-item>
@@ -143,7 +146,7 @@
 
 <script>
 import { uploadApi } from '@/api/common'
-import { applyApi } from '@/api/goods'
+import { applyApi, applyUpdateApi, getApplyInfoApi } from '@/api/goods'
 const typeData = [
   { name: '小微商户', id: 2401 },
   { name: '个人卖家', id: 2500 },
@@ -153,10 +156,15 @@ const typeData = [
   { name: '政府机关', id: 2502 },
   { name: '社会组织', id: 1708 }
 ]
-
+const progressMap = {
+  0: '已申请',
+  1: '已通过',
+  2: '已拒绝'
+}
 export default {
   data() {
     return {
+      progress: null,
       showType: false,
       typeList: typeData,
       form: {
@@ -181,6 +189,37 @@ export default {
       agree: false,
       submitLoading: false
     }
+  },
+  computed: {
+    progressText() {
+      return this.progress === null ? '' : progressMap[this.progress]
+    }
+  },
+  onLoad() {
+    getApplyInfoApi().then(res => {
+      if (!res.data) return
+      const { progress, ...rest } = res.data
+      this.progress = progress
+      const form = rest
+      const imgArr = [
+        'license',
+        'idCardPortrait',
+        'idCardNational',
+        'workshopPhoto',
+        'netshopPhoto'
+      ]
+      for (const key of imgArr) {
+        if (form[key]) {
+          const imgs = form[key].split(',').map(v => ({ status: 'success', message: '', url: v }))
+          form[key] = imgs
+        }
+      }
+      if (form.organizationType !== null) {
+        const organizationType = typeData.find(v => v.id === form.organizationType)
+        form.organizationType = organizationType
+      }
+      this.form = form
+    })
   },
   onReady() {
     this.$refs.formRef.setRules(this.rules)
@@ -257,17 +296,31 @@ export default {
           }
         }
       }
-      applyApi(data)
-        .then(res => {
-          this.loading = false
-          uni.$u.toast('提交成功')
-          setTimeout(() => {
-            uni.navigateBack()
-          }, 800)
-        })
-        .catch(err => {
-          this.loading = false
-        })
+      if (data.id) {
+        applyUpdateApi(data)
+          .then(res => {
+            this.loading = false
+            uni.$u.toast('更新成功')
+            setTimeout(() => {
+              uni.navigateBack()
+            }, 800)
+          })
+          .catch(err => {
+            this.loading = false
+          })
+      } else {
+        applyApi(data)
+          .then(res => {
+            this.loading = false
+            uni.$u.toast('提交成功')
+            setTimeout(() => {
+              uni.navigateBack()
+            }, 800)
+          })
+          .catch(err => {
+            this.loading = false
+          })
+      }
     }
   }
 }
@@ -298,6 +351,14 @@ page {
     background: $u-primary;
     transform: translateY(-50%);
     border-radius: 2px;
+  }
+  &__status {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 20rpx 0;
+    color: $u-warning;
+    font-size: 13px;
   }
 }
 .row-agree {

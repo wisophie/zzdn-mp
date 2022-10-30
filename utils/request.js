@@ -17,7 +17,6 @@ module.exports = vm => {
       config.data = config.data || {}
       if (config?.custom?.auth) {
         config.header['X-Litemall-Token'] = uni.getStorageSync('token')
-        // config.header['X-Litemall-Token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aGlzIGlzIGxpdGVtYWxsIHRva2VuIiwiYXVkIjoiTUlOSUFQUCIsImlzcyI6IkxJVEVNQUxMIiwiZXhwIjoxNjY2NjQwMjkyLCJ1c2VySWQiOjgsImlhdCI6MTY2NjYxODY5Mn0.CI1kirLVGlJsW3gvLK8iqG1Sm31SKlMdp629HD8MHuQ'
       }
       return config
     },
