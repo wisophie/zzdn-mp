@@ -43,6 +43,7 @@ export default {
     handleSwitch() {
       if (this.userLevel !== this.userInfo.userLevel) {
         const otherLevel = this.userInfo.otherLevel
+        console.log('%c 【 otherLevel 】-46', 'font-size:14px; color:rgb(210, 110, 210);', this.userInfo)
         const item = otherLevel.find(item => item.userLevel === this.userLevel)
         if (item) {
           this.handleLogin(item)

@@ -1,99 +1,105 @@
 <template>
   <view>
-    <view class="os-addr">
-      <view class="os-status">
-        <u-text color="#fff" bold text="已取消"></u-text>
-        <view class="ml-4">
+    <template v-if="orderInfo">
+      <view class="os-addr">
+        <view class="os-status">
+          <u-text color="#fff" bold :text="orderInfo.orderStatusText"></u-text>
+          <!-- <view class="ml-4">
           <u-button type="warning" size="small" text="去支付" />
+        </view> -->
+        </view>
+        <view class="os-addr-box u-border" @click="showP = true">
+          <view class="os-addr-box__icon"><image src="/static/img/icon-wuliu.png" /></view>
+          <view class="os-addr-box__content">
+            <view>
+              <text>{{ orderInfo.consignee }}</text>
+              <text class="ml-3">{{ orderInfo.mobile }}</text>
+            </view>
+            <view class="mt-1">
+              <text>{{ orderInfo.address }}</text>
+              <!-- <text>四川省</text>
+              <text class="ml-2">成都市</text>
+              <text class="ml-2">金牛区</text>
+              <text class="ml-2">营通街66号10栋1单元4楼</text> -->
+            </view>
+          </view>
         </view>
       </view>
-      <view class="os-addr-box u-border" @click="showP = true">
-        <view class="os-addr-box__icon"><image src="/static/img/icon-wuliu.png" /></view>
-        <view class="os-addr-box__content">
-          <view>
-            <text>张小三</text>
-            <text class="ml-3">13348840101</text>
-          </view>
-          <view class="mt-1">
-            <text>四川省</text>
-            <text class="ml-2">成都市</text>
-            <text class="ml-2">金牛区</text>
-            <text class="ml-2">营通街66号10栋1单元4楼</text>
-          </view>
-        </view>
-      </view>
-    </view>
 
-    <view class="os-content">
-      <view class="os-goods">
-        <view class="os-goods__img">
-          <u--image
-            src="https://cdn.uviewui.com/uview/album/1.jpg"
-            width="81"
-            height="81"
-            radius="4"
-          />
+      <view class="os-content">
+        <view class="os-goods" v-for="item in orderInfo.goodsList">
+          <view class="os-goods__img">
+            <u--image :src="item.picUrl" width="81" height="81" radius="4" />
+          </view>
+          <view class="os-goods__content">
+            <view class="os-goods__content__row">
+              <text class="text-bold">{{ item.goodsName }}</text>
+            </view>
+            <!-- <view class="os-goods__content__row">
+              <text class="label">规格：</text>
+              <text>xxxx</text>
+              <text class="label ml-3">型号：</text>
+              <text>xxxx</text>
+            </view> -->
+            <view class="os-goods__content__row">
+              <text class="label">单价：</text>
+              <text>￥{{ item.price }}</text>
+            </view>
+            <view class="os-goods__content__row">
+              <text class="label">数量：</text>
+              <text>x{{ item.number }}</text>
+            </view>
+          </view>
         </view>
-        <view class="os-goods__content">
-          <view class="os-goods__content__row">
-            <text class="text-bold">这是一个商品名称</text>
+        <view class="os-price u-border-top u-border-bottom">
+          <view class="os-price__row">
+            <text class="os-price__row__label">商品总价</text>
+            <text class="os-price__row__value">￥{{ orderInfo.goodsPrice }}</text>
           </view>
-          <view class="os-goods__content__row">
-            <text class="label">规格：</text>
-            <text>xxxx</text>
-            <text class="label ml-3">型号：</text>
-            <text>xxxx</text>
+          <view class="os-price__row">
+            <text class="os-price__row__label">运费(快递)</text>
+            <text class="os-price__row__value">￥{{ orderInfo.freightPrice }}</text>
           </view>
-          <view class="os-goods__content__row">
-            <text class="label">单价：</text>
-            <text>￥99.00</text>
+          <view class="os-price__row">
+            <text class="os-price__row__label">实付款</text>
+            <text class="os-price__row__value u-warning">￥{{ orderInfo.actualPrice }}</text>
           </view>
-          <view class="os-goods__content__row">
-            <text class="label">数量：</text>
-            <text>x2</text>
+        </view>
+        <view class="os-order">
+          <view class="os-order__row">
+            <text class="os-order__row__label">订单编号</text>
+            <text class="os-order__row__value">{{ orderInfo.orderSn }}</text>
+          </view>
+          <view class="os-order__row">
+            <text class="os-order__row__label">创建时间</text>
+            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+          </view>
+          <view class="os-order__row">
+            <text class="os-order__row__label">付款时间</text>
+            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+          </view>
+          <view class="os-order__row">
+            <text class="os-order__row__label">成交时间</text>
+            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+          </view>
+          <view class="os-order__row" v-if="orderInfo.addTime">
+            <text class="os-order__row__label">发起退款时间</text>
+            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+          </view>
+          <view class="os-order__row" v-if="orderInfo.applyRefundContent">
+            <text class="os-order__row__label">退款原因</text>
+            <text class="os-order__row__value">{{ orderInfo.applyRefundContent }}</text>
           </view>
         </view>
       </view>
-      <view class="os-price u-border-top u-border-bottom">
-        <view class="os-price__row">
-          <text class="os-price__row__label">商品总价</text>
-          <text class="os-price__row__value">￥99.00</text>
-        </view>
-        <view class="os-price__row">
-          <text class="os-price__row__label">运费(快递)</text>
-          <text class="os-price__row__value">￥12.00</text>
-        </view>
-        <view class="os-price__row">
-          <text class="os-price__row__label">实付款</text>
-          <text class="os-price__row__value u-warning">￥200.00</text>
-        </view>
-      </view>
-      <view class="os-order">
-        <view class="os-order__row">
-          <text class="os-order__row__label">订单编号</text>
-          <text class="os-order__row__value">x1231312321313123</text>
-        </view>
-        <view class="os-order__row">
-          <text class="os-order__row__label">创建时间</text>
-          <text class="os-order__row__value">2022-02-02 16:30</text>
-        </view>
-        <view class="os-order__row">
-          <text class="os-order__row__label">付款时间</text>
-          <text class="os-order__row__value">2022-02-02 16:30</text>
-        </view>
-        <view class="os-order__row">
-          <text class="os-order__row__label">成交时间</text>
-          <text class="os-order__row__value">2022-02-02 16:30</text>
-        </view>
-      </view>
-    </view>
-    <!-- <base-footer>
+      <!-- <base-footer>
 			<view class="b-footer">
 				<view class="b-footer__item"><u-button size="mini" text="删除订单" @click="onRemove" /></view>
 				<view class="b-footer__item"><u-button size="mini" text="物流详情" @click="toWuliu" /></view>
 				<view class="b-footer__item"><u-button size="mini" text="联系客服" /></view>
 			</view>
 		</base-footer> -->
+    </template>
   </view>
 </template>
 
@@ -105,7 +111,8 @@ export default {
   // components: { BaseFooter },
   data() {
     return {
-      orderId: null
+      orderId: null,
+      orderInfo: null
     }
   },
   onLoad({ id }) {
@@ -115,7 +122,7 @@ export default {
   methods: {
     getOrderInfo() {
       getOrderInfoApi({ orderId: this.orderId }).then(res => {
-        console.log('%c 【 res 】-118', 'font-size:14px; color:rgb(210, 110, 210);', res)
+        this.orderInfo = res.data.orderInfo
       })
     },
     toWuliu() {
