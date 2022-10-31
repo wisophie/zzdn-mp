@@ -66,6 +66,7 @@ export default {
       upOption: {
         noMoreSize: 0
       },
+      show: false,
       goods: [], // 数据列表
       name: null //当前搜索关键词
     }
@@ -90,6 +91,12 @@ export default {
       },
       deep: true
     }
+  },
+  onShow() {
+    if (this.show) {
+      this.mescroll.resetUpScroll()
+    }
+    this.show = true
   },
   methods: {
     // 输入监听

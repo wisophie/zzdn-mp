@@ -1,31 +1,31 @@
 <template>
   <div class="container">
     <div class="form-box">
+      <div class="form-item">
+        <input class="username" v-model="username" placeholder="账号" />
+        <van-icon name="close" v-if="username.length > 0" id="clear-username" class="clear" />
+      </div>
 
-    	<div class="form-item">
-    		<input class="username" v-model="username" placeholder="账号"/>
-        <van-icon name="close" v-if="username.length > 0" id="clear-username" class="clear"/>
-    	</div>
-
-    	<div class="form-item">
-    		<input class="password" v-model="password" password placeholder="密码"/>
-        <van-icon class="clear" id="clear-password" v-if="password.length > 0" name="close"/>      
-    	</div>
+      <div class="form-item">
+        <input class="password" v-model="password" password placeholder="密码" />
+        <van-icon class="clear" id="clear-password" v-if="password.length > 0" name="close" />
+      </div>
 
       <div class="button-login">
         <u-button type="primary" text="登录" @click="accountLogin"></u-button>
       </div>
 
-     <div class="form-item-text">
-      <navigator url="/pages/login/register" class="register">注册账号</navigator>
-			<navigator url="/pages/login/reset" class="reset">忘记密码</navigator>
-    </div> 
+      <div class="form-item-text">
+        <navigator url="/pages/login/register" class="register">注册账号</navigator>
+        <navigator url="/pages/login/reset" class="reset">忘记密码</navigator>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { loginByAccount } from '@/api/login'
+import { loginByAccount, fetchUserInfo } from '@/api/login'
+
 export default {
   data() {
     return {
@@ -38,11 +38,11 @@ export default {
 
   methods: {
     accountLogin() {
-      var that = this;
+      var that = this
 
       if (this.password.length < 1 || this.username.length < 1) {
         uni.$u.toast('请输入账号和密码')
-        return false;
+        return false
       }
 
       loginByAccount({
@@ -51,16 +51,22 @@ export default {
       }).then(res => {
         if (res.errno == 0) {
           that.loginErrorCount = 0
-          uni.setStorageSync('userInfo', res.data.userInfo);
           uni.setStorage({
-            key: "token",
+            key: 'token',
             data: res.data.token,
-            success: function() {
-              uni.switchTab({
-                url: '/pages/home/home'
-              });
+            success: function () {
+              fetchUserInfo().then(response => {
+                const userInfo = response.data
+                // console.log('%c 【 userInfo 】-60', 'font-size:14px; color:rgb(210, 110, 210);', userInfo)
+                uni.setStorageSync('userInfo', userInfo)
+                setTimeout(() => {
+                  uni.switchTab({
+                    url: '/pages/home/home'
+                  })
+                }, 600)
+              })
             }
-          });
+          })
         } else {
           that.loginErrorCount += 1
           uni.$u.toast('账户登录失败')
@@ -78,7 +84,6 @@ export default {
   overflow: hidden;
 }
 
-
 .form-box {
   width: 100%;
   height: auto;
@@ -95,7 +100,9 @@ export default {
   border-bottom: 1px solid #d9d9d9;
 }
 
-.form-item .username, .form-item .password, .form-item .code {
+.form-item .username,
+.form-item .password,
+.form-item .code {
   position: absolute;
   top: 26rpx;
   left: 0;
@@ -158,5 +165,4 @@ export default {
   float: right;
   font-size: 28rpx;
 }
-
 </style>

@@ -63,7 +63,7 @@
         </view>
         <view class="os-price__row">
           <text class="os-price__row__label">运费(快递)</text>
-          <text class="os-price__row__value">￥{{freightPrice}}</text>
+          <text class="os-price__row__value">￥{{ freightPrice }}</text>
         </view>
         <view class="os-price__row">
           <text class="os-price__row__label">应付款</text>
@@ -146,6 +146,7 @@ export default {
       retailPrice: 0,
       freightPrice: 0,
       payType: null,
+      exchange: null,
       showP: false,
       currentAd: null,
       adList: []
@@ -153,7 +154,7 @@ export default {
   },
   onLoad({ id, payType }) {
     this.goodsId = id
-    this.payType = payType
+    this.exchange = +payType
     addressList({ page: 1, limit: 999 }).then(res => {
       this.adList = res.data.list
       this.currentAd = this.adList[0]
@@ -171,7 +172,7 @@ export default {
       return p.times(n)
     },
     actualPrice() {
-      if (this.payType == 0) {
+      if (this.exchange == 0) {
         const p = Big(this.totalPrice)
         const f = this.freightPrice
         return p.plus(f)
@@ -190,19 +191,25 @@ export default {
       }
     },
     toPay() {
+      let payType = null
+      if (this.exchange === 0) {
+        payType = 'WX_PAY'
+      } else if (this.exchange === 1) {
+        payType = 'XIANXIA_PAY'
+      } else if (his.exchange === 2) {
+        payType = 'DELAY_PAY'
+      }
       const data = {
         addressId: this.currentAd.id,
         message: this.remark,
-        price: this.retailPrice,
         number: this.num,
         goodsId: this.goodsId,
-        actualPrice: this.actualPrice,
-        payType: this.payType
+        exchange: this.exchange,
+        payType: payType
       }
       createApi(data).then(res => {
-        console.log('%c 【 res 】-164', 'font-size:14px; color:rgb(210, 110, 210);', res)
+        uni.$u.route('/pages/goods/order-detail', { id: res.data.orderId })
       })
-      // uni.$u.route('/pages/goods/order-detail')
     }
   }
 }

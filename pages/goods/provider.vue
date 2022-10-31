@@ -1,6 +1,6 @@
 <template>
   <view class="content">
-    <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
+    <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="360">
       <view class="form-section">
         基本信息
         <text class="form-section__status">{{ progressText }}</text>
@@ -55,6 +55,31 @@
       </u-form-item>
       <u-form-item label="身份证有效期末" prop="idCardValidTime" borderBottom>
         <u-input v-model="form.idCardValidTime" border="none" placeholder="请输入"></u-input>
+      </u-form-item>
+      <u-form-item label="营业执照注册号" prop="licenseNo" borderBottom>
+        <u-input v-model="form.licenseNo" border="none" placeholder="请输入"></u-input>
+      </u-form-item>
+      <u-form-item label="证件的经营者/法定代表人姓名" prop="legalPerson" borderBottom>
+        <u-input v-model="form.legalPerson" border="none" placeholder="请输入"></u-input>
+      </u-form-item>
+      <u-form-item label="营业执照/登记证书的商家名称" prop="licenseName" borderBottom>
+        <u-input v-model="form.licenseName" border="none" placeholder="请输入"></u-input>
+      </u-form-item>
+      <u-form-item label="账户类型" prop="bankAccountType" borderBottom @click="changeType1">
+        <u-input
+          v-model="form.bankAccountType.name"
+          border="none"
+          placeholder="请选择"
+          disabled
+          disabledColor="#ffffff"
+        ></u-input>
+        <u-icon slot="right" name="arrow-right"></u-icon>
+      </u-form-item>
+      <u-form-item label="开户银行" prop="accountBank" borderBottom>
+        <u-input v-model="form.accountBank" border="none" placeholder="请输入"></u-input>
+      </u-form-item>
+      <u-form-item label="开户人名称" prop="accountName" borderBottom>
+        <u-input v-model="form.accountName" border="none" placeholder="请输入"></u-input>
       </u-form-item>
 
       <view class="form-section">营业执照</view>
@@ -135,6 +160,13 @@
         @close="showType = false"
         @select="confirmType"
       ></u-action-sheet>
+      <u-action-sheet
+        :show="showType1"
+        :actions="typeList1"
+        title="请选择账户类型"
+        @close="showType1 = false"
+        @select="confirmType1"
+      ></u-action-sheet>
     </u-form>
     <base-footer>
       <view class="u-flex-fill px-4 pt-1">
@@ -156,6 +188,10 @@ const typeData = [
   { name: '政府机关', id: 2502 },
   { name: '社会组织', id: 1708 }
 ]
+const typeData1 = [
+  { name: '对公账户', id: 74 },
+  { name: '对私账户', id: 75 }
+]
 const progressMap = {
   0: '已申请',
   1: '已通过',
@@ -166,10 +202,12 @@ export default {
     return {
       progress: null,
       showType: false,
+      showType1: false,
       typeList: typeData,
+      typeList1: typeData1,
       form: {
         companyName: '',
-        organizationType: {}, // 主体类型
+        organizationType: { name: '' }, // 主体类型
         organizationCode: '',
         address: '',
         tel: '',
@@ -183,7 +221,13 @@ export default {
         realName: '', // 真实姓名
         idCardNumber: '', // 身份证号
         idCardValidTimeBegin: '', // 身份证有效期始
-        idCardValidTime: '' // 身份证有效期末
+        idCardValidTime: '', // 身份证有效期末
+        licenseNo: '', // 新增字段
+        legalPerson: '',
+        licenseName: '',
+        bankAccountType: { name: '' },
+        accountBank: '',
+        accountName: ''
       },
       rules: {},
       agree: false,
@@ -214,11 +258,15 @@ export default {
           form[key] = imgs
         }
       }
-      if (form.organizationType !== null) {
+      if (form.organizationType !== null && form.organizationType !== undefined) {
         const organizationType = typeData.find(v => v.id === form.organizationType)
         form.organizationType = organizationType
       }
-      this.form = form
+      if (form.bankAccountType !== null && form.bankAccountType !== undefined) {
+        const bankAccountType = typeData1.find(v => v.id === form.bankAccountType)
+        form.bankAccountType = bankAccountType
+      }
+      this.form = Object.assign(this.form, form)
     })
   },
   onReady() {
@@ -232,8 +280,15 @@ export default {
       this.showType = true
       uni.hideKeyboard()
     },
+    changeType1() {
+      this.showType1 = true
+      uni.hideKeyboard()
+    },
     confirmType(e) {
       this.form.organizationType = e
+    },
+    confirmType1(e) {
+      this.form.bankAccountType = e
     },
     // 删除图片
     deletePic(event, key) {

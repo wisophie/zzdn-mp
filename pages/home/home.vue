@@ -100,6 +100,12 @@ export default {
 				: '采购商'
 		}
 	},
+	onLoad(){
+		const token =  uni.getStorageSync('token')
+		if(token){
+			this.fetchUserInfo()
+		}
+	},
 	onShow() {
 		user
 			.checkLogin()
