@@ -135,7 +135,7 @@
 					})
 				}
 						console.log(index)
-					}
+				}
 		}
 	}
 </script>

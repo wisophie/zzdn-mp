@@ -7,9 +7,9 @@
 					<view class="title">图片</view>
 					<view class="user-head" v-if="id==uid">
 						<u-upload
-							:fileList="fileList3"
-							@afterRead="afterRead"
-							@delete="deletePic"
+							:fileList="banner"
+							@afterRead="afterRead($event)"
+							@delete="deletePic($event, 'url')"
 							name="3"
 							multiple
 							:maxCount="2"
@@ -112,7 +112,7 @@
 		  <view class="os-remark__title">商品详情</view>
 		  <view class="os-remark__content">
 		    <u--textarea
-		      v-model="remark"
+		      v-model="list.detail"
 		      placeholder="请输入留言信息"
 		      count
 			  :disabled=false
@@ -157,7 +157,7 @@
 </template>
 
 <script>
-	import myfunction from './myfunction.js'
+	import { uploadApi } from '@/api/common'
 	import { editShare,createShare} from '@/api/share'
 	import { regionList } from '@/api/address'
 	export default {
@@ -168,15 +168,13 @@
 				  city: '',
 				  country:'',
 				},
-				fileList3: [{
-							url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-						}],
+				banner: [],
 				editable:'true',
 				maxl:10,
 				type:'',
 				data:'',
 				show: false,
-				remark: '这里是商品详情这里是商品详情这里是商品详情',
+				remark: "sfsafsf",
 				array: ['滞销货物', '共享信息', '未知'],
 				index1: 0,
 				index2: 0,
@@ -186,19 +184,81 @@
 				exchangetype:['提供货物', '需求货物'],
 				list:{
 					'title':'商品标题',
-					'tel':'13202125125'
+					tel:'输入手机号码',
+					detail:'请输入商品详情'
 				},
 				addressOptions: [],
 			};
 		},
-		onLoad(){
+		onLoad(id){
 			
+			this.getlist(id)
 		},
 		created() {
 		  
 		  this.getRegionList()
 		},
 		methods:{
+			getlist(id){
+				console.log(id.id)
+				const banners=id.gallery.split(",")
+				const temp =[{ url: 1 },{ url: 1 }]
+				this.banner= temp.map(((o, i) => ({ 
+				url: (i < banners.length) ? banners[i]  : ''})))
+				if(id.city!==undefined){
+					this.list = id
+				}else{
+					
+				}
+				console.log(this.banner)
+			},
+			// 删除图片
+			deletePic(event, key) {
+			     this.banner.splice(event.index,1)
+			},
+			// 新增图片
+			async afterRead(event, key) {
+				
+			  let lists = [].concat(event.file)
+			  let fileListLen = this.banner.length
+			  lists.map(item => {
+			    this.banner.push({
+			      ...item,
+			      status: 'uploading',
+			      message: '上传中'
+			    })
+			  })
+			  for (let i = 0; i < lists.length; i++) {
+			    let type = null
+			    uploadApi(lists[i].url, type)
+			      .then(res => {
+			        const result = res.data
+					console.log(result)
+			        let item = this.banner[fileListLen]
+			        this.banner.splice(
+			          fileListLen,
+			          1,
+			          Object.assign(item, {
+			            status: 'success',
+			            message: '',
+			            url: result
+			          })
+			        )
+			        fileListLen++
+			      })
+			      .catch(err => {
+			        this.banner.splice(
+			          fileListLen,
+			          1,
+			          Object.assign(item, {
+			            status: 'fail',
+			            message: '上传失败'
+			          })
+			        )
+			        fileListLen++
+			      })
+			  }
+			},
 			getRegionList() {
 			  regionList().then(res => {
 			    this.addressOptions = res.data.list
@@ -237,10 +297,6 @@
 						this.list[type]=this.data
 						this.close()
 					},
-			//处理时间
-			changeTime:function(date){
-				return myfunction.detailTime(date)
-			},
 			bindPickerChange: function(e) {
 				this.index1 = e.target.value
 				let sex='asexual';
@@ -270,43 +326,52 @@
 				console.log(this.index3)
 			},
 			toeditshare(){
+				this.list.gallery=[]
+				this.banner.map(e=>{this.list.gallery.push(e.url)})
 				const data = {
-				  id: 1,
-				  exchange: 0,   //0提供货物1需求货物
-				  category: '',
-				  title: '',
-				  gallery: '',
-				  specification: '',
-				  detail: '',
-				  tel: '',
-				  province:'',
-				  city:'',
-				  country:'',
+				  id: this.list.id,
+				  exchange: this.extype,   //0提供货物1需求货物
+				  category: this.array[this.index1],
+				  title: this.list.title,
+				  gallery: this.list.gallery.toString(),
+				  specification: this.specification[this.index2],
+				  detail: this.list.detail,
+				  tel: this.list.tel,
+				  province:this.formData.province,
+				  city:this.formData.city,
+				  country:this.formData.country,
 				}
 				editShare(data).then(res=>{
 					console.log(res)
 				})
 			},
 			tocreateshare(){
+				this.list.gallery=[]
+				this.banner.map(e=>{this.list.gallery.push(e.url)})
+				console.log(this.list.gallery)
 				const data = {
 				  exchange: this.extype,   //0提供货物1需求货物
 				  category: this.array[this.index1],
-				  title: '商品标题',
-				  gallery: 'https://cdn.uviewui.com/uview/swiper/1.jpg,https://cdn.uviewui.com/uview/swiper/1.jpg',
+				  title: this.list.title,
+				  gallery: this.list.gallery.toString(),
 				  specification: this.specification[this.index2],
-				  detail: this.remark,
-				  tel: '13120212152',
+				  detail: this.list.detail,
+				  tel: this.list.tel,
 				  province:this.formData.province,
 				  city:this.formData.city,
 				  country:this.formData.country,
 				}
 				createShare(data).then(res=>{
-					console.log(res)
+					uni.$u.toast('发布成功！')
 				})
+				this.canceldingdan()
 			},
 			canceldingdan(){
-				uni.navigateBack()
-			}
+				uni.switchTab({
+					url:'/pages/share/share',
+				})
+			},
+			
 			
 		}
 	}

@@ -1,9 +1,24 @@
 <template>
 	<view class="content">
 		
+	
 		<view class="main">
 			<view class="column heads">
-				
+				<view class="row head">
+					<view class="title">图片</view>
+					<view class="user-head" v-if="id==uid">
+						<u-upload
+							:fileList="fileList3"
+							@afterRead="afterRead"
+							@delete="deletePic"
+							name="3"
+							multiple
+							:maxCount="2"
+							:previewFullImage="true"
+						></u-upload>
+					</view>
+					
+				</view>
 				<view class="row" >
 					<view class="title">标题</view>
 					<view class="cont" @tap="get('title',list.title)" >
@@ -14,35 +29,11 @@
 					</view>
 				</view>
 				<view class="row">
-					<view class="title">选择地点</view>
-					<view class="fff">
-						<view class="form-item">
-						  <uni-data-picker 
-						    :localdata="addressOptions" 
-						    placeholder="地址" 
-						    popup-title="请选择"
-						    :map="{text: 'name', value: 'code'}"
-						    :clear-icon="false"
-						    @change="onchange"
-						  ></uni-data-picker>
-						</view>
+					<view class="title">发布时间</view>
+					<view class="cont">
+						{{changeTime(new Date())}}
 					</view>
 				</view>
-				<view class="row">
-					<view class="lm">
-						<view class="title">交易类型</view>
-						<view class="cont">
-							<picker @change="bindPickerChange3" :value="index3" :range="exchangetype" v-if="id==uid">
-								<view class="uni-input">{{exchangetype[index3]}}</view>
-							</picker>
-							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
-						</view>
-						<!-- <view class="more" v-if="id==uid">
-							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-						</view> -->
-					</view>
-				</view>
-				
 			</view>
 			<view class="column heads">
 				<!-- <view class="row" @tap="modify('name','昵称',user.name,false)">
@@ -55,18 +46,31 @@
 					</view>
 				</view> -->
 				<view class="row cc">
-					
-					
-				</view>
-				<view class="row" >
-					<view class="title">总费用</view>
-					<view class="cont" @tap="get('title',list.amount)" >
-						{{list.amount}}
+					<view class="lm">
+						<view class="title">任务类型</view>
+						<view class="cont">
+							<picker @change="bindPickerChange" :value="index1" :range="array" v-if="id==uid">
+								<view class="uni-input">{{array[index1]}}</view>
+							</picker>
+							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
+						</view>
+						<!-- <view class="more" v-if="id==uid">
+							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
+						</view> -->
 					</view>
-					<view class="more">
-						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-					</view>
+					
+					<!-- <view class="lm">
+						<view class="title">规格</view>
+						<view class="cont">
+							<picker @change="bindPickerChange2" :value="index2" :range="specification" v-if="id==uid">
+								<view class="uni-input">{{specification[index2]}}</view>
+							</picker>
+							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
+						</view>
+						
+					</view> -->
 				</view>
+				
 				
 				<view class="row" @tap="get('tel',list.tel)">
 					<view class="title">联系方式</view>
@@ -80,11 +84,11 @@
 				
 			</view>
 		<view class="os-remark">
-		  <view class="os-remark__title">任务内容</view>
+		  <view class="os-remark__title">任务详情</view>
 		  <view class="os-remark__content">
 		    <u--textarea
-		      v-model="list.detail"
-		      placeholder="请输入内容信息"
+		      v-model="remark"
+		      placeholder="请输入留言信息"
 		      count
 			  :disabled=false
 		      maxlength="50"
@@ -93,7 +97,7 @@
 		  </view>
 		</view>
 			
-
+			<!-- <view class="bt2" v-if="id==uid"@tap="edit">编辑商品</view> -->
 			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
 			<view class="func">
 				<view class="f">
@@ -129,123 +133,49 @@
 
 <script>
 	import { createHelp} from '@/api/help'
-	import { regionList } from '@/api/address'
 	export default {
 		data() {
 			return {
-				formData: {
-				  province: '',
-				  city: '',
-				  country:'',
-				},
-				banner: [],
+				fileList3: [{
+							url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+						}],
 				editable:'true',
 				maxl:10,
 				type:'',
 				data:'',
 				show: false,
-				remark: "sfsafsf",
-				array: ['滞销货物', '共享信息', '未知'],
+				remark: '这里是商品详情这里是商品详情这里是商品详情',
+				array: ['跑腿任务', '帮忙任务'],
 				index1: 0,
 				index2: 0,
-				index3: 0,
-				extype:false,
-				amount:'',
-				exchangetype:['跑题订单', '帮忙订单'],
+				specification:['金属', '不锈钢', '未知'],
 				list:{
 					'title':'商品标题',
-					tel:'输入手机号码',
-					detail:'请输入商品详情'
+					'tel':'13202125125'
 				},
-				addressOptions: [],
+				
+				token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aGlzIGlzIGxpdGVtYWxsIHRva2VuIiwiYXVkIjoiTUlOSUFQUCIsImlzcyI6IkxJVEVNQUxMIiwiZXhwIjoxNjY2NjM5MjU2LCJ1c2VySWQiOjYsImlhdCI6MTY2NjYxNzY1Nn0.3LDrT2DyOOXYPeel8PWYvlEh3hJa_BrbgKhPQSoNUKc"
 			};
 		},
-		onLoad(id){
-			
-			this.getlist(id)
-		},
-		created() {
-		  
-		  this.getRegionList()
+		onLoad(){
+			this.getShare();
 		},
 		methods:{
-			getlist(id){
-				console.log(id.id)
-				const banners=id.gallery.split(",")
-				const temp =[{ url: 1 },{ url: 1 }]
-				this.banner= temp.map(((o, i) => ({ 
-				url: (i < banners.length) ? banners[i]  : ''})))
-				if(id.city!==undefined){
-					this.list = id
-				}else{
-					
+			tocreateHelp(){
+				const data = {
+				  amount: 1,
+				  mobile: '',   
+				  topic: '',
+				  content: '',
+				  orderType: '',  //0跑腿订单 1帮忙订单
+				  province:'',
+				  city:'',
+				  country:'',
 				}
-				console.log(this.banner)
+				createHelp(data).then(res=>{
+					console.log(res)
+				})
 			},
-			// 删除图片
-			deletePic(event, key) {
-			     this.banner.splice(event.index,1)
-			},
-			// 新增图片
-			async afterRead(event, key) {
-				
-			  let lists = [].concat(event.file)
-			  let fileListLen = this.banner.length
-			  lists.map(item => {
-			    this.banner.push({
-			      ...item,
-			      status: 'uploading',
-			      message: '上传中'
-			    })
-			  })
-			  for (let i = 0; i < lists.length; i++) {
-			    let type = null
-			    uploadApi(lists[i].url, type)
-			      .then(res => {
-			        const result = res.data
-					console.log(result)
-			        let item = this.banner[fileListLen]
-			        this.banner.splice(
-			          fileListLen,
-			          1,
-			          Object.assign(item, {
-			            status: 'success',
-			            message: '',
-			            url: result
-			          })
-			        )
-			        fileListLen++
-			      })
-			      .catch(err => {
-			        this.banner.splice(
-			          fileListLen,
-			          1,
-			          Object.assign(item, {
-			            status: 'fail',
-			            message: '上传失败'
-			          })
-			        )
-			        fileListLen++
-			      })
-			  }
-			},
-			getRegionList() {
-			  regionList().then(res => {
-			    this.addressOptions = res.data.list
-			  })
-			},
-			onchange(e) {
-			  console.log(e)
-			  const { value } = e.detail
-			  const addressType = ['province', 'city','country']
-			  value.forEach((item, index) => {
-			    if (addressType[index]) {
-			      this.formData[addressType[index]] = item.text
-			    }
-			  })
-			  console.log(this.formData)
-			},
-			
 			edit(){
 				this.editable=false
 			},
@@ -286,38 +216,9 @@
 					}
 				//this.update(sex,'sex')
 			},
-			bindPickerChange3: function(e) {
-					this.index3 = e.target.value
-					if(this.index3==0){
-						this.extype=false
-					}else if(this.index3==1){
-						this.extype=true
-					}
-				console.log(this.index3)
-			},
-			tocreateHelp(){
-				const data = {
-				  orderType: '0',   //订单类型0跑腿订单 1帮忙订单	
-				  topic: "发生发生",
-				  content: '跑腿所发生的',
-				  amount:2352,
-				  mobile: '13525142121',
-				  province:this.formData.province,
-				  city:this.formData.city,
-				  country:this.formData.country,
-				}
-				createHelp(data).then(res=>{
-					console.log(res)
-					uni.$u.toast('发布成功！')
-				})
-				this.canceldingdan()
-			},
 			canceldingdan(){
-				uni.navigateTo({
-					url:'/pages/help/help-list',
-				})
-			},
-			
+				uni.navigateBack()
+			}
 			
 		}
 	}
@@ -326,7 +227,7 @@
 <style lang="scss" scoped>
 .main {
 		padding-top: 60rpx;
-		padding-bottom: 300rpx;
+		padding-bottom: 90rpx;
 		display: flex;
 		flex-direction: column;
         background-color: #fff;
@@ -336,14 +237,13 @@
 			//border:1px solid red;
 			border-bottom: 1px dashed #ccc;
 			margin:0 40rpx;
-			
 			.row {
 				display: flex;
 				flex-direction: row;
 				justify-content: space-between;
 				.lm{
 					display: flex;
-					flex:0.62;
+					flex:1;
 					flex-direction: row;
 					.cont{
 						margin-left: 80rpx;
@@ -359,7 +259,7 @@
 				font-size: 32rpx;
 				font-weight: 520;
 				color: #333;
-				line-height: 80rpx;
+				line-height: 112rpx;
 			}
 
 			.user-head {
@@ -386,7 +286,7 @@
 				margin-left: 40rpx;
 				font-size: 30rpx;
 				color: gray;
-				line-height: 80rpx;
+				line-height: 112rpx;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -394,12 +294,11 @@
 					font-size: 30rpx;
 				}
 				
-				
 			}
 
 			.more {
 				flex: none;
-				height: 80rpx;
+				height: 112rpx;
 				display: flex;
 				align-items: center;
 				image {
@@ -477,69 +376,12 @@
 		}
 	.func{
 		display: flex;
-		margin-top: 200rpx;
+		margin-top: 120rpx;
 		padding:0 20rpx;
 		.f{
 			flex:1;
 			padding:0 20rpx;
 		}
 	}
-	.fff{
-		display: flex;
-		align-items: center;
-		position: absolute;
-		top:150rpx;
-		left:230rpx;
-		 
-	}
-	.form-item {
-	  position: relative;
-	  background: #fff;
-	  height: 56rpx;
-	  //border-bottom: 1px solid #d9d9d9;
 	
-	}
-	
-	.form-item .username, .form-item .password, .form-item .mobile, .form-item .code {
-	  position: absolute;
-	  top: 26rpx;
-	  left: 0rpx;
-	  display: block;
-	  width: 100%;
-	  height: 44rpx;
-	  background: #fff;
-	  color: #333;
-	  font-size: 30rpx;
-	}
-	
-	.form-item-code {
-	  margin-top: 32rpx;
-	  height: auto;
-	  overflow: hidden;
-	  width: 100%;
-	}
-	
-	.form-item-code .form-item {
-	  float: left;
-	  width: 350rpx;
-	}
-	
-	.form-item-code .code-btn {
-	  float: right;
-	  padding: 20rpx 40rpx;
-	  //border: 1px solid #d9d9d9;
-	  border-radius: 10rpx;
-	  color: #fff;
-	  background: green;
-	}
-	
-	.form-item .clear {
-	  position: absolute;
-	  top: 32rpx;
-	  right: 18rpx;
-	  z-index: 2;
-	  display: block;
-	  background: #fff;
-	 
-	}
 </style>

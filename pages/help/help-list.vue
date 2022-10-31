@@ -78,17 +78,25 @@
 		methods:{
 			upCallback(page){
 				const params = {
-				  status:'', //1：发起订单，未支付，2：已支付，等待接单，3：已接单，正在赶往现场，4：完成，5：取消订单
+				  status:1, //1：发起订单，未支付，2：已支付，等待接单，3：已接单，正在赶往现场，4：完成，5：取消订单
 				  page: '',
 				  limit: '',
-				  order: 'desc',
+				  order: '',
 				  sort:'',
-				  relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
-				  orderType:'',  //0跑腿订单 1帮忙订单
-				  role:'',  //接单人角色，我是发起人 0 我是接单人1
+				  relatedMe:1,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  orderType:0,  //0跑腿订单 1帮忙订单
+				  role:0,  //接单人角色，我是发起人 0 我是接单人1
 				}
 				getHelplist(params).then(res =>{
-					console.log(res)
+					console.log(res.data)
+					const { list: listData, total } = res.data
+					//const list = listData.map(v => ({extype:{'0':'跑腿订单','1':'帮忙订单'}[v.orderType]}))
+					this.mescroll.endBySize(list.length, total)
+					if (page.num == 1) this.goods = []
+					this.goods = this.goods.concat(list)
+					console.log(this.goods)
+				}).catch(() => {
+				  this.mescroll.endErr()
 				})
 			},
 			click(item) {

@@ -6,7 +6,7 @@
           <u-icon name="order" color="#5d51ff" size="18" />
           <text class="ml-1">发布者：xxxxx</text>
         </view>
-        <u--text type="warning" :text="extype" />
+        <u--text type="warning" :text="item.extype" />
       </view>
       <view class="o-list__item__content" >
         <view class="o-list__item__content__img">
@@ -27,12 +27,12 @@
       <view class="o-list__item__footer u-border-top">
         <view class="u-flex u-flex-between">
 			<view>
-				{{item.province}}/{{item.city}}/{{item.country}}
+				地点：{{item.province}}/{{item.city}}/{{item.country}}
 			</view>
 			
           <view>
-            价格：
-            <text>￥100.00</text>
+            类型：
+            <text>{{item.category}}</text>
             
           </view>
         </view>
@@ -52,18 +52,14 @@ export default {
   },
   data(){
 	  return{
-		  extype:'提供货物',
+		  extype:'ww',
 	  }
   },
-  computed:{
-	  extype:function(){
-		 
-		  return  {'false':'提供货物','true':'需求货物'}[this.list.exchange]
-	  		  
-	  },
-	  
-  },
+  
   methods: {
+	refresh() {
+	  this.$emit('refresh')
+	},
 	  
     toDetail(id) {
       uni.$u.route('/pages/share/share-detail', id)

@@ -11,10 +11,9 @@
 		>
 		<view class="top-bar">
 			<view class="search-bar">
-				<view class="search-div">
-					<image src="../../static/static/images/search.png" class="search-image"></image>
-					<input class="searchbar" type="search" @input="search" placeholder="搜索用户/群" placeholder-style="color:#ccc"/>
-				</view>
+				
+					<u-search placeholder="请输入关键字" v-model="keyword" @custom="doSearch"></u-search>
+				
 			
 			</view>
 			<view class="bannerline">
@@ -23,13 +22,24 @@
 				</view>
 			</view>
 		</view>
-		<ShareList :list="goods" />
+		<view class="bottom-back">
+			<view class="bottom-area">
+				<view v-if="showSelectTag" class="conversation-bubble" @tap.stop="handleEditToggle">
+					<view v-for="(item, index) in array" :key="index" class="picker" :data-name="item.name" @tap="handleOnTap">{{ item.name }}</view>
+				</view>
+				<!-- <image @tap="showMore" class="btn-show-more" src="/static/static/assets/add.svg"></image> -->
+				<view class="btn-show-more" @tap="showMore">
+				  <u-icon name="more-dot-fill" size="24" color="#fff" />
+				</view>
+			</view>
+		</view>
+		<ShareList :list="goods" @refresh="refresh"/>
 	
 		</mescroll-body>
 	
 </template>
 <script>
-	import myfunction from './myfunction.js';
+	
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js';
 	import ShareList from '@/components/ShareList';
 	import { getShareApi} from '@/api/share'
@@ -39,7 +49,8 @@
 		components: { ShareList },
 		data() {
 			return {
-				mealnum:'',
+				mealnum:'全部内容',
+				showSelectTag: false,
 				arr1:[],
 				goods: [],
 				downOption: {
@@ -48,7 +59,15 @@
 				upOption: {
 					noMoreSize: 0
 				},
-				
+				array: [
+					{
+						name: '创建共享'
+					},
+					{
+						name: '我的共享'
+					},
+					
+				],
 				tabs: [
 				  {
 				    id: 1,
@@ -63,42 +82,28 @@
 				    name: '共享信息'
 				  },
 				  ],
+				  myid:'',
 			};
 		},
 		
-		onLoad() {
-		 // this.getShare();
+		onShow() {
+		 this.refresh()
 		},
 		methods:{
-			// getShare() {
-			  
-			//     uni.request({
-			//     	url: 'http://7dgvmk.natappfree.cc/wx/share/goods/list',
-			//     	data: {
-			    		
-			//     	},
-			// 		header:{"X-Litemall-Token":this.token},
-			//     	method: 'GET',
-			//     	success: (res) => {
-			//     		let status = res.data.errno;
-			//     		if (status == 0) {
-			// 			this.list=res.data.data.list
-			// 				console.log(this.list)
-			// 				}
-			// 			}
-			//   })
-			// },
+			
 			upCallback(page) {
 				const params = {
-				  category:this.mealnum ,
+				  category:'',
 				  page: '',
 				  limit: '',
 				  order: '',
 				  sort:''
 				}
+				
+			
 				getShareApi(params).then(res =>{
 					const { list: listData, total } = res.data
-					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
+					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)
@@ -112,11 +117,69 @@
 			
 			//点击餐次生成列表
 			clickMeal(e){
-				this.mealnum=e.name;		
+				this.mealnum=e.name;
+				this.goods = []
+				this.mescroll.resetUpScroll()
 			},
-			changeTime:function(date){
-				return myfunction.dateTime(date)
+			
+			handleEditToggle() {
+				this.setData({
+					showSelectTag: false
+				});
 			},
+			handleOnTap(event) {
+				this.setData(
+					{
+						showSelectTag: false
+					},
+					() => {
+						switch (event.currentTarget.dataset.name) {
+							case '创建共享':
+								this.$createConversation();
+								break;
+			
+							case '我的共享':
+								this.$myVote();
+								break;
+							default:
+								break;
+						}
+					}
+				);
+			},
+			showMore() {
+				this.setData({
+					showSelectTag: !this.showSelectTag
+				});
+			},
+			$createConversation() {
+				uni.navigateTo({
+					url: './share-edit'
+				});
+			},
+			$myVote() {
+				this.myid = uni.getStorageSync('userInfo').id
+				let newgoods=[]
+				this.goods.map(e=>{
+					
+					if(e.userId==this.myid){
+						newgoods.push(e)
+					}
+					
+				})
+				console.log(newgoods)
+				this.goods=[]
+				this.goods=newgoods
+				this.mescroll.resetUpScroll()
+			},
+			doSearch() {
+			
+			  this.goods = []
+			  this.mescroll.resetUpScroll(true)
+			},
+			refresh() {
+			  this.mescroll.resetUpScroll()
+			}
 		}
 	}
 </script>
@@ -135,36 +198,15 @@
 			padding: 5px 12px 0;
 		}
 		.search-bar{
-			width: 100%;
-			height: 115rpx;
-			line-height: 115rpx;
-			//border: 1px solid red;
-			.search-div{
-				position: absolute;
-				left:0;
-				width: 100%;
-				
-				z-index: -1;
-				box-sizing: border-box;
-				padding:15rpx 91rpx 14rpx 14rpx;
-				//border: 1px solid red;
-			}
-			.searchbar{
-				padding:0 12rpx 0 65rpx;
-				height:80rpx;
-				background:#fff ;
-				border-radius: 40rpx;
-				border: 1px solid #ccc;
-				width: 100%;
-			}
-			.search-image{
-				position: absolute;
-				right: 680rpx;
-				top:35rpx;
-				width:40rpx ;
-				height:40rpx ;
-			}
+			position: sticky;
+			top: var(--window-top); /* css变量 */
+			left:0;
+			width:100%;
+			padding: 15rpx 32rpx;
+			background-color: #fff;
+			z-index: 10;
 		}
+		
 	
 	
 		
@@ -269,5 +311,93 @@
 						}
 					}
 			}
+		.bottom-back {
+			position: fixed;
+			height: 10rpx;
+			width: 100%;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			z-index: 3;
+		}
+		.bottom-area {
+			flex-direction: column;
+			position: absolute;
+			bottom: 20rpx;
+			right: 0;
+			width: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: right;
+		}
+		.conversation-bubble {
+			padding-top: 10rpx;
+			position: absolute;
+			width: 250rpx;
+			padding-right: 3px;
+			background-color: #FFFFFF;
+			height: 180rpx;
+			bottom: 150rpx;
+			left:-110rpx;
+			z-index: 100;
+			box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+			border-radius: 14rpx;
+			transition-duration: all .3s;
+		}
 		
+		.conversation-bubble:before,
+		.conversation-bubble:after {
+			content: "";
+			display: block;
+			border-width:15px;
+			position: absolute;
+			bottom: -28px;
+			left: 84px;
+			border-style: solid dashed dashed;
+			border-color: #fff transparent transparent;
+			font-size: 0;
+			line-height: 0;
+			margin-left: 4px;
+			transition: all .3s;
+			//border:1px solid red;
+		}
+		
+		.conversation-bubble:after {
+			bottom: -28px;
+			
+			border-color: #fff transparent transparent;
+		
+		}
+		.picker {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 32rpx;
+			font-weight: 300;
+			width: 100%;
+			height: 80rpx;
+			&:active{
+				background-color: #ccc;
+			}
+			
+		}
+		.btn-show-more {
+			
+			  position: fixed;
+			  right: 60rpx;
+			  bottom: calc(var(--window-bottom) + 50rpx);
+			  width: 80rpx;
+			  height: 80rpx;
+			  display: flex;
+			  justify-content: center;
+			  align-items: center;
+			  border-radius: 50%;
+			  background: $u-primary;
+			  box-shadow: 0px 1px 4px 1px rgba($color: $u-primary, $alpha: 0.5);
+			  z-index: 99;
+			  &:active{
+			  	background-color: #ccc;
+			  }
+			
+		}
 </style>
