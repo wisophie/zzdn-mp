@@ -4,7 +4,6 @@
     <view class="header">
       <view class="user-avatar">
         <img v-if="mineInfo.avatar" :src="mineInfo.avatar" alt="">
-        <open-data v-else type="userAvatarUrl"></open-data>
       </view>
 
       <view class="user-info">

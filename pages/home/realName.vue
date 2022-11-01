@@ -76,7 +76,7 @@ export default {
   methods: {
     fetchCertifyDetail() {
       certifyDetail().then(res => {
-        const data = res.data
+        const data = res.data || {}
         for(let key in this.formData) {
           if (data[key]) {
             this.formData[key] = data[key]
