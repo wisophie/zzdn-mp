@@ -149,7 +149,6 @@ export default {
   width: 100%;
   height: auto;
   overflow: hidden;
-  padding: 0 40rpx;
   margin-top: 50rpx;
 }
 

@@ -206,6 +206,7 @@ export default {
   padding: 0 40rpx;
   margin-top: 96rpx;
   background: #fff;
+  box-sizing: border-box;
 }
 
 .form-item {
