@@ -84,7 +84,7 @@
         </view>
       </view>
     </view>
-    <order-list :userInfo="userInfo" :list="goods" @refresh="refresh" />
+    <order-list :list="goods" @refresh="refresh" />
     <u-datetime-picker
       v-model="initDate"
       :show="showDate"

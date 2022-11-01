@@ -83,7 +83,7 @@ export default {
 }
 
 .form-box {
-  width: 100%;
+  // width: 100%;
   height: auto;
   overflow: hidden;
   padding: 0 40rpx;

@@ -146,7 +146,7 @@ export default {
 }
 
 .login-box {
-  width: 100%;
+  // width: 100%;
   height: auto;
   overflow: hidden;
   margin-top: 50rpx;
