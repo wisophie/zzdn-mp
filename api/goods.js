@@ -26,6 +26,16 @@ export const getInfoApi = (params = {}) =>
   http.get('/wx/goods/detail', {
     params
   })
+	
+export const getBankApi1 = (params = {}) =>
+	http.get('/wx/provider/publicBanking', {
+		params
+	})
+	
+export const getBankApi2 = (params = {}) =>
+	http.get('/wx/provider/personalBanking', {
+		params
+	})
 
 /** 删除商品*/
 export const removeById = (data = {}) => http.post('/wx/goods/delete ', data)

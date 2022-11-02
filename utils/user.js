@@ -10,14 +10,18 @@ const util = require('../utils/util.js');
  */
 function checkSession() {
   return new Promise(function(resolve, reject) {
-    uni.checkSession({
-      success: function() {
-        resolve(true);
-      },
-      fail: function() {
-        reject(false);
-      }
-    })
+    if (uni.checkSession) {
+      uni.checkSession({
+        success: function() {
+          resolve(true);
+        },
+        fail: function() {
+          reject(false);
+        }
+      })
+    } else {
+      resolve(true)
+    }
   });
 }
 

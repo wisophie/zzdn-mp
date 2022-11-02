@@ -55,7 +55,7 @@ export default {
             this.doLogin(res.userInfo)
           },
           fail: () => {
-            util.showErrorToast('微信登录失败');
+            uni.$u.toast('微信登录失败')
           }
         })
         return
@@ -146,10 +146,9 @@ export default {
 }
 
 .login-box {
-  width: 100%;
+  // width: 100%;
   height: auto;
   overflow: hidden;
-  padding: 0 40rpx;
   margin-top: 50rpx;
 }
 

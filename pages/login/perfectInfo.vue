@@ -157,6 +157,7 @@ export default {
   overflow: hidden;
   padding: 0 40rpx;
   background: #fff;
+  box-sizing: border-box;
 }
 
 .form-item {

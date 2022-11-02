@@ -3,12 +3,10 @@
     <div class="form-box">
       <div class="form-item">
         <input class="username" v-model="username" placeholder="账号" />
-        <van-icon name="close" v-if="username.length > 0" id="clear-username" class="clear" />
       </div>
 
       <div class="form-item">
         <input class="password" v-model="password" password placeholder="密码" />
-        <van-icon class="clear" id="clear-password" v-if="password.length > 0" name="close" />
       </div>
 
       <div class="button-login">
@@ -85,12 +83,13 @@ export default {
 }
 
 .form-box {
-  width: 100%;
+  // width: 100%;
   height: auto;
   overflow: hidden;
   padding: 0 40rpx;
   margin-top: 200rpx;
   background: #fff;
+  box-sizing: border-box;
 }
 
 .form-item {
