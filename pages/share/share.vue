@@ -83,6 +83,7 @@
 				  },
 				  ],
 				  myid:'',
+				  categ:'',
 			};
 		},
 		
@@ -93,7 +94,7 @@
 			
 			upCallback(page) {
 				const params = {
-				  category:'',
+				  category:this.categ,
 				  page: '',
 				  limit: '',
 				  order: '',
@@ -115,10 +116,10 @@
 				// this.mescroll.endErr()
 			},
 			
-			//点击餐次生成列表
+			//点击标签生成列表
 			clickMeal(e){
 				this.mealnum=e.name;
-				this.goods = []
+				this.categ={'全部':'','滞销货物':'滞销','共享信息':'共享'}[e.name]
 				this.mescroll.resetUpScroll()
 			},
 			
