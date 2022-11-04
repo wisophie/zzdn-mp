@@ -122,8 +122,7 @@
 		  </view>
 		</view>
 			
-			<view class="bt2" v-if="id==uid"@tap="toeditshare">保存商品</view>
-			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
+			<view class="bt2"  @tap="toeditshare">保存商品</view>
 			<view class="func">
 				<view class="f">
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
@@ -175,7 +174,7 @@
 				data:'',
 				show: false,
 				remark: "sfsafsf",
-				array: ['滞销货物', '共享信息', '未知'],
+				array: ['滞销', '共享'],
 				index1: 0,
 				index2: 0,
 				index3: 0,
@@ -183,7 +182,7 @@
 				specification:['金属', '不锈钢'],
 				exchangetype:['提供货物', '需求货物'],
 				list:{
-					'title':'商品标题',
+					title:'商品标题',
 					tel:'输入手机号码',
 					detail:'请输入商品详情'
 				},
@@ -204,11 +203,14 @@
 				const banners=id.gallery.split(",")
 				const temp =[{ url: 1 },{ url: 1 }]
 				this.banner= temp.map(((o, i) => ({ 
-				url: (i < banners.length) ? banners[i]  : ''})))
+				url: banners[i]})))
 				if(id.city!==undefined){
 					this.list = id
 				}else{
 					
+				}
+				if(this.banner[1].url==undefined){
+					this.banner.pop()
 				}
 				console.log(this.banner)
 			},
@@ -299,7 +301,6 @@
 					},
 			bindPickerChange: function(e) {
 				this.index1 = e.target.value
-				let sex='asexual';
 				if(this.index1==0){
 					sex='male'
 				}else if(this.index1==1){
@@ -343,6 +344,7 @@
 				}
 				editShare(data).then(res=>{
 					console.log(res)
+					uni.$u.toast('发布成功！')
 				})
 			},
 			tocreateshare(){
@@ -380,7 +382,7 @@
 <style lang="scss" scoped>
 .main {
 		padding-top: 60rpx;
-		padding-bottom: 90rpx;
+		padding-bottom: 320rpx;
 		display: flex;
 		flex-direction: column;
         background-color: #fff;

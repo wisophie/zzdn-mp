@@ -18,9 +18,9 @@
 					<view class="title">图片</view>
 					<view class="user-head" v-if="id==uid">
 						<u-upload
-							:fileList="fileList3"
-							@afterRead="afterRead"
-							@delete="deletePic"
+							:fileList="banner"
+							@afterRead="afterRead($event)"
+							@delete="deletePic($event, 'url')"
 							name="3"
 							multiple
 							:maxCount="2"
@@ -88,10 +88,25 @@
 			  height='90'
 		    ></u--textarea>
 		  </view>
+		  <view>
+		  	<u-form-item label="投票项一" prop="one" borderBottom>
+		  	  <u-input v-model="form.netshopName" border="none" placeholder="请输入"></u-input>
+		  	</u-form-item>
+		  	<u-form-item label="投票项二" prop="two" borderBottom>
+		  	  <u-input v-model="form.realName" border="none" placeholder="请输入"></u-input>
+		  	</u-form-item>
+		  	<u-form-item label="投票项三" prop="three" borderBottom>
+		  	  <u-input v-model="form.organizationCode" border="none" placeholder="请输入"></u-input>
+		  	</u-form-item>
+		  	<u-form-item label="投票项四" prop="four" borderBottom>
+		  	  <u-input v-model="form.organizationCode" border="none" placeholder="请输入"></u-input>
+		  	</u-form-item>
+		  </view>
 		</view>
+		
 			
 			<view class="bt2" v-if="id==uid"@tap="toeditVote">保存修改</view>
-			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
+			
 			<view class="func">
 				<view class="f">
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
@@ -125,7 +140,8 @@
 </template>
 
 <script>
-import { createVote,editVote} from '@/api/vote'
+	import { uploadApi } from '@/api/common'
+	import { createVote,editVote} from '@/api/vote'
 	export default {
 		data() {
 			return {
@@ -147,8 +163,7 @@ import { createVote,editVote} from '@/api/vote'
 					'title':'反馈标题',
 					'tel':'13202125125'
 				},
-				
-				token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0aGlzIGlzIGxpdGVtYWxsIHRva2VuIiwiYXVkIjoiTUlOSUFQUCIsImlzcyI6IkxJVEVNQUxMIiwiZXhwIjoxNjY2NjM5MjU2LCJ1c2VySWQiOjYsImlhdCI6MTY2NjYxNzY1Nn0.3LDrT2DyOOXYPeel8PWYvlEh3hJa_BrbgKhPQSoNUKc"
+				banner:[]
 			};
 		},
 		onLoad(){
@@ -232,6 +247,53 @@ import { createVote,editVote} from '@/api/vote'
 					}else if(this.index2==1){
 						sex='female';
 					}
+			},
+			// 删除图片
+			deletePic(event, key) {
+			     this.banner.splice(event.index,1)
+			},
+			// 新增图片
+			async afterRead(event, key) {
+				
+			  let lists = [].concat(event.file)
+			  let fileListLen = this.banner.length
+			  lists.map(item => {
+			    this.banner.push({
+			      ...item,
+			      status: 'uploading',
+			      message: '上传中'
+			    })
+			  })
+			  for (let i = 0; i < lists.length; i++) {
+			    let type = null
+			    uploadApi(lists[i].url, type)
+			      .then(res => {
+			        const result = res.data
+					console.log(result)
+			        let item = this.banner[fileListLen]
+			        this.banner.splice(
+			          fileListLen,
+			          1,
+			          Object.assign(item, {
+			            status: 'success',
+			            message: '',
+			            url: result
+			          })
+			        )
+			        fileListLen++
+			      })
+			      .catch(err => {
+			        this.banner.splice(
+			          fileListLen,
+			          1,
+			          Object.assign(item, {
+			            status: 'fail',
+			            message: '上传失败'
+			          })
+			        )
+			        fileListLen++
+			      })
+			  }
 			},
 			canceldingdan(){
 				uni.navigateBack()
@@ -333,7 +395,7 @@ import { createVote,editVote} from '@/api/vote'
 		}
 
 		.bt2 {
-			margin-top: 200rpx;
+			margin-bottom: 50rpx;
 			text-align: center;
 			font-size: 32rpx;
 			color: $uni-color-error;

@@ -11,6 +11,16 @@
 		<view class="search-bar">
 		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
+		<view class="tab" >
+			
+			<view class='judgedisplay' @tap="showJudge">
+				显示：{{jd}}⏷
+				
+			</view>
+			<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
+				<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
+			</view>
+		</view>
 		</view>
 		<view class="bt">
 			<u-button class="mt-4" type="primary" @click="toPage('/pages/help/help-edit')">发布跑腿订单</u-button>
@@ -18,7 +28,7 @@
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in friends" :key="item.id" @click="toPage('/pages/help/help-detail',item.id)">
+				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages/help/help-detail',item)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
@@ -26,21 +36,22 @@
 						</view>
 						<view class="friends-list-r">
 							<view class="top">
-								<view class="name">{{item.name}}</view>
-								<view class="type">跑腿/帮忙</view>
+								<view class="name">{{item.item[0].topic}}</view>
+								<view class="type">{{item.statustype}}</view>
 							</view>
 							<view>
-								<view class="chatcontent">{{item.chatcontent}}</view>
+								<view class="chatcontent">{{item.item[0].content}}</view>
 							</view>
 							
 						</view>
 					</view>
 					
 					<view class="friends-list-d">
-						<text class="name">发布地点：xxx</text>
-						<text class="price">价格：99元</text>
+						<text class="name">发布地点：{{item.province}}-{{item.city}}</text>
+						<text class="price">价格：{{item.amount}}元</text>
 					</view>
 				</view>
+				
 			</view>
 		
 	</mescroll-body>
@@ -56,9 +67,9 @@
 		data() {
 			return {
 				 list1: [{
-							name: '跑腿订单',
+							name: '我是发起人',
 						}, {
-							name: '帮忙订单',
+							name: '我是接单人',
 						}],
 				goods:[],
 				friends:[],
@@ -69,28 +80,46 @@
 				upOption: {
 					noMoreSize: 0
 				},
+				arrayjudge: [
+					{
+						name: '我的订单'
+					},
+					{
+						name: '待接单列表'
+					},
+					
+				],
+				jd:'我的订单',
+				showSelectTag2:false,
+				rol:'',
+				relme:0,
 			};
 		},
 		onLoad(){
 			// this.getHelpList()
 			this.getFriends1()
+			
 		},
+		// onShow() {
+		//  this.refresh()
+		// },
 		methods:{
+			
 			upCallback(page){
+				//console.log(this.relme)
 				const params = {
-				  status:1, //1：发起订单，未支付，2：已支付，等待接单，3：已接单，正在赶往现场，4：完成，5：取消订单
+				  status:'', //1：发起订单，未支付，2：已支付，等待接单，3：已接单，正在赶往现场，4：完成，5：取消订单
 				  page: '',
 				  limit: '',
 				  order: '',
 				  sort:'',
-				  relatedMe:1,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
-				  orderType:0,  //0跑腿订单 1帮忙订单
-				  role:0,  //接单人角色，我是发起人 0 我是接单人1
+				  //relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  orderType:'',  //0跑腿订单 1帮忙订单
+				  role:this.rol,  //接单人角色，我是发起人 0 我是接单人1
 				}
 				getHelplist(params).then(res =>{
-					console.log(res.data)
-					const { list: listData, total } = res.data
-					//const list = listData.map(v => ({extype:{'0':'跑腿订单','1':'帮忙订单'}[v.orderType]}))
+					const { list:listData, total } = res.data
+					const list = listData.map(v => ({ ...v, statustype:{'1':'等待接单','2':'等待接单','3':'已接单','4':'已完成','5':'已取消'}[v.status]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)
@@ -100,10 +129,12 @@
 				})
 			},
 			click(item) {
-			                console.log('item', item);
-			            },
+			console.log(item.index);
+			this.rol=item.index
+			this.mescroll.resetUpScroll()
+			 },
 			toPage(url,id) {
-			  uni.$u.route(url, { id })
+			  uni.$u.route(url, id )
 			},
 			// getHelpList(){
 			// 	uni.request({
@@ -129,6 +160,45 @@
 			changeTime:function(date){
 				return myfunction.dateTime(date)
 			},
+			showJudge() {
+				this.setData({
+					showSelectTag2: !this.showSelectTag2
+				});
+			},
+			handleEditToggle2() {
+				this.setData({
+					showSelectTag2: false
+				});
+			},
+			handleOnTap2(event) {
+				this.setData(
+					{
+						showSelectTag2: false
+					},
+					() => {
+						switch (event.currentTarget.dataset.name) {
+							case '我的订单':
+								this.jd='我的订单';
+								this.relme=0
+								//console.log(this.relme)
+								this.mescroll.resetUpScroll()
+								break;
+			
+							case '待接单列表':
+								this.jd='待接单列表';
+								this.relme=1
+								//console.log(this.relme)
+								this.mescroll.resetUpScroll()
+								break;
+							default:
+								break;
+						}
+					}
+				);
+			},
+			refresh() {
+			  this.mescroll.resetUpScroll()
+			}
 		}
 	}
 </script>
@@ -240,4 +310,48 @@
 						
 					}
 			}
+			.conversation-bubble2 {
+				padding-top: 5rpx;
+				position: absolute;
+				width: 160rpx;
+				padding-right: 3px;
+				background-color: #FFFFFF;
+				height: 157rpx;
+				top: 150rpx;
+				right:50rpx;
+				z-index: 100;
+				box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+				border-radius: 14rpx;
+				transition-duration: all .3s;
+			}
+			.picker2 {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 28rpx;
+				font-weight: 300;
+				width: 100%;
+				height: 78rpx;
+				border-bottom: 1px solid #ccc;
+				&:active{
+					background-color: #ccc;
+				}
+				
+			}
+			.tab{
+				//position: fixed;
+				width:230rpx;
+				height:0rpx;
+				right:0rpx;
+				top:50rpx;
+				z-index: 20;
+				
+			}
+				.judgedisplay{
+					position: absolute;
+					width:230rpx;
+					height:40rpx;
+					right:20rpx;
+					top:100rpx;
+				}
 </style>

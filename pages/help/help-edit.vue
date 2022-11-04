@@ -6,8 +6,8 @@
 				
 				<view class="row" >
 					<view class="title">标题</view>
-					<view class="cont" @tap="get('title',list.title)" >
-						{{list.title}}
+					<view class="cont" @tap="get('topic',list.topic)" >
+						{{list.topic}}
 					</view>
 					<view class="more">
 						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
@@ -60,7 +60,7 @@
 				</view>
 				<view class="row" >
 					<view class="title">总费用</view>
-					<view class="cont" @tap="get('title',list.amount)" >
+					<view class="cont" @tap="get('amount',list.amount)" >
 						{{list.amount}}
 					</view>
 					<view class="more">
@@ -68,10 +68,10 @@
 					</view>
 				</view>
 				
-				<view class="row" @tap="get('tel',list.tel)">
+				<view class="row" @tap="get('mobile',list.mobile)">
 					<view class="title">联系方式</view>
 					<view class="cont"   >
-						{{list.tel}}
+						{{list.mobile}}
 					</view>
 					<view class="more">
 						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
@@ -83,7 +83,7 @@
 		  <view class="os-remark__title">任务内容</view>
 		  <view class="os-remark__content">
 		    <u--textarea
-		      v-model="list.detail"
+		      v-model="list.content"
 		      placeholder="请输入内容信息"
 		      count
 			  :disabled=false
@@ -153,9 +153,9 @@
 				amount:'',
 				exchangetype:['跑题订单', '帮忙订单'],
 				list:{
-					'title':'商品标题',
-					tel:'输入手机号码',
-					detail:'请输入商品详情'
+					topic:'商品标题',
+					mobile:'输入手机号码',
+					content:'请输入商品详情'
 				},
 				addressOptions: [],
 			};
@@ -297,11 +297,11 @@
 			},
 			tocreateHelp(){
 				const data = {
-				  orderType: '0',   //订单类型0跑腿订单 1帮忙订单	
-				  topic: "发生发生",
-				  content: '跑腿所发生的',
-				  amount:2352,
-				  mobile: '13525142121',
+				  orderType: this.index3,   //订单类型0跑腿订单 1帮忙订单	
+				  topic: this.list.topic,
+				  content: this.list.content,
+				  amount:this.list.amount,
+				  mobile: this.list.mobile,
 				  province:this.formData.province,
 				  city:this.formData.city,
 				  country:this.formData.country,
@@ -326,7 +326,7 @@
 <style lang="scss" scoped>
 .main {
 		padding-top: 60rpx;
-		padding-bottom: 300rpx;
+		padding-bottom: 360rpx;
 		display: flex;
 		flex-direction: column;
         background-color: #fff;

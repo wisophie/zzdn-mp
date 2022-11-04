@@ -21,7 +21,7 @@
 		</u-swiper>
 		<view class="g-section">
 		  <view class="text-md text-bold">{{list.title}}</view>
-		  <view class='mt-2 u-tips-color text-s'>
+		 <view class='mt-2 u-tips-color text-s'>
 			  <text >发布人：xxx</text>
 		  </view>
 		 <view class='mt-2 u-tips-color text-s'>
@@ -66,7 +66,7 @@
 		 <view class="b-footer__right" v-if="list.userId==myid" @click="toPage('pages/share/share-edit',list)">
 		    <text class="bt" >编辑商品</text>
 		  </view>
-		  <view class="b-footer__left">
+		  <view class="b-footer__left" v-if="list.userId!=myid">
 		  			  <view @tap="handleRoute('C2Cyanli')" class="u">
 		  				  <u-icon name="chat"  color="#303133" size="28" />
 		  				  <text>联系他</text>
@@ -74,7 +74,7 @@
 		    
 		  </view>
 		</view>
-		<view class='more' @click="show2 = true">
+		<view class='more' @click="show2 = true" v-if="list.userId==myid">
 					  <text>更多</text>
 		</view>
 		<u-action-sheet
@@ -114,8 +114,9 @@
 		},
 		methods:{
 			getShareInfo(){
-				console.log(this.list)
+				console.log(this.list.userId)
 				this.myid= uni.getStorageSync('userInfo').id
+				console.log(this.myid)
 				this.banner=this.list.gallery.split(",")
 				this.extype={'false':'提供货物','true':'需求货物'}[this.list.exchange]
 			},
@@ -235,6 +236,9 @@ page {
 }
 
 .b-footer {
+	position: absolute;
+	bottom:60rpx;
+	left:5rpx;
 	display: flex;
 	justify-content: flex-end;
 	width: 100%;
@@ -271,11 +275,12 @@ page {
 }
 .more{
 	position: absolute;
-	bottom:70rpx;
+	bottom:80rpx;
 	left:20rpx;
 }
 .detail{
-	height:140rpx;
+	
+	height:175rpx;
 }
 </style>
 
