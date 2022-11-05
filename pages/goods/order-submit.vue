@@ -81,7 +81,7 @@
           ></u--textarea>
         </view>
       </view>
-      <view class="os-pay">
+<!--      <view class="os-pay">
         <view class="os-pay__title">支付方式</view>
         <view class="os-pay__content">
           <u-radio-group v-model="pay">
@@ -94,7 +94,7 @@
             ></u-radio>
           </u-radio-group>
         </view>
-      </view>
+      </view> -->
     </view>
     <u-popup :show="showP" round @close="showP = false" closeOnClickOverlay>
       <scroll-view scroll-y="true" class="scroll-view">
