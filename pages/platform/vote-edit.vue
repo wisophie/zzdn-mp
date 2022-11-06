@@ -58,7 +58,7 @@
 						
 					</view>
 					<view class="lm" v-if='index1==0'>
-						<text class="d">订单id</text>
+						<text class="d">订单编号</text>
 						<u--input
 						    placeholder="请输入订单id"
 							border="bottom"	
