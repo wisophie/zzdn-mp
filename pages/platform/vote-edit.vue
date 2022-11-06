@@ -62,7 +62,7 @@
 						<u--input
 						    placeholder="请输入订单id"
 							border="bottom"	
-						    v-model="list.orderId"
+						    v-model="list.orderSn"
 						    @change="change"
 						  ></u--input>
 					</view>
@@ -161,7 +161,7 @@
 				list:{
 					topic:'反馈标题',
 					progress:'反馈内容',
-					orderId:0,
+					orderSn:0,
 				},
 				form:{
 					one:'',
@@ -179,12 +179,6 @@
 					],
 				rules: {
 					'one': {
-						type: 'string',
-						required: true,
-						message: '请填写至少2项投票内容',
-						trigger: ['blur', 'change']
-					},
-					'two': {
 						type: 'string',
 						required: true,
 						message: '请填写至少2项投票内容',
@@ -243,12 +237,12 @@
 						
 					})
 					this.togetpics(item)
-					console.log(parseInt(this.list.orderId))
+					console.log(parseInt(this.list.orderSn))
 				}
 				
 			},
 			tocreateVote(){
-				console.log(parseInt(this.list.orderId))
+				console.log(parseInt(this.list.orderSn))
 				console.log(this.index1)
 				console.log(this.optionsubmit)
 				this.list.pics=[]
@@ -266,7 +260,7 @@
 					]
 				}
 				const data={
-					orderId:parseInt(this.list.orderId),
+					orderSn:parseInt(this.list.orderSn),
 					progress:this.list.progress,
 					topic:this.list.topic,
 					feedbackType:this.fdtype,  //订单纠纷
@@ -287,7 +281,7 @@
 			toeditVote(){
 				const data={
 					id:parseInt(this.list.id),
-					orderId:parseInt(this.list.orderId),
+					orderSn:parseInt(this.list.orderSn),
 					progress:this.list.progress,
 					topic:this.list.topic,
 					feedbackType:this.fdtype,
