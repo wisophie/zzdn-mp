@@ -74,9 +74,12 @@ export const buyNeedUpdate = (data = {}) => http.post('/wx/buyer/buyNeed/update'
 export const buyNeedDelete = (data = {}) => http.post('/wx/buyer/buyNeed/delete', data)
 
 /** 采购需求列表 */
-export const buyNeedList = (params = {}) =>
+export const buyNeedList = (params = {}, isAuth) =>
   http.get('/wx/buyer/buyNeed/list', {
-    params
+    params,
+    custom: {
+      auth: isAuth
+    }
   })
 
 /** 采购需求详情 */

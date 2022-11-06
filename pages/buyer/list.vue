@@ -25,7 +25,7 @@
         <view class="list-item" @click="handleDetail(item.id)">
           <view class="item-title">
             <view class="title">{{ item.goodsName }}</view>
-            <view class="item-handle">
+            <view v-if="isBuyer" class="item-handle">
               <view class="item-handle-item" @click.stop="handleDelete(item)">
                 <u-icon name="trash" color="#fa3534"></u-icon>
               </view>
@@ -60,6 +60,13 @@ export default {
     }
   },
 
+  computed: {
+    isBuyer() {
+      const userInfo = uni.getStorageSync('userInfo')
+      return userInfo.userLevel === 2
+    }
+  },
+
   onShow() {
     this.query.page = 1
     this.getList()
@@ -75,7 +82,8 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      buyNeedList(this.query).then(res => {
+      console.log(this.isBuyer)
+      buyNeedList(this.query, this.isBuyer).then(res => {
         const data = res.data
         this.total = data.total
         this.list = this.query.page === 1 ? data.list : [...this.list, ...data.list]
