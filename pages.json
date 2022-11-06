@@ -236,38 +236,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/TUI-Login/login",
-      "style": {}
-    },
-    {
-      "path": "pages/TUI-Index/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/TUI-User-Center/mine/mine",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/TUI-User-Center/about/about",
-      "style": {}
-    },
-    {
-      "path": "pages/TUI-User-Center/personal/personal",
-      "style": {}
-    },
-    {
-      "path": "pages/TUI-User-Center/cancel/cancel",
-      "style": {}
-    },
-    {
-      "path": "pages/TUI-User-Center/webview/webview",
-      "style": {}
-    },
+   
 
     {
       "path": "pages/TUI-Group/create-group/create",
