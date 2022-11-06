@@ -231,7 +231,7 @@ export default {
 				bankAccountType: { name: '' },
 				accountBank: '',
 				accountName: '',
-				accountNumber:''
+				accountNumber: ''
 			},
 			rules: {},
 			agree: false,
@@ -314,7 +314,7 @@ export default {
 				this.showP = true
 			}
 		},
-		confirmBank(e){
+		confirmBank(e) {
 			const item = e.value[0]
 			this.form.accountBank = item.account_bank
 			this.showP = false
@@ -373,7 +373,8 @@ export default {
 				if (Array.isArray(this.form[key])) {
 					data[key] = this.form[key].map(v => v.url).join(',')
 				} else {
-					if (key === 'organizationType') {
+					const keys = ['organizationType', 'bankAccountType']
+					if (keys.includes(key)) {
 						data[key] = this.form[key].id
 					} else {
 						data[key] = this.form[key]
