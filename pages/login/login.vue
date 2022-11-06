@@ -48,7 +48,7 @@ export default {
 
   methods: {
     getUserInfo(e) {
-			if (uni.getSystemInfoSync().platform === 'android') {
+			if (!user.isMpWeixin) {
 				this.doLogin()
 				return
 			}
