@@ -84,6 +84,7 @@
 				  ],
 				  myid:'',
 				  categ:'',
+				  relme:0,
 			};
 		},
 		
@@ -93,12 +94,14 @@
 		methods:{
 			
 			upCallback(page) {
+	          console.log(this.relme)
 				const params = {
 				  category:this.categ,
 				  page: '',
 				  limit: '',
 				  order: '',
-				  sort:''
+				  sort:'',
+				  related:this.relme
 				}
 				
 			
@@ -159,22 +162,11 @@
 				});
 			},
 			$myVote() {
-				this.myid = uni.getStorageSync('userInfo').id
-				let newgoods=[]
-				this.goods.map(e=>{
-					
-					if(e.userId==this.myid){
-						newgoods.push(e)
-					}
-					
-				})
-				console.log(newgoods)
-				this.goods=[]
-				this.goods=newgoods
-				this.mescroll.resetUpScroll()
+				this.relme=1
+			    this.mescroll.resetUpScroll()
+				this.relme=0
 			},
 			doSearch() {
-			
 			  this.goods = []
 			  this.mescroll.resetUpScroll(true)
 			},
