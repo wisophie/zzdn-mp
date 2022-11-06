@@ -41,9 +41,13 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* 快应用特有相关 */
@@ -54,10 +58,10 @@
         "setting" : {
             "urlCheck" : false
         },
-        "lazyCodeLoading": "requiredComponents",
+        "lazyCodeLoading" : "requiredComponents",
         "usingComponents" : true,
-        "optimization": {
-            "subPackages": true
+        "optimization" : {
+            "subPackages" : true
         }
     },
     "mp-alipay" : {

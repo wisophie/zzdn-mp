@@ -74,6 +74,9 @@
 				></u-input>
 				<u-icon slot="right" name="arrow-right"></u-icon>
 			</u-form-item>
+			<u-form-item label="银行卡号" prop="accountNumber" borderBottom>
+				<u-input v-model="form.accountNumber" border="none" placeholder="请输入"></u-input>
+			</u-form-item>
 			<u-form-item label="开户人名称" prop="accountName" borderBottom>
 				<u-input v-model="form.accountName" border="none" placeholder="请输入"></u-input>
 			</u-form-item>
@@ -227,7 +230,8 @@ export default {
 				licenseName: '',
 				bankAccountType: { name: '' },
 				accountBank: '',
-				accountName: ''
+				accountName: '',
+				accountNumber:''
 			},
 			rules: {},
 			agree: false,

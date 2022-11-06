@@ -76,15 +76,15 @@
           </view>
           <view class="os-order__row">
             <text class="os-order__row__label">付款时间</text>
-            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+            <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
           </view>
           <view class="os-order__row">
             <text class="os-order__row__label">成交时间</text>
-            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+            <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
           </view>
-          <view class="os-order__row" v-if="orderInfo.addTime">
+          <view class="os-order__row" v-if="orderInfo.applyRefundTime">
             <text class="os-order__row__label">发起退款时间</text>
-            <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
+            <text class="os-order__row__value">{{ orderInfo.applyRefundTime }}</text>
           </view>
           <view class="os-order__row" v-if="orderInfo.applyRefundContent">
             <text class="os-order__row__label">退款原因</text>

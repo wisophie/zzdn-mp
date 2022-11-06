@@ -77,7 +77,7 @@ import BaseFooter from '@/components/BaseFooter'
 import { getCateApi, getInfoApi } from '@/api/goods'
 
 const wayData = [
-  { id: '0', name: '线上交易' },
+  // { id: '0', name: '线上交易' },
   { id: '1', name: '线下交易' },
   { id: '2', name: '老客户下单延期支付' }
 ]

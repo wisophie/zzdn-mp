@@ -48,6 +48,11 @@ export default {
 
   methods: {
     getUserInfo(e) {
+			if (uni.getSystemInfoSync().platform === 'android') {
+				this.doLogin()
+				return
+			}
+			console.log(e, '--gg')
       if (this.canIUseGetUserProfile) {
         uni.getUserProfile({
           desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
@@ -85,9 +90,12 @@ export default {
     },
 
     doLogin(userInfo) {
+			console.log('doLogin')
       user.checkLogin().then(() => {
+				console.log('checkLogin true')
         this.fetchUserInfo()
       }).catch(() => {
+				console.log('checkLogin false')
         user.loginByWeixin(userInfo)
           .then(res => {
             this.fetchUserInfo()
@@ -134,6 +142,7 @@ export default {
     },
 
     accountLogin: function() {
+			console.log('ggg-gg')
       uni.navigateTo({
         url: "/pages/login/accountLogin"
       });

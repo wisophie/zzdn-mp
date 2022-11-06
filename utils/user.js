@@ -4,6 +4,7 @@
 import { weixinLogin } from '@/api/login'
 const util = require('../utils/util.js');
 
+export const isAndroid = uni.getSystemInfoSync().platform === 'android'
 
 /**
  * Promise封装wx.checkSession
@@ -31,6 +32,8 @@ function checkSession() {
 function login() {
   return new Promise(function(resolve, reject) {
     uni.login({
+      provider: 'weixin',
+      onlyAuthorize: true,
       success: function(res) {
         if (res.code) {
           resolve(res);
@@ -45,17 +48,38 @@ function login() {
   });
 }
 
+function getUserInfo() {
+  return new Promise(resolve => {
+    uni.getUserInfo({
+      provider: 'weixin',
+      success: function(info) {
+      // 获取用户信息成功, info.authResult保存用户信息
+        resolve(info)
+      },
+      fail: err => {
+        console.log(err, 'err--')
+      }
+    })
+  })
+}
+
 /**
  * 调用微信登录
  */
 function loginByWeixin(userInfo) {
 
   return new Promise(function(resolve, reject) {
-    return login().then((res) => {
+    return login().then(async(res) => {
+      if (isAndroid) {
+        userInfo = await getUserInfo()
+      }
+      console.log(res, userInfo, 'uniloginres')
       weixinLogin({
         code: res.code,
-        userInfo: userInfo
+        userInfo: userInfo,
+				loginChannel: isAndroid ? 'APP' : 'MA'
       }).then(res => {
+				console.log('登录成功：', res)
         if (res.errno === 0) {
           //存储用户信息
           uni.setStorageSync('userInfo', res.data.userInfo);
@@ -66,6 +90,7 @@ function loginByWeixin(userInfo) {
           reject(res);
         }
       }).catch((err) => {
+				console.log('登录失败：', err)
         reject(err);
       });
     }).catch((err) => {
@@ -96,4 +121,5 @@ function checkLogin() {
 module.exports = {
   loginByWeixin,
   checkLogin,
+  isAndroid
 };
