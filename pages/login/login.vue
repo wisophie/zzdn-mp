@@ -131,7 +131,7 @@ export default {
         if (res.errno === 0) {
           const data = res.data
           if (!data.mobile || !data.province) {
-            uni.navigateTo({
+            uni.redirectTo({
               url: '/pages/login/perfectInfo'
             })
             return
@@ -142,7 +142,6 @@ export default {
     },
 
     accountLogin: function() {
-			console.log('ggg-gg')
       uni.navigateTo({
         url: "/pages/login/accountLogin"
       });

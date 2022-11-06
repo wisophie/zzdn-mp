@@ -132,7 +132,7 @@ export default {
       updateInfo(this.formData).then(res => {
 		  
         uni.navigateBack({
-          delta: 2
+          delta: 1
         })
       })
     }

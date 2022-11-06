@@ -12,7 +12,7 @@
       </view>
     </view>
     <view class="content">
-      <view class="content-item" @click="toPage(`/pages/home/bindMobile?mobile=${mineInfo.mobile}`)">
+      <view class="content-item" @click="toPage(`/pages/mine/bindMobile?mobile=${mineInfo.mobile}`)">
         <text class="item-label">绑定手机号</text>
         <text class="item-info">{{ mineInfo.mobile }}</text>
         <u-icon name="arrow-right"></u-icon>
@@ -22,7 +22,7 @@
         <text class="item-info">sdfsdf</text>
         <u-icon name="arrow-right"></u-icon>
       </view> -->
-      <view class="content-item" @click="toPage('/pages/home/realName')">
+      <view class="content-item" @click="toPage('/pages/mine/realName')">
         <text class="item-label">实名认证</text>
         <text class="item-info">{{ mineInfo.certify ? '已实名' : '未实名' }}</text>
         <u-icon name="arrow-right"></u-icon>

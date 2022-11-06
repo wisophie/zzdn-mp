@@ -6,36 +6,7 @@
         "navigationBarTitleText": "首页"
       }
     },
-    {
-      "path": "pages/home/mine",
-      "style": {
-        "navigationBarTitleText": "个人信息"
-      }
-    },
-    {
-      "path": "pages/home/afterService",
-      "style": {
-        "navigationBarTitleText": "售后服务"
-      }
-    },
-    {
-      "path": "pages/home/moreFunction",
-      "style": {
-        "navigationBarTitleText": "更多功能"
-      }
-    },
-    {
-      "path": "pages/home/bindMobile",
-      "style": {
-        "navigationBarTitleText": "绑定手机号"
-      }
-    },
-    {
-      "path": "pages/home/realName",
-      "style": {
-        "navigationBarTitleText": "实名认证"
-      }
-    },
+    
     {
       "path": "pages/address/list",
       "style": {
@@ -48,36 +19,7 @@
         "navigationBarTitleText": "添加/编辑地址"
       }
     },
-    {
-      "path": "pages/login/login",
-      "style": {
-        "navigationBarTitleText": "登录"
-      }
-    },
-    {
-      "path": "pages/login/accountLogin",
-      "style": {
-        "navigationBarTitleText": "账号登录"
-      }
-    },
-    {
-      "path": "pages/login/register",
-      "style": {
-        "navigationBarTitleText": "注册"
-      }
-    },
-    {
-      "path": "pages/login/reset",
-      "style": {
-        "navigationBarTitleText": "重置密码"
-      }
-    },
-    {
-      "path": "pages/login/perfectInfo",
-      "style": {
-        "navigationBarTitleText": "完善信息"
-      }
-    },
+    
     {
       "path": "pages/goods/goods",
       "style": {
@@ -86,30 +28,7 @@
         "navigationBarTextStyle": "white"
       }
     },
-    {
-      "path": "pages/buyer/apply",
-      "style": {
-        "navigationBarTitleText": "采购商申请",
-        "navigationBarBackgroundColor": "#5d51ff",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/buyer/demand",
-      "style": {
-        "navigationBarTitleText": "采购需求",
-        "navigationBarBackgroundColor": "#5d51ff",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/buyer/list",
-      "style": {
-        "navigationBarTitleText": "采购需求列表",
-        "navigationBarBackgroundColor": "#5d51ff",
-        "navigationBarTextStyle": "white"
-      }
-    },
+    
     {
       "path": "pages/share/share",
       "style": {
@@ -248,12 +167,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/agreement/agreement",
-      "style": {
-        "navigationBarTitleText": "用户协议"
-      }
-    },
+    
     {
       "path": "pages/help/help-detail",
       "style": {
@@ -322,6 +236,112 @@
       }
     ]
   },
+  "subPackages": [
+    {
+      "root": "pages/login/",
+      "pages": [
+        {
+          "path": "login",
+          "style": {
+            "navigationBarTitleText": "登录"
+          }
+        },
+        {
+          "path": "accountLogin",
+          "style": {
+            "navigationBarTitleText": "账号登录"
+          }
+        },
+        {
+          "path": "register",
+          "style": {
+            "navigationBarTitleText": "注册"
+          }
+        },
+        {
+          "path": "reset",
+          "style": {
+            "navigationBarTitleText": "重置密码"
+          }
+        },
+        {
+          "path": "perfectInfo",
+          "style": {
+            "navigationBarTitleText": "完善信息"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages/mine/",
+      "pages": [
+        {
+          "path": "mine",
+          "style": {
+            "navigationBarTitleText": "个人信息"
+          }
+        },
+        {
+          "path": "afterService",
+          "style": {
+            "navigationBarTitleText": "售后服务"
+          }
+        },
+        {
+          "path": "moreFunction",
+          "style": {
+            "navigationBarTitleText": "更多功能"
+          }
+        },
+        {
+          "path": "bindMobile",
+          "style": {
+            "navigationBarTitleText": "绑定手机号"
+          }
+        },
+        {
+          "path": "realName",
+          "style": {
+            "navigationBarTitleText": "实名认证"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages/buyer/",
+      "pages": [
+        {
+          "path": "apply",
+          "style": {
+            "navigationBarTitleText": "采购商申请"
+          }
+        },
+        {
+          "path": "demand",
+          "style": {
+            "navigationBarTitleText": "采购需求"
+          }
+        },
+        {
+          "path": "list",
+          "style": {
+            "navigationBarTitleText": "采购需求列表"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages/agreement/",
+      "pages": [
+        {
+          "path": "agreement",
+          "style": {
+            "navigationBarTitleText": "用户协议"
+          }
+        }
+      ]
+    }
+  ],
   "globalStyle": {
     "navigationBarBackgroundColor": "#5c4ffe",
     "navigationBarTextStyle": "white"
