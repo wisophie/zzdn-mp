@@ -16,6 +16,7 @@
 				},
 			method:'POST',
 			success:(res)=>{	
+				console.log(res)
 				if(res.data.ActionStatus=='OK'){
 					login(userID.toString())
 				}
