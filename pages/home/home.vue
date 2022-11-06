@@ -14,7 +14,7 @@
 		</view>
 
 		<view class="content-navigate">
-			<view class="navigate-item" @click="toPage('/pages/home/mine')">个人<br>信息</view>
+			<view class="navigate-item" @click="toPage('/pages/mine/mine')">个人<br>信息</view>
 			<view class="navigate-item" @click="toPage('/pages/goods/order-list')">我的<br>订单</view>
 			<view class="navigate-item" @click="toPage('/pages/share/share', 'switchTab')">我的<br>共享</view>
 			<view class="navigate-item" @click="toPage('/pages/TUI-Conversation/conversation/conversation', 'switchTab')">我的<br>沟通</view>
@@ -40,7 +40,7 @@
 				</view>
 				<view class="item-title">跑腿/帮忙</view>
 			</view>
-			<view class="more-item"  @click="toPage('/pages/home/afterService')">
+			<view class="more-item"  @click="toPage('/pages/mine/afterService')">
 				<view class="item-icon">
 					<u-icon name="server-man" size="70rpx" color="pink"></u-icon>
 				</view>
@@ -52,7 +52,7 @@
 				</view>
 				<view class="item-title">平台共建</view>
 			</view>
-			<view class="more-item" @click="toPage('/pages/home/moreFunction')">
+			<view class="more-item" @click="toPage('/pages/mine/moreFunction')">
 				<view class="item-icon">
 					<u-icon name="more-circle" size="70rpx" color="black"></u-icon>
 				</view>
@@ -62,7 +62,7 @@
 
 		<SwitchIdentity ref="identity" @success="val => userLevel = val"></SwitchIdentity>
 
-		<!-- <view @click="toPage('/pages/home/mine')">个人信息</view>
+		<!-- <view @click="toPage('/pages/mine/mine')">个人信息</view>
 		<view class="text-sm u-primary">{{ title }}</view>
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/goods-detail')">商品详情</u-button></view>
 		<view class="mt-4"><u-button type="primary" @click="toPage('/pages/goods/order-list')">订单列表</u-button></view>
