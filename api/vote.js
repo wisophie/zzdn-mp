@@ -15,27 +15,27 @@ export const getVoteDetail = (params = {}) =>
 /** 发起订单纠纷或者意见反馈投票*/
 export const createVote = (data = {}) => http.post('/wx/vote/save', data, {
     custom: {
-      auth: false
+      auth: true
     }
   })
 
 /** 投票*/
 export const toVote = (data = {}) => http.post('/wx/vote/vote', data, {
     custom: {
-      auth: false
+      auth: true
     }
   })
 /** 修改投票*/
 export const editVote = (data = {}) => http.post('/wx/vote/update', data, {
   custom: {
-	auth: false
+	auth: true
   }
 })
   
   /**删除投票*/
   export const deleteVote = (data = {}) => http.post('/wx/vote/delete', data, {
       custom: {
-        auth: false
+        auth: true
       }
     })
 	
@@ -43,12 +43,12 @@ export const editVote = (data = {}) => http.post('/wx/vote/update', data, {
 	export const adminGetVotelist = (params = {}) => http.get('/admin/vote/list', {
 		params,
 	    custom: {
-	      auth: false
+	      auth: true
 	    }
 	  })
   /** 管理后台审核投票*/
   export const adminJudgeVote = (data = {}) => http.post('/admin/vote/update', data, {
 	  custom: {
-		auth: false
+		auth: true
 	  }
 	})

@@ -4,7 +4,7 @@
       <view class="o-list__item__header u-border-bottom">
         <view class="u-flex u-flex-fill">
           <u-icon name="order" color="#5d51ff" size="18" />
-          <text class="ml-1">发布者：xxxxx</text>
+          <text class="ml-1">发布者：{{item.username}}</text>
         </view>
         <u--text type="warning" :text="item.extype" />
       </view>

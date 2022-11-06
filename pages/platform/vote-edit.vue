@@ -7,13 +7,15 @@
 				
 				<view class="row" >
 					<view class="title b">标题</view>
-					<view class="cont b" @tap="get('title',list.title)" >
-						{{list.title}}
+					<view class="cont b" @tap="get('topic',list.topic)" >
+						{{list.topic}}
 					</view>
 					<view class="more b">
 						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
 					</view>
+					
 				</view>
+				
 				<view class="row head pic">
 					<view class="title">图片</view>
 					<view class="user-head" v-if="id==uid">
@@ -29,7 +31,9 @@
 					</view>
 					
 				</view>
-				
+				<view class='text-ml name'>
+						 <text >发布人：{{myusername}}</text>
+				 </view>
 			</view>
 			<view class="column heads">
 				<!-- <view class="row" @tap="modify('name','昵称',user.name,false)">
@@ -51,11 +55,17 @@
 							</picker>
 							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
 						</view>
-						<!-- <view class="more" v-if="id==uid">
-							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-						</view> -->
+						
 					</view>
-					
+					<view class="lm" v-if='index1==0'>
+						<text class="d">订单id</text>
+						<u--input
+						    placeholder="请输入订单id"
+							border="bottom"	
+						    v-model="list.orderId"
+						    @change="change"
+						  ></u--input>
+					</view>
 					
 				</view>
 				<view class="row">
@@ -65,22 +75,12 @@
 					</view>
 				</view>
 				
-				<view class="row" @tap="get('tel',list.tel)">
-					<view class="title">联系方式</view>
-					<view class="cont"   >
-						{{list.tel}}
-					</view>
-					<view class="more">
-						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-					</view>
-				</view>
-				
 			</view>
 		<view class="os-remark">
 		  <view class="os-remark__title">反馈详情</view>
 		  <view class="os-remark__content">
 		    <u--textarea
-		      v-model="remark"
+		      v-model="list.progress"
 		      placeholder="请输入留言信息"
 		      count
 			  :disabled=false
@@ -88,33 +88,37 @@
 			  height='90'
 		    ></u--textarea>
 		  </view>
-		  <view>
+		  <view v-if='index1==1'>
+			<u-form labelPosition="left" :model="form" :rules="rules" ref="formRef" >
 		  	<u-form-item label="投票项一" prop="one" borderBottom>
-		  	  <u-input v-model="form.netshopName" border="none" placeholder="请输入"></u-input>
+		  	  <u-input v-model="form.one" border="none" placeholder="请输入"></u-input>
 		  	</u-form-item>
 		  	<u-form-item label="投票项二" prop="two" borderBottom>
-		  	  <u-input v-model="form.realName" border="none" placeholder="请输入"></u-input>
+		  	  <u-input v-model="form.two" border="none" placeholder="请输入"></u-input>
 		  	</u-form-item>
 		  	<u-form-item label="投票项三" prop="three" borderBottom>
-		  	  <u-input v-model="form.organizationCode" border="none" placeholder="请输入"></u-input>
+		  	  <u-input v-model="form.three" border="none" placeholder="请输入"></u-input>
 		  	</u-form-item>
 		  	<u-form-item label="投票项四" prop="four" borderBottom>
-		  	  <u-input v-model="form.organizationCode" border="none" placeholder="请输入"></u-input>
+		  	  <u-input v-model="form.four" border="none" placeholder="请输入"></u-input>
 		  	</u-form-item>
+			</u-form>
+		  </view>
+		  <view class="bt2" v-if="id==uid"@tap="toeditVote">保存修改</view>
+		  <view class="func">
+		  	
+		  	<view class="f">
+		  		<u-button class="mt-4" type="primary" :plain="true" @click="backdingdan">取消修改</u-button>
+		  	</view>
+		  	<view class="f">
+		  		<u-button class="mt-4" type="primary" @click="tocreateVote">发布投票</u-button>
+		  	</view>
 		  </view>
 		</view>
 		
 			
-			<view class="bt2" v-if="id==uid"@tap="toeditVote">保存修改</view>
 			
-			<view class="func">
-				<view class="f">
-					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
-				</view>
-				<view class="f">
-					<u-button class="mt-4" type="primary" @click="tocreateVote">发布投票</u-button>
-				</view>
-			</view>
+			
 		</view>
 		
 		<u-popup :show="show" @close="close" @open="open">
@@ -141,72 +145,163 @@
 
 <script>
 	import { uploadApi } from '@/api/common'
-	import { createVote,editVote} from '@/api/vote'
+	import { createVote,editVote,getVoteDetail} from '@/api/vote'
 	export default {
 		data() {
 			return {
 				fdtype:'订单纠纷问题',
-				fileList3: [{
-							url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-						}],
 				editable:'true',
 				maxl:10,
 				type:'',
 				data:'',
 				show: false,
-				remark: '这里是商品详情这里是商品详情这里是商品详情',
 				array: ['订单纠纷', '意见反馈'],
 				index1: 0,
 				index2: 0,
-				specification:['金属', '不锈钢', '未知'],
 				list:{
-					'title':'反馈标题',
-					'tel':'13202125125'
+					topic:'反馈标题',
+					progress:'反馈内容',
+					orderId:0,
 				},
-				banner:[]
+				form:{
+					one:'',
+					two:'',
+					three:'',
+					four:'',
+				},
+				banner:[],
+				myusername:'',
+				optionsubmit:[{
+						content:'0',
+					},{
+						content:'1',
+					}
+					],
+				rules: {
+					'one': {
+						type: 'string',
+						required: true,
+						message: '请填写至少2项投票内容',
+						trigger: ['blur', 'change']
+					},
+					'two': {
+						type: 'string',
+						required: true,
+						message: '请填写至少2项投票内容',
+						trigger: ['blur', 'change']
+					},
+								
+				},
 			};
 		},
-		onLoad(){
-			this.getShare();
+		onLoad(id){
+			this.togetVoteDetail(id);
+		},
+		onReady() {
+				//如果需要兼容微信小程序，并且校验规则中含有方法等，只能通过setRules方法设置规则。
+		    	//this.$refs.formRef.setRules(this.rules)
+		    },
+		computed:{
+			cid(){
+			  this.myusername=uni.getStorageSync('userInfo').username
+			  
+			},
 		},
 		methods:{
+			//还要修改
+			togetpics(item){
+				if(item.pics==undefined){
+				}else{
+					const banners=item.pics.split(",")
+					const temp =[{ url: 1 },{ url: 1 }]
+					this.banner= temp.map(((o, i) => ({ 
+					url: banners[i]})))
+					
+					if(this.banner[1].url==undefined){
+						this.banner.pop()
+					}
+					
+				}
+			},
+			togetVoteDetail(item){
+				
+				const params={
+					id:item.id
+				}
+				if(item.id!=undefined){
+					getVoteDetail(params).then(res=>{
+						console.log(res.data)
+						this.list = res.data
+						this.index1=this.list.type
+						this.extype={'0':'订单纠纷','1':'意见反馈'}[this.list.type]
+						if(this.index1==1){
+							this.form.one=this.list.options[0].content
+							this.form.two=this.list.options[1].content
+							this.form.three=this.list.options[2].content
+							this.form.four=this.list.options[3].content
+						}
+						
+					})
+					this.togetpics(item)
+					console.log(parseInt(this.list.orderId))
+				}
+				
+			},
 			tocreateVote(){
-				const data={
-					orderId:'',
-					progress:'',
-					topic:'',
-					feedbackType:'',
-					pics:'',
-					type:'',
-					options:[{
-						content:'',
+				console.log(parseInt(this.list.orderId))
+				console.log(this.index1)
+				console.log(this.optionsubmit)
+				this.list.pics=[]
+				this.banner.map(e=>{this.list.pics.push(e.url)})
+				if(this.index1==1){
+					this.optionsubmit=[{
+						content:this.form.one,
+					},{
+						content:this.form.two,
+					},{
+						content:this.form.three,
+					},{
+						content:this.form.four,
 					}
 					]
 				}
+				const data={
+					orderId:parseInt(this.list.orderId),
+					progress:this.list.progress,
+					topic:this.list.topic,
+					feedbackType:this.fdtype,  //订单纠纷
+					pics:this.list.pics.toString(),
+					type:this.index1,
+					options:this.optionsubmit,
+				}
 				createVote(data).then(res=>{
+					console.log(res)
+					if(res.errmsg=='成功'){
+						uni.$u.toast('发布成功！')
+						this.canceldingdan()
+					}
+					
 					
 				})
 			},
 			toeditVote(){
 				const data={
-					id:0,
-					orderId:'',
-					progress:'',
-					topic:'',
-					feedbackType:'',
-					pics:'',
-					type:'',
-					options:[
-						{
-						id:0,
-						count:0,
-						content:'',
-						}
-					]
+					id:parseInt(this.list.id),
+					orderId:parseInt(this.list.orderId),
+					progress:this.list.progress,
+					topic:this.list.topic,
+					feedbackType:this.fdtype,
+					pics:this.list.pics.toString(),
+					type:this.index1,
+					options:this.optionsubmit,
 				}
 				
 				editVote(data).then(res=>{
-					
+					console.log(res)
+					if(res.errmsg=='成功'){
+						uni.$u.toast('保存成功！')
+						this.canceldingdan()
+					}
 				})
 			},
 			edit(){
@@ -235,6 +330,12 @@
 				
 				if(this.index1==0){
 					this.fdtype='订单纠纷问题';
+					this.optionsubmit=[{
+						content:'0',
+					},{
+						content:'1',
+					}
+					]
 				}else if(this.index1==1){
 					this.fdtype='功能不完善';
 				}
@@ -296,6 +397,11 @@
 			  }
 			},
 			canceldingdan(){
+				uni.switchTab({
+					url:'/pages/platform/platform',
+				})
+			},
+			backdingdan(){
 				uni.navigateBack()
 			}
 			
@@ -304,9 +410,13 @@
 </script>
 
 <style lang="scss" scoped>
+	.content{
+		height:100vh;
+		background-color: #fff;
+	}
 .main {
 		padding-top: 30rpx;
-		padding-bottom: 520rpx;
+		
 		display: flex;
 		flex-direction: column;
         background-color: #fff;
@@ -328,6 +438,11 @@
 						margin-left: 40rpx;
 						
 					}
+				}
+				.d{
+					font-size: 30rpx;
+					text-align: center;
+					line-height: 70rpx;
 				}
 			}
 
@@ -373,6 +488,8 @@
 				white-space: nowrap;
 				.uni-input{
 					font-size: 30rpx;
+					color: #555dff;
+					border-bottom: 1px dotted #ccc;
 				}
 				
 			}
@@ -394,13 +511,7 @@
 			}
 		}
 
-		.bt2 {
-			margin-bottom: 50rpx;
-			text-align: center;
-			font-size: 32rpx;
-			color: $uni-color-error;
-			line-height: 88rpx;
-		}
+		
 	}
 	
 	.os-remark {
@@ -461,8 +572,9 @@
 			
 		}
 	.func{
+		
 		display: flex;
-		position: absolute;
+		margin-top: 20rpx;
 		width:100%;
 		bottom: 60rpx;
 		padding:0 20rpx;
@@ -470,6 +582,20 @@
 			flex:1;
 			padding:0 20rpx;
 		}
+		
 	}
+	.bt2 {
+		margin-top: 10rpx;
+		bottom:350rpx;
+		left:320rpx;
+		text-align: center;
+		font-size: 32rpx;
+		color: $uni-color-error;
+		line-height: 88rpx;
+	}
+	.name{
+		margin-bottom: 10rpx;
+	}
+	
 	
 </style>

@@ -11,7 +11,16 @@
 		<view class="search-bar">
 		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
-		
+		<!-- <view class="tab" >
+			
+			<view class='judgedisplay' @tap="showJudge">
+				显示：{{jd}}⏷
+				
+			</view>
+			<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
+				<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
+			</view>
+		</view> -->
 		
 		</view>
 		<view class="bottom-back">
@@ -28,40 +37,31 @@
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in friends" :key="item.id" @click="toPage('/pages/platform/vote-detail',item.id)">
+				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages/platform/vote-detail',item)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
-							<image :src="item.imgurl"></image>
+							<image :src="item.img"></image>
 						</view>
 						<view class="friends-list-r">
 							<view class="top">
-								<view class="name">{{item.name}}</view>
-								<view class="type">订单纠纷</view>
+								<view class="name">{{item.topic}}</view>
+								<view class="type">{{item.extype}}</view>
 							</view>
 							<view>
-								<view class="chatcontent">{{item.chatcontent}}</view>
+								<view class="chatcontent">{{item.progress}}</view>
 							</view>
 							
 						</view>
 					</view>
 					
 					<view class="friends-list-d">
-						<text class="name">发布者：xxx</text>
-						<text class="judge">审核通过</text>
-						<text class="price">意见反馈类目</text>
+						<text class="name">发布者：{{item.username}}</text>
+						<!-- <text class="judge">审核通过</text> -->
+						<text class="price">{{item.time}}</text>	
 					</view>
 				</view>
-				<view class="tab" >
-					
-					<view class='judgedisplay' @tap="showJudge">
-						显示：{{jd}}⏷
-						
-					</view>
-					<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
-						<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
-					</view>
-				</view>
+				
 			</view>
 		
 	</mescroll-body>
@@ -69,7 +69,6 @@
 </template>
 
 <script>
-	import datas from './datas.js';
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 	import { getVotelist} from '@/api/vote'
 	export default {
@@ -97,7 +96,7 @@
 						name: '发起投票'
 					},
 					{
-						name: '我的投票'
+						name: '审核投票'
 					},
 					
 				],
@@ -114,6 +113,8 @@
 					
 				],
 				jd:'全部',
+				typ:0,
+				extype:'',
 			};
 		},
 		onLoad(){
@@ -126,16 +127,28 @@
 				  page:'',
 				  order: '', 
 				  sort:'',
-				  relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
-				  type:0   //0 订单纠纷 1 意见反馈
+				  //relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  type:this.tye,  //0 订单纠纷 1 意见反馈
 				}
 				getVotelist(params).then(res =>{
-					console.log(res)
-				})
+					console.log(res.data)
+					console.log(this.list1.index)
+					const { list:listData, total } = res.data
+					const list = listData.map(v => ({ ...v, img: v.pics ? v.pics.split(',')[0] : '',extype:{'0':'订单纠纷','1':'意见反馈'}[v.type],time:v.options[0].updateTime.split(' ')[0]}))
+					this.mescroll.endBySize(list.length, total)
+						if (page.num == 1) this.goods = []
+						this.goods = this.goods.concat(list)
+				
+					}).catch(() => {
+					  this.mescroll.endErr()
+					})
+				
 			},
 			click(item) {
-			                console.log('item', item);
-			            },
+				console.log(item)
+			        this.tye=item.index
+			        this.mescroll.resetUpScroll()
+			  },
 			toPage(url) {
 			  uni.$u.route(url)
 			},
@@ -181,8 +194,8 @@
 								this.$createConversation();
 								break;
 			
-							case '我的投票':
-								this.$myVote();
+							case '审核投票':
+								//this.$myVote();
 								break;
 							default:
 								break;
@@ -224,7 +237,7 @@
 				});
 			},
 			toPage(url,id) {
-			  uni.$u.route(url, { id })
+			  uni.$u.route(url, id )
 			},
 		}
 	}
@@ -274,6 +287,7 @@
 					margin-top: 12rpx;
 					.price{
 						float:right;
+						font-size:23rpx;
 					}
 					.judge{
 						margin-left:50rpx;
@@ -314,7 +328,7 @@
 				
 							.type {
 								float: right;
-								font-size: $uni-font-size-sm;
+								font-size: 26rpx;
 								color: #5555ff;
 								line-height: 50rpx;
 							}
@@ -335,7 +349,7 @@
 							float:right;
 							margin-top:3rpx;
 							.price{
-								font-size:26rpx
+								
 							}
 						}
 						
@@ -465,12 +479,13 @@
 				
 			}
 		.tab{
-			position: fixed;
+			//position: fixed;
 			width:230rpx;
-			height:40rpx;
-			right:10rpx;
-			top:5rpx;
+			height:0rpx;
+			right:0rpx;
+			top:50rpx;
 			z-index: 20;
+			
 		}
 			.judgedisplay{
 				position: absolute;

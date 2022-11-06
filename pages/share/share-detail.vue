@@ -22,7 +22,7 @@
 		<view class="g-section">
 		  <view class="text-md text-bold">{{list.title}}</view>
 		 <view class='mt-2 u-tips-color text-s'>
-			  <text >发布人：xxx</text>
+			  <text >发布人：{{list.username}}</text>
 		  </view>
 		 <view class='mt-2 u-tips-color text-s'>
 		 			  <text >联系号码：{{list.tel}}</text>
@@ -67,7 +67,7 @@
 		    <text class="bt" >编辑商品</text>
 		  </view>
 		  <view class="b-footer__left" v-if="list.userId!=myid">
-		  			  <view @tap="handleRoute('C2Cyanli')" class="u">
+		  			  <view @tap="handleRoute(list.userId)" class="u">
 		  				  <u-icon name="chat"  color="#303133" size="28" />
 		  				  <text>联系他</text>
 		  			  </view>
@@ -114,14 +114,15 @@
 		},
 		methods:{
 			getShareInfo(){
-				console.log(this.list.userId)
+				console.log(this.list)
 				this.myid= uni.getStorageSync('userInfo').id
 				console.log(this.myid)
 				this.banner=this.list.gallery.split(",")
 				this.extype={'false':'提供货物','true':'需求货物'}[this.list.exchange]
 			},
-			handleRoute(id) {
-				const url = `../TUI-Chat/chat?conversationID=${id}`;
+			handleRoute() {
+				const id =this.list.userId
+				const url = `../TUI-Chat/chat?conversationID=C2C${id}`;
 				uni.navigateTo({
 					url
 				});

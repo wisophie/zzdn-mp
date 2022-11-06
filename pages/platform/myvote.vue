@@ -11,46 +11,57 @@
 		<view class="search-bar">
 		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
+		<view class="tab" >
+			
+			<view class='judgedisplay' @tap="showJudge">
+				显示：{{jd}}⏷
+				
+			</view>
+			<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
+				<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
+			</view>
 		</view>
-		<!-- <view class="bottom-back">
+		
+		</view>
+		<view class="bottom-back">
 			<view class="bottom-area">
 				<view v-if="showSelectTag" class="conversation-bubble" @tap.stop="handleEditToggle">
 					<view v-for="(item, index) in array" :key="index" class="picker" :data-name="item.name" @tap="handleOnTap">{{ item.name }}</view>
 				</view>
-			 
+				<!-- <image @tap="showMore" class="btn-show-more" src="/static/static/assets/add.svg"></image> -->
 				<view class="btn-show-more" @tap="showMore">
 				  <u-icon name="more-dot-fill" size="24" color="#fff" />
 				</view>
 			</view>
-		</view> -->
+		</view>
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in friends" :key="item.id" @click="toPage('/pages/vote/vote-detail')">
+				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages/platform/vote-detail',item)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
-							<image :src="item.imgurl"></image>
+							<image :src="item.img"></image>
 						</view>
 						<view class="friends-list-r">
 							<view class="top">
-								<view class="name">{{item.name}}</view>
-								<view class="type">订单纠纷</view>
+								<view class="name">{{item.topic}}</view>
+								<view class="type">{{item.extype}}</view>
 							</view>
 							<view>
-								<view class="chatcontent">{{item.chatcontent}}</view>
+								<view class="chatcontent">{{item.progress}}</view>
 							</view>
 							
 						</view>
 					</view>
 					
 					<view class="friends-list-d">
-						<text class="name">发布者：xxx</text>
+						<text class="name">发布者：{{item.username}}</text>
 						<text class="judge">审核通过</text>
-						<text class="price">意见反馈类目</text>
-						
+						<text class="price">{{item.time}}</text>	
 					</view>
 				</view>
+				
 			</view>
 		
 	</mescroll-body>
@@ -58,8 +69,8 @@
 </template>
 
 <script>
-	import datas from './datas.js';
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
+	import { getVotelist} from '@/api/vote'
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
@@ -79,42 +90,69 @@
 					noMoreSize: 0
 				},
 				showSelectTag: false,
+				showSelectTag2: false,
 				array: [
 					{
 						name: '发起投票'
 					},
 					{
-						name: '后台审核'
+						name: '审核投票'
 					},
 					
-				]
+				],
+				arrayjudge: [
+					{
+						name: '全部'
+					},
+					{
+						name: '已通过审核'
+					},
+					{
+						name: '未通过审核'
+					},
+					
+				],
+				jd:'全部',
+				typ:0,
+				extype:'',
 			};
 		},
 		onLoad(){
-			this.getHelpList()
 			this.getFriends1()
 		},
 		methods:{
+			upCallback(page){
+				const params = {
+				  limit: '',
+				  page:'',
+				  order: '', 
+				  sort:'',
+				  //relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  type:this.tye,  //0 订单纠纷 1 意见反馈
+				}
+				getVotelist(params).then(res =>{
+					console.log(res.data)
+					console.log(this.list1.index)
+					const { list:listData, total } = res.data
+					const list = listData.map(v => ({ ...v, img: v.pics ? v.pics.split(',')[0] : '',extype:{'0':'订单纠纷','1':'意见反馈'}[v.type],time:v.options[0].updateTime.split(' ')[0]}))
+					this.mescroll.endBySize(list.length, total)
+						if (page.num == 1) this.goods = []
+						this.goods = this.goods.concat(list)
+				
+					}).catch(() => {
+					  this.mescroll.endErr()
+					})
+				
+			},
 			click(item) {
-			                console.log('item', item);
-			            },
+				console.log(item)
+			        this.tye=item.index
+			        this.mescroll.resetUpScroll()
+			  },
 			toPage(url) {
 			  uni.$u.route(url)
 			},
-			getHelpList(){
-				uni.request({
-				  	url: this.serverUrl+'/wx/errand/order/list',
-				  	data: {
-				  		
-				  	},
-					header:{"X-Litemall-Token":this.token},
-				  	method: 'GET',
-				  	success: (res) => {
-				  		console.log(res)
-						
-						}
-				})
-			}, 
+			
 			getFriends1: function() {
 			  	this.friends = datas.friends();
 			  	for(let i=0;i<10;i++){
@@ -130,9 +168,19 @@
 					showSelectTag: !this.showSelectTag
 				});
 			},
+			showJudge() {
+				this.setData({
+					showSelectTag2: !this.showSelectTag2
+				});
+			},
 			handleEditToggle() {
 				this.setData({
 					showSelectTag: false
+				});
+			},
+			handleEditToggle2() {
+				this.setData({
+					showSelectTag2: false
 				});
 			},
 			handleOnTap(event) {
@@ -146,8 +194,31 @@
 								this.$createConversation();
 								break;
 			
-							case '后台审核':
-								this.$createGroup();
+							case '审核投票':
+								this.$myVote();
+								break;
+							default:
+								break;
+						}
+					}
+				);
+			},
+			handleOnTap2(event) {
+				this.setData(
+					{
+						showSelectTag2: false
+					},
+					() => {
+						switch (event.currentTarget.dataset.name) {
+							case '全部':
+								this.jd='全部';
+								break;
+			
+							case '已通过审核':
+								this.jd='已通过审核';
+								break;
+							case '未通过审核':
+								this.jd='未通过审核';
 								break;
 							default:
 								break;
@@ -159,6 +230,14 @@
 				uni.navigateTo({
 					url: './vote-edit'
 				});
+			},
+			$myVote() {
+				uni.navigateTo({
+					url: './myvote'
+				});
+			},
+			toPage(url,id) {
+			  uni.$u.route(url, id )
 			},
 		}
 	}
@@ -208,6 +287,7 @@
 					margin-top: 12rpx;
 					.price{
 						float:right;
+						font-size:23rpx;
 					}
 					.judge{
 						margin-left:50rpx;
@@ -248,7 +328,7 @@
 				
 							.type {
 								float: right;
-								font-size: $uni-font-size-sm;
+								font-size: 26rpx;
 								color: #5555ff;
 								line-height: 50rpx;
 							}
@@ -269,7 +349,7 @@
 							float:right;
 							margin-top:3rpx;
 							.price{
-								font-size:26rpx
+								
 							}
 						}
 						
@@ -332,6 +412,23 @@
 				border-color: #fff transparent transparent;
 			
 			}
+			.conversation-bubble2 {
+				padding-top: 5rpx;
+				position: absolute;
+				width: 160rpx;
+				padding-right: 3px;
+				background-color: #FFFFFF;
+				height: 157rpx;
+				top: 150rpx;
+				right:50rpx;
+				z-index: 100;
+				box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+				border-radius: 14rpx;
+				transition-duration: all .3s;
+			}
+			
+		
+			
 			.picker {
 				display: flex;
 				justify-content: center;
@@ -340,6 +437,20 @@
 				font-weight: 300;
 				width: 100%;
 				height: 80rpx;
+				&:active{
+					background-color: #ccc;
+				}
+				
+			}
+			.picker2 {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 25rpx;
+				font-weight: 300;
+				width: 100%;
+				height: 51rpx;
+				border-bottom: 1px solid #ccc;
 				&:active{
 					background-color: #ccc;
 				}
@@ -367,4 +478,21 @@
 				  }
 				
 			}
+		.tab{
+			//position: fixed;
+			width:230rpx;
+			height:0rpx;
+			right:0rpx;
+			top:50rpx;
+			z-index: 20;
+			
+		}
+			.judgedisplay{
+				position: absolute;
+				width:230rpx;
+				height:40rpx;
+				right:20rpx;
+				top:100rpx;
+			}
+			
 </style>

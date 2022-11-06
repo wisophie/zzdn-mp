@@ -60,7 +60,7 @@ function loginByWeixin(userInfo) {
           //存储用户信息
           uni.setStorageSync('userInfo', res.data.userInfo);
           uni.setStorageSync('token', res.data.token);
-
+          
           resolve(res);
         } else {
           reject(res);
@@ -72,6 +72,7 @@ function loginByWeixin(userInfo) {
       reject(err);
     })
   });
+  
 }
 
 /**

@@ -84,12 +84,18 @@
 					
 					<view class="lm">
 						<view class="title">规格</view>
-						<view class="cont">
+						<!-- <view class="cont">
 							<picker @change="bindPickerChange2" :value="index2" :range="specification" v-if="id==uid">
 								<view class="uni-input">{{specification[index2]}}</view>
 							</picker>
 							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
-						</view>
+							
+						</view> -->
+						<u--input
+						    placeholder="请输入规格"
+							border="bottom"	
+						    v-model="list.specification"
+						  ></u--input>
 						<!-- <view class="more" v-if="id==uid">
 							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
 						</view> -->
@@ -173,7 +179,6 @@
 				type:'',
 				data:'',
 				show: false,
-				remark: "sfsafsf",
 				array: ['滞销', '共享'],
 				index1: 0,
 				index2: 0,
@@ -199,7 +204,7 @@
 		},
 		methods:{
 			getlist(id){
-				console.log(id.id)
+				console.log(id)
 				const banners=id.gallery.split(",")
 				const temp =[{ url: 1 },{ url: 1 }]
 				this.banner= temp.map(((o, i) => ({ 
@@ -212,7 +217,7 @@
 				if(this.banner[1].url==undefined){
 					this.banner.pop()
 				}
-				console.log(this.banner)
+				console.log(this.list)
 			},
 			// 删除图片
 			deletePic(event, key) {
@@ -364,9 +369,13 @@
 				  country:this.formData.country,
 				}
 				createShare(data).then(res=>{
-					uni.$u.toast('发布成功！')
+					if(res.errmsg=='成功'){
+						uni.$u.toast('发布成功！')
+						this.canceldingdan()
+					}
+					
 				})
-				this.canceldingdan()
+				
 			},
 			canceldingdan(){
 				uni.switchTab({
@@ -448,6 +457,7 @@
 				white-space: nowrap;
 				.uni-input{
 					font-size: 30rpx;
+					
 				}
 				
 				
