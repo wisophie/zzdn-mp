@@ -3,9 +3,12 @@
  */
 import { weixinLogin } from '@/api/login'
 const util = require('../utils/util.js');
-
-export const isAndroid = uni.getSystemInfoSync().platform === 'android'
-
+// #ifdef MP-WEIXIN
+export const isMpWeixin = true
+// #endif
+// #ifdef APP-PLUS
+export const isMpWeixin = false
+// #endif
 /**
  * Promise封装wx.checkSession
  */
@@ -70,14 +73,14 @@ function loginByWeixin(userInfo) {
 
   return new Promise(function(resolve, reject) {
     return login().then(async(res) => {
-      if (isAndroid) {
+      if (!isMpWeixin) {
         userInfo = await getUserInfo()
       }
       console.log(res, userInfo, 'uniloginres')
       weixinLogin({
         code: res.code,
         userInfo: userInfo,
-				loginChannel: isAndroid ? 'APP' : 'MA'
+				loginChannel: isMpWeixin ? 'MA' : 'APP'
       }).then(res => {
 				console.log('登录成功：', res)
         if (res.errno === 0) {
@@ -121,5 +124,5 @@ function checkLogin() {
 module.exports = {
   loginByWeixin,
   checkLogin,
-  isAndroid
+  isMpWeixin
 };
