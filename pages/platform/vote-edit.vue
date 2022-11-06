@@ -181,7 +181,7 @@
 					'one': {
 						type: 'string',
 						required: true,
-						message: '请填写至少2项投票内容',
+						message: '请填写至少1项投票内容',
 						trigger: ['blur', 'change']
 					},
 								

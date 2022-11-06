@@ -36,7 +36,7 @@
 		</view>
 		
 			<view class="ff" v-if="list.userId!==myid&&list.status==3">请上传完成凭证</view>
-			<view class="u-flex tt" v-if="list.userId!==myid&&list.status==3">
+			<view class="u-flex tt" v-if="(list.userId!==this.myid&&list.status==3)||list.status==4">
 			  <view>
 			    <u-upload
 			      :fileList="banner1"
@@ -46,6 +46,7 @@
 			      @afterRead="afterRead($event, 'one')"
 			      @delete="deletePic($event, 'one')"
 				  :previewFullImage="true"
+				  :deletable='dtable'
 			    ></u-upload>
 			    <view class="text-xs u-tips-color" style="textalign: center">到场拍的照片</view>
 			  </view>
@@ -58,6 +59,7 @@
 			      @afterRead="afterRead($event, 'two')"
 			      @delete="deletePic($event, 'two')"
 				  :previewFullImage="true"
+				  :deletable='dtable'
 			    ></u-upload>
 			    <view class="text-xs u-tips-color text-center" style="textalign: center">
 			      结束拍的照片
@@ -130,6 +132,7 @@
 					banner1:[],
 					banner2:[],
 					clickeble:0,
+					dtable:1,
 				
 				
 			};
@@ -157,8 +160,10 @@
 				}
 				let res =await getHelpDetail(params)
 					this.list= res.data
+					console.log(this.list)
 					this.statustype = {'1':'等待接单','2':'等待接单','3':'已接单','4':'跑腿完成，等待确认','5':'已取消','6':'订单已完成'}[res.data.status]
 				    this.list.username=item.username
+					
 			
 				let sts =this.list.status
 				if(item.userId==this.myid&&sts==2){
@@ -170,8 +175,22 @@
 				}else if(item.userId!==this.myid&&sts==3){
 					this.ordertext='提交凭证'
 				}else if(item.userId==this.myid&&sts==4){
+					this.banner1=[{
+							url:this.list.detail.beforeRepairPhoto,
+						}],
+					this.banner2=[{
+							url:this.list.detail.afterRepairPhoto,
+						}],
+					this.dtable=0
 					this.ordertext='已完成，请点击确认'
 				}else if(item.userId!==this.myid&&sts==4){
+					this.banner1=[{
+							url:this.list.detail.beforeRepairPhoto,
+						}],
+					this.banner2=[{
+							url:this.list.detail.afterRepairPhoto,
+						}],
+					this.dtable=0
 					this.ordertext='已完成，等待确认'
 				}else if(sts==5){
 					this.ordertext='订单已取消'
@@ -233,10 +252,11 @@
 			
 			},
 			tofulfillHelp(){
+				console.log(this.banner2[0].url.toString())
 				const data={
 					orderId:this.list.item[0].orderId,
-					afterRepairPhoto:'',
-					beforeRepairPhoto:'',
+					afterRepairPhoto:this.banner2[0].url.toString(),
+					beforeRepairPhoto:this.banner1[0].url.toString(),
 				}
 				uni.showModal({
 				  title: '提示',
@@ -244,6 +264,7 @@
 				  success: res => {
 				    if (res.confirm) {
 				     fulfillHelp(data).then(res=>{
+						 console.log(res)
 				     	if(res.errmsg=='成功'){
 							this.gethelpInfo(this.list)
 				     		uni.$u.toast('上传成功，等待确认！')

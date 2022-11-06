@@ -67,11 +67,11 @@
 		data() {
 			return {
 				 list1: [{
+							name: '待接单列表',
+						}, {
 							name: '我是发起人',
 						}, {
 							name: '我是接单人',
-						}, {
-							name: '待接单列表',
 						}],
 				goods:[],
 				friends:[],
@@ -93,13 +93,12 @@
 				],
 				jd:'我的订单',
 				showSelectTag2:false,
-				rol:0,
+				rol:'',
 				relme:0,
 			};
 		},
 		onLoad(){
-			// this.getHelpList()
-			this.getFriends1()
+			
 			
 		},
 		onShow() {
@@ -133,7 +132,7 @@
 			},
 			click(item) {
 			console.log(item.index);
-			this.rol={'0':0,'1':1,'3':''}[item.index]
+			this.rol={'0':'','1':0,'2':1}[item.index]
 			this.mescroll.resetUpScroll()
 			 },
 			toPage(url,id) {

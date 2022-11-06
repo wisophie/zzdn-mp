@@ -1,6 +1,6 @@
 module.exports = vm => {
 
-  const baseURL = 'http://a73bau.natappfree.cc/'
+  const baseURL = 'http://sbahm2.natappfree.cc/'
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
       baseURL: baseURL,
