@@ -58,7 +58,8 @@
     {
       "path": "pages/platform/platform",
       "style": {
-        "navigationBarTitleText": "平台"
+        "navigationBarTitleText": "平台",
+		 "enablePullDownRefresh": true
       }
     },
     {

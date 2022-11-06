@@ -103,7 +103,7 @@
 				
 			
 				getShareApi(params).then(res =>{
-					const { list: listData, total } = res.data
+					const { list: listData, total } = res.data.list
 					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []

@@ -130,6 +130,7 @@ export default {
       if(!this.isBindMobile) return
 
       updateInfo(this.formData).then(res => {
+		  
         uni.navigateBack({
           delta: 2
         })

@@ -11,7 +11,7 @@
 		<view class="search-bar">
 		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
-		<view class="tab" >
+		<!-- <view class="tab" >
 			
 			<view class='judgedisplay' @tap="showJudge">
 				显示：{{jd}}⏷
@@ -20,7 +20,7 @@
 			<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
 				<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
 			</view>
-		</view>
+		</view> -->
 		</view>
 		<view class="bt">
 			<u-button class="mt-4" type="primary" @click="toPage('/pages/help/help-edit')">发布跑腿订单</u-button>
@@ -47,7 +47,7 @@
 					</view>
 					
 					<view class="friends-list-d">
-						<text class="name">发布地点：{{item.province}}-{{item.city}}</text>
+						<text class="name">发布人：{{item.username}}</text>
 						<text class="price">价格：{{item.amount}}元</text>
 					</view>
 				</view>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-	import datas from './datas.js';
+	
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 	import { getHelplist} from '@/api/help'
 	export default {
@@ -70,6 +70,8 @@
 							name: '我是发起人',
 						}, {
 							name: '我是接单人',
+						}, {
+							name: '待接单列表',
 						}],
 				goods:[],
 				friends:[],
@@ -91,7 +93,7 @@
 				],
 				jd:'我的订单',
 				showSelectTag2:false,
-				rol:'',
+				rol:0,
 				relme:0,
 			};
 		},
@@ -100,9 +102,9 @@
 			this.getFriends1()
 			
 		},
-		// onShow() {
-		//  this.refresh()
-		// },
+		onShow() {
+		 this.refresh()
+		},
 		methods:{
 			
 			upCallback(page){
@@ -119,7 +121,8 @@
 				}
 				getHelplist(params).then(res =>{
 					const { list:listData, total } = res.data
-					const list = listData.map(v => ({ ...v, statustype:{'1':'等待接单','2':'等待接单','3':'已接单','4':'已完成','5':'已取消'}[v.status]}))
+					const list = listData.map(v => ({ ...v, statustype:{'1':'等待接单','2':'等待接单','3':'已接单','4':'跑腿完成，等待确认','5':'已取消','6':'订单已完成'}[v.status],
+					imgurl:{'跑腿订单':'../../static/img/pao.png','帮忙订单':'../../static/img/bang.png'}["帮忙订单"]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)
@@ -130,32 +133,11 @@
 			},
 			click(item) {
 			console.log(item.index);
-			this.rol=item.index
+			this.rol={'0':0,'1':1,'3':''}[item.index]
 			this.mescroll.resetUpScroll()
 			 },
 			toPage(url,id) {
 			  uni.$u.route(url, id )
-			},
-			// getHelpList(){
-			// 	uni.request({
-			// 	  	url: this.serverUrl+'/wx/errand/order/list',
-			// 	  	data: {
-				  		
-			// 	  	},
-			// 		header:{"X-Litemall-Token":this.token},
-			// 	  	method: 'GET',
-			// 	  	success: (res) => {
-			// 	  		console.log(res)
-						
-			// 			}
-			// 	})
-			// }, 
-			getFriends1: function() {
-			  	this.friends = datas.friends();
-			  	for(let i=0;i<10;i++){
-			  		this.friends[i].imgurl=`https://cdn.uviewui.com/uview/album/${i+1}.jpg`;
-			  		}
-			  	
 			},
 			changeTime:function(date){
 				return myfunction.dateTime(date)
@@ -186,7 +168,7 @@
 			
 							case '待接单列表':
 								this.jd='待接单列表';
-								this.relme=1
+								this.rol=''
 								//console.log(this.relme)
 								this.mescroll.resetUpScroll()
 								break;
@@ -216,7 +198,7 @@
 	.bt{
 		position: fixed;
 		width:100%;
-		bottom:0;
+		bottom:30rpx;
 		padding: 0rpx 32rpx;
 		z-index: 10;
 	}
@@ -349,9 +331,9 @@
 			}
 				.judgedisplay{
 					position: absolute;
-					width:230rpx;
+					width:245rpx;
 					height:40rpx;
-					right:20rpx;
+					right:40rpx;
 					top:100rpx;
 				}
 </style>

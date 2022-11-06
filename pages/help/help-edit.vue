@@ -59,13 +59,17 @@
 					
 				</view>
 				<view class="row" >
+					<view class="lm">
 					<view class="title">总费用</view>
-					<view class="cont" @tap="get('amount',list.amount)" >
+					<!-- <view class="cont" @tap="get('amount',list.amount)" >
 						{{list.amount}}
-					</view>
-					<view class="more">
-						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-					</view>
+					</view> -->
+					<u--input
+					    placeholder="请输入价格"
+						border="bottom"	
+					    v-model="list.amount"
+					  ></u--input>
+				  </view>
 				</view>
 				
 				<view class="row" @tap="get('mobile',list.mobile)">
@@ -153,9 +157,9 @@
 				amount:'',
 				exchangetype:['跑题订单', '帮忙订单'],
 				list:{
-					topic:'商品标题',
+					topic:'任务标题',
 					mobile:'输入手机号码',
-					content:'请输入商品详情'
+					content:'请输入任务描述',
 				},
 				addressOptions: [],
 			};

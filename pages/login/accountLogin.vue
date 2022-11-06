@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import {loginImUser} from '../../utils/imlogin';
 import { loginByAccount, fetchUserInfo } from '@/api/login'
 
 export default {
@@ -55,8 +56,10 @@ export default {
             success: function () {
               fetchUserInfo().then(response => {
                 const userInfo = response.data
+				console.log(userInfo)
                 // console.log('%c 【 userInfo 】-60', 'font-size:14px; color:rgb(210, 110, 210);', userInfo)
                 uni.setStorageSync('userInfo', userInfo)
+				loginImUser()
                 setTimeout(() => {
                   uni.switchTab({
                     url: '/pages/home/home'
