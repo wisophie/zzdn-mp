@@ -62,7 +62,7 @@ export default {
 	},
 	  
     toDetail(id) {
-      uni.$u.route('/pages/share/share-detail', id)
+      uni.$u.route('pages_share/share-detail', id)
     },
   }
 }

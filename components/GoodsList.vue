@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     toDetail(id) {
-      uni.$u.route('/pages/goods/goods-detail', { id })
+      uni.$u.route('/pages_goods/goods-detail', { id })
     }
   }
 }

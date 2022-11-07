@@ -158,7 +158,7 @@
 			},
 			$createConversation() {
 				uni.navigateTo({
-					url: './share-edit'
+					url: '/pages_share/share-edit'
 				});
 			},
 			$myVote() {

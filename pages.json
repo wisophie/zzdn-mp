@@ -8,19 +8,6 @@
     },
     
     {
-      "path": "pages/address/list",
-      "style": {
-        "navigationBarTitleText": "收货地址"
-      }
-    },
-    {
-      "path": "pages/address/add",
-      "style": {
-        "navigationBarTitleText": "添加/编辑地址"
-      }
-    },
-    
-    {
       "path": "pages/goods/goods",
       "style": {
         "navigationBarTitleText": "商品",
@@ -37,101 +24,10 @@
       }
     },
     {
-      "path": "pages/share/share-edit",
-      "style": {
-        "navigationBarTitleText": "编辑共享商品"
-      }
-    },
-    {
-      "path": "pages/help/help-list",
-      "style": {
-        "navigationBarTitleText": "跑腿订单",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "pages/chat/chat",
-      "style": {
-        "navigationBarTitleText": "沟通"
-      }
-    },
-    {
       "path": "pages/platform/platform",
       "style": {
         "navigationBarTitleText": "平台",
 		 "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "pages/platform/myvote",
-      "style": {
-        "navigationBarTitleText": "我的投票"
-      }
-    },
-    {
-      "path": "pages/platform/vote-edit",
-      "style": {
-        "navigationBarTitleText": "发起投票"
-      }
-    },
-    {
-      "path": "pages/platform/vote-detail",
-      "style": {
-        "navigationBarTitleText": "投票详情"
-      }
-    },
-    {
-      "path": "pages/goods/order-list",
-      "style": {
-        "navigationBarTitleText": "我的订单",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "pages/goods/goods-detail",
-      "style": {
-        "navigationBarTitleText": "商品详情"
-      }
-    },
-    {
-      "path": "pages/goods/provider",
-      "style": {
-        "navigationBarTitleText": "供货商入驻"
-      }
-    },
-    {
-      "path": "pages/goods/upload",
-      "style": {
-        "navigationBarTitleText": "上传产品"
-      }
-    },
-    {
-      "path": "pages/goods/upload-list",
-      "style": {
-        "navigationBarTitleText": "我的产品",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "pages/goods/order-submit",
-      "style": {
-        "navigationBarTitleText": "下单支付",
-        "navigationBarBackgroundColor": "#5d51ff",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/goods/order-detail",
-      "style": {
-        "navigationBarTitleText": "订单详情",
-        "navigationBarBackgroundColor": "#5d51ff",
-        "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/goods/wuliu",
-      "style": {
-        "navigationBarTitleText": "物流详情"
       }
     },
     {
@@ -144,58 +40,9 @@
       }
     },
     {
-      "path": "pages/TUI-Chat/chat",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/TUI-Conversation/create-conversation/create",
       "style": {
         "navigationStyle": "custom"
-      }
-    },
-   
-
-    {
-      "path": "pages/TUI-Group/create-group/create",
-      "style": {}
-    },
-    {
-      "path": "pages/TUI-Group/join-group/join",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    
-    {
-      "path": "pages/help/help-detail",
-      "style": {
-        "navigationBarTitleText": "任务详情",
-        "enablePullDownRefresh": false
-      }
-    },
-    {
-      "path": "pages/share/share-detail",
-      "style": {
-        "navigationBarTitleText": "共享商品详情",
-        "enablePullDownRefresh": false
-      }
-    },
-    {
-      "path": "pages/help/help-edit",
-      "style": {
-        "navigationBarTitleText": "编辑跑腿订单",
-        "enablePullDownRefresh": false
-      }
-    },
-    {
-      "path": "pages/goods/aftersale",
-      "style": {
-        "navigationBarTitleText": "申请售后",
-        "navigationBarBackgroundColor": "#fff",
-        "navigationBarTextStyle": "black",
-        "enablePullDownRefresh": false
       }
     }
   ],
@@ -307,6 +154,74 @@
         }
       ]
     },
+	{
+	  "root": "pages_goods/",
+	  "pages": [
+	    {
+	      "path": "aftersale",
+	      "style": {
+	        "navigationBarTitleText": "申请售后",
+	        "navigationBarBackgroundColor": "#fff",
+	        "navigationBarTextStyle": "black",
+	        "enablePullDownRefresh": false
+	      }
+	    },
+	    {
+	      "path": "goods-detail",
+	      "style": {
+	        "navigationBarTitleText": "商品详情"
+	      }
+	    },
+	    {
+	      "path": "order-detail",
+	      "style": {
+	        "navigationBarTitleText": "订单详情",
+	        "navigationBarBackgroundColor": "#5d51ff",
+	        "navigationBarTextStyle": "white"
+	      }
+	    },
+	    {
+	      "path": "order-submit",
+	      "style": {
+	        "navigationBarTitleText": "下单支付",
+	        "navigationBarBackgroundColor": "#5d51ff",
+	        "navigationBarTextStyle": "white"
+	      }
+	    },
+	    {
+	      "path": "order-list",
+	      "style": {
+	        "navigationBarTitleText": "我的订单",
+	        "enablePullDownRefresh": true
+	      }
+	    },
+		{
+		  "path": "provider",
+		  "style": {
+		    "navigationBarTitleText": "供货商入驻"
+		  }
+		},
+		{
+		  "path": "upload",
+		  "style": {
+		    "navigationBarTitleText": "上传产品"
+		  }
+		},
+		{
+		  "path": "upload-list",
+		  "style": {
+		    "navigationBarTitleText": "我的产品",
+		    "enablePullDownRefresh": true
+		  }
+		},
+		{
+		  "path": "wuliu",
+		  "style": {
+		    "navigationBarTitleText": "物流详情"
+		  }
+		}
+	  ]
+	},
     {
       "root": "pages/buyer/",
       "pages": [
@@ -330,6 +245,97 @@
         }
       ]
     },
+	{
+	  "root": "pages/help/",
+	  "pages": [
+	    {
+	      "path": "help-list",
+	      "style": {
+	        "navigationBarTitleText": "跑腿订单列表"
+	      }
+	    },
+	    {
+	      "path": "help-detail",
+	      "style": {
+	        "navigationBarTitleText": "任务详情"
+	      }
+	    },
+	    {
+	      "path": "help-edit",
+	      "style": {
+	        "navigationBarTitleText": "发布跑腿订单"
+	      }
+	    }
+	  ]
+	},
+	{
+	  "root": "pages_platform/",
+	  "pages": [
+	    {
+	      "path": "myvote",
+	      "style": {
+	        "navigationBarTitleText": "跑腿订单列表"
+	      }
+	    },
+	    {
+	      "path": "vote-detail",
+	      "style": {
+	        "navigationBarTitleText": "任务详情"
+	      }
+	    },
+	    {
+	      "path": "vote-edit",
+	      "style": {
+	        "navigationBarTitleText": "发布跑腿订单"
+	      }
+	    }
+	  ]
+	},
+	{
+	  "root": "pages/address/",
+	  "pages": [
+	    {
+	      "path": "list",
+	      "style": {
+	        "navigationBarTitleText": "收货地址"
+	      }
+	    },
+	    {
+	      "path": "add",
+	      "style": {
+	        "navigationBarTitleText": "添加/编辑地址"
+	      }
+	    }
+	  ]
+	},
+	{
+	  "root": "pages_share/",
+	  "pages": [
+	    {
+	      "path": "share-detail",
+	      "style": {
+	        "navigationBarTitleText": "共享详情"
+	      }
+	    },
+	    {
+	      "path": "share-edit",
+	      "style": {
+	        "navigationBarTitleText": "编辑共享"
+	      }
+	    }
+	  ]
+	},
+	{
+	  "root": "pages/TUI-Chat/",
+	  "pages": [
+	    {
+	      "path": "chat",
+	      "style": {
+	        "navigationBarTitleText": "聊天页面"
+	      }
+	    }
+	  ]
+	},
     {
       "root": "pages/agreement/",
       "pages": [

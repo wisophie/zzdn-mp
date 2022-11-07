@@ -37,7 +37,7 @@
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages/platform/vote-detail',item)">
+				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages_platform/vote-detail',item)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
@@ -152,14 +152,7 @@
 			toPage(url) {
 			  uni.$u.route(url)
 			},
-			
-			getFriends1: function() {
-			  	this.friends = datas.friends();
-			  	for(let i=0;i<10;i++){
-			  		this.friends[i].imgurl=`https://cdn.uviewui.com/uview/album/${i+1}.jpg`;
-			  		}
-			  	
-			},
+		
 			changeTime:function(date){
 				return myfunction.dateTime(date)
 			},
@@ -228,12 +221,12 @@
 			},
 			$createConversation() {
 				uni.navigateTo({
-					url: './vote-edit'
+					url: '/pages_platform/vote-edit'
 				});
 			},
 			$myVote() {
 				uni.navigateTo({
-					url: './myvote'
+					url: '/pages_platform/myvote'
 				});
 			},
 			toPage(url,id) {

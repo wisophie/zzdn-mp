@@ -113,12 +113,12 @@ export default {
 							this.$createConversation();
 							break;
 
-						case '发起群聊':
-							this.$createGroup();
-							break;
+						// case '发起群聊':
+						// 	this.$createGroup();
+						// 	break;
 
-						case '加入群聊':
-							this.$joinGroup();
+						// case '加入群聊':
+						// 	this.$joinGroup();
 
 						default:
 							break;
@@ -146,17 +146,17 @@ export default {
 			});
 		},
 
-		$createGroup() {
-			uni.navigateTo({
-				url: '../../TUI-Group/create-group/create'
-			});
-		},
+		// $createGroup() {
+		// 	uni.navigateTo({
+		// 		url: '../../TUI-Group/create-group/create'
+		// 	});
+		// },
 
-		$joinGroup() {
-			uni.navigateTo({
-				url: '../../TUI-Group/join-group/join'
-			});
-		}
+		// $joinGroup() {
+		// 	uni.navigateTo({
+		// 		url: '../../TUI-Group/join-group/join'
+		// 	});
+		// }
 	}
 };
 </script>

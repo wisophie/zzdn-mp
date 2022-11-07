@@ -7,12 +7,7 @@
 		:config="config">
 	</tuicalling> -->
 		<!-- #endif -->
-		<view class="tui-chatroom-navigatorbar">
-			<image class="tui-chatroom-navigatorbar-back" src="/static/static/assets/ic_back_white.svg" @tap="goBack" />
-			<!-- 先查 remark；无 remark 查 (c2c)nick/(group)name；最后查 (c2c)userID/(group)groupID -->
-			<view class="conversation-title">{{ conversationName }}</view>
-		</view>
-		<view class="group-profile"><TUI-group-profile v-if="isShow" id="groip-profile" :conversation="conversation" /></view>
+		<!-- <view class="group-profile"><TUI-group-profile v-if="isShow" id="groip-profile" :conversation="conversation" /></view> -->
 		<view class="message-list" @tap="triggerClose"><TUI-message-list id="message-list" ref="messageList" :conversation="conversation" /></view>
 		<view v-if="videoPlay" class="container-box" @tap.stop="stopVideoHander">
 			<video
@@ -33,17 +28,15 @@
 </template>
 
 <script>
-import logger from '../../utils/logger';
-import TUIMessageList from '../../components/tui-chat/message-list/index';
-import TUIMessageInput from '../../components/tui-chat/message-input/index';
-import TUIGroupProfile from '../../components/tui-group/group-profile/index';
-
+import logger from '@/utils/logger';
+import TUIMessageList from '@/components/tui-chat/message-list/index';
+import TUIMessageInput from './message-input/index';
 const app = getApp();
 export default {
 	components: {
 		TUIMessageList,
 		TUIMessageInput,
-		TUIGroupProfile
+		//TUIGroupProfile
 	},
 	props: {},
 	data() {
@@ -105,13 +98,22 @@ export default {
 		uni.$TUIKit.getConversationProfile(conversationID).then(res => {
 			const { conversation } = res.data;
 			this.conversation = conversation;
+			
 			this.setData({
 				conversationName: this.getConversationName(conversation),
-				isShow: conversation.type === 'GROUP'
+				isShow: conversation.type === 'GROUP',
+				
 			});
+			wx.setNavigationBarTitle({
+			   title: this.conversationName,
+			   
+			})
+			
 		});
 	},
-	mounted() {},
+	mounted() {
+		
+	},
 	onUnload() {
 		// #ifdef MP-WEIXIN
 		//   this.$refs.TUICalling.destroyed();

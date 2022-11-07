@@ -11,16 +11,8 @@
 		logger.error(' TUIKit 暂不支持 H5 / web ，请使用者自己完成兼容哦，页面刷新可能会导致报错，需要重新登录 ');
 		// #endif
 		
-	// #ifdef APP-PLUS
-		import Aegis from 'aegis-weex-sdk';
-		// #endif
-		
 		// #ifdef MP-WEIXIN
 		import Aegis from 'aegis-mp-sdk';
-		// #endif
-		
-		// #ifdef H5
-		import Aegis from 'aegis-web-sdk';
 		// #endif
 		
 		import logger from './utils/logger'; // app.js

@@ -46,12 +46,12 @@
 		})
 		// #endif
 		// #ifdef H5
-		uni.$aegis.reportEvent({
-		    name: 'platform',
-		    ext1: 'platform-H5',
-		    ext2: 'uniTuikitExternal',
-		    ext3: `${SDKAppID}`,
-		})
+		// uni.$aegis.reportEvent({
+		//     name: 'platform',
+		//     ext1: 'platform-H5',
+		//     ext2: 'uniTuikitExternal',
+		//     ext3: `${SDKAppID}`,
+		// })
 		uni.showToast({
 			title: 'TUIKit 暂不支持 H5 / web ，请使用者自己完成兼容哦～ ',
 			icon: 'none',
