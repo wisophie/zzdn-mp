@@ -133,7 +133,7 @@ export default {
         })
     },
     toEdit(item) {
-      uni.$u.route('/pages/goods/upload', { id: item.id })
+      uni.$u.route('/pages_goods/upload', { id: item.id })
     },
     remove(item) {
       uni.showModal({

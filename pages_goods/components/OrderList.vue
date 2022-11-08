@@ -189,7 +189,7 @@ export default {
 			return statusMap[s] || ''
 		},
 		toDetail(id) {
-			uni.$u.route('/pages/goods/order-detail', { id })
+			uni.$u.route('/pages_goods/order-detail', { id })
 		},
 		onComment(item) {
 			this.current = item
@@ -299,7 +299,7 @@ export default {
 			this.showMoney = false
 		},
 		toAftersale(id) {
-			uni.$u.route('/pages/goods/aftersale')
+			uni.$u.route('/pages_goods/aftersale')
 		}
 	}
 }
