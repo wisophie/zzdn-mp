@@ -6,9 +6,9 @@
 	
 	export function loginImUser(){
 		const {id:userID,avatar:FaceUrl,username:Nick} = uni.getStorageSync('userInfo')
-		let usig=genTestUserSig('administrator')
+		let usig=genTestUserSig('administrator').userSig
 		uni.request({
-			url:`https://console.tim.qq.com/v4/im_open_login_svc/account_import?sdkappid=1400755763&identifier=administrator&usersig=eJwtzMEOgjAQBNB-6RVD1upSQ*JJvRgSi4J6bWypGwWxNMRo-HcROM6byXxYlhzC1jgWMx4Cm-SZtKk8FdSz0iVV1Hin-MONg0bfVF2TZvF0DiAQRTQbGvOqyZnOEZEDwKCeyr9FkRDAcSHGF7Ld-4rbzfmppLRBju9qW*x3zpn2sj6Lqz2VKeXHeyKzQFK6ZN8fZOA1Tw__&random=2233221152&contenttype=json`,
+			url:`https://console.tim.qq.com/v4/im_open_login_svc/account_import?sdkappid=1400757222&identifier=administrator&usersig=${usig}&random=2233221152&contenttype=json`,
 			data:{
 				   "UserID":userID.toString(),
 				   "Nick":Nick,

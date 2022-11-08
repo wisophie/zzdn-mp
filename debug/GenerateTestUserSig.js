@@ -6,7 +6,7 @@ import LibGenerateTestUserSig from './lib-generate-test-usersig-es.min.js';
  * 它是腾讯云用于区分客户的唯一标识。
  */
 
-const SDKAPPID = 1400755763;
+const SDKAPPID = 1400757222;
 /**
  * 签名过期时间，建议不要设置的过短
  * <p>
@@ -26,7 +26,7 @@ const EXPIRETIME = 604800;
  * 文档：https://cloud.tencent.com/document/product/647/17275#Server
  */
 
-const SECRETKEY = 'd5e204c5943b28695de36feb3841cbf8951b7c50573379b6573830a2187d61a3';
+const SECRETKEY = '3803bf1ec41b99cc6ffc51ff32052324fd31bc3222cf6e6bd44335b5ed6fff52';
 /*
  * Module:   GenerateTestUserSig
  *

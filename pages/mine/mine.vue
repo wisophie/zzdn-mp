@@ -46,6 +46,8 @@
 </template>
 
 <script>
+	import logger from '../../utils/logger';
+	const app = getApp();
 import { logout, bindPhone, fetchUserInfo, updateInfo } from '@/api/login'
 import SwitchIdentity from '@/components/SwitchIdentity'
 
@@ -97,6 +99,7 @@ export default {
         uni.navigateTo({
            url: '/pages/login/login'
         });
+		this.quit()
       })
     },
 
@@ -109,7 +112,16 @@ export default {
 
     handleSwitch() {
 			this.$refs.identity.show()
-		}
+		},
+		//退出IM登录
+		quit() {
+			// TUIKit xxxx | mine | quit | xxxx
+			logger.log('| TUI-User-Center | mine  | quit-logout ');
+			uni.$TUIKit.logout().then(() => {
+				uni.clearStorage();
+				
+			});
+		},
   }
 }
 </script>

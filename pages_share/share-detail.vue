@@ -122,7 +122,7 @@
 			},
 			handleRoute() {
 				const id =this.list.userId
-				const url = `../pages/TUI-Chat/chat?conversationID=C2C${id}`;
+				const url = `../pages_chat/chat?conversationID=C2C${id}`;
 				uni.navigateTo({
 					url
 				});

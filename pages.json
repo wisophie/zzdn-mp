@@ -31,18 +31,11 @@
       }
     },
     {
-      "path": "pages/TUI-Conversation/conversation/conversation",
+      "path": "pages/TUI-Index/index",
       "style": {
-        "navigationBarTitleText": "会话列表",
+        "navigationBarTitleText": "会话",
         "navigationBarBackgroundColor": "#006EFF",
-        "backgroundColor": "#FFFFFF",
         "navigationBarTextStyle": "white"
-      }
-    },
-    {
-      "path": "pages/TUI-Conversation/create-conversation/create",
-      "style": {
-        "navigationStyle": "custom"
       }
     }
   ],
@@ -70,7 +63,7 @@
         "text": "共享"
       },
       {
-        "pagePath": "pages/TUI-Conversation/conversation/conversation",
+        "pagePath": "pages/TUI-Index/index",
         "iconPath": "static/tabbar/tab4.png",
         "selectedIconPath": "static/tabbar/tab4_a.png",
         "text": "沟通"
@@ -274,19 +267,19 @@
 	    {
 	      "path": "myvote",
 	      "style": {
-	        "navigationBarTitleText": "跑腿订单列表"
+	        "navigationBarTitleText": "投票列表"
 	      }
 	    },
 	    {
 	      "path": "vote-detail",
 	      "style": {
-	        "navigationBarTitleText": "任务详情"
+	        "navigationBarTitleText": "投票详情"
 	      }
 	    },
 	    {
 	      "path": "vote-edit",
 	      "style": {
-	        "navigationBarTitleText": "发布跑腿订单"
+	        "navigationBarTitleText": "编辑投票"
 	      }
 	    }
 	  ]
@@ -326,12 +319,24 @@
 	  ]
 	},
 	{
-	  "root": "pages/TUI-Chat/",
+	  "root": "pages_chat/",
 	  "pages": [
 	    {
 	      "path": "chat",
 	      "style": {
-	        "navigationBarTitleText": "聊天页面"
+	        "navigationBarTitleText": ""
+	      }
+	    },
+	    {
+	      "path": "conversation",
+	      "style": {
+	        "navigationBarTitleText": "聊天列表"
+	      }
+	    },
+	    {
+	      "path": "create",
+	      "style": {
+	        "navigationBarTitleText": "发起对话"
 	      }
 	    }
 	  ]
