@@ -11,17 +11,6 @@
 		<view class="search-bar">
 		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
-		<!-- <view class="tab" >
-			
-			<view class='judgedisplay' @tap="showJudge">
-				显示：{{jd}}⏷
-				
-			</view>
-			<view v-if="showSelectTag2" class="conversation-bubble2" @tap.stop="handleEditToggle2">
-				<view v-for="(item, index) in arrayjudge" :key="index" class="picker2" :data-name="item.name" @tap="handleOnTap2">{{ item.name }}</view>
-			</view>
-		</view> -->
-		
 		</view>
 		<view class="bottom-back">
 			<view class="bottom-area">
@@ -37,7 +26,7 @@
 		
 		
 			<view class="friends">
-				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages/platform/vote-detail',item)">
+				<view class="friends-list" v-for="(item,index) in goods" :key="item.id" @click="toPage('/pages_platform/vote-detail',item)">
 					<view class="friends-list-u">
 						<view class="friends-list-l">
 							
@@ -152,14 +141,7 @@
 			toPage(url) {
 			  uni.$u.route(url)
 			},
-			
-			getFriends1: function() {
-			  	this.friends = datas.friends();
-			  	for(let i=0;i<10;i++){
-			  		this.friends[i].imgurl=`https://cdn.uviewui.com/uview/album/${i+1}.jpg`;
-			  		}
-			  	
-			},
+		
 			changeTime:function(date){
 				return myfunction.dateTime(date)
 			},
@@ -228,12 +210,12 @@
 			},
 			$createConversation() {
 				uni.navigateTo({
-					url: './vote-edit'
+					url: '/pages_platform/vote-edit'
 				});
 			},
 			$myVote() {
 				uni.navigateTo({
-					url: './myvote'
+					url: '/pages_platform/myvote'
 				});
 			},
 			toPage(url,id) {
@@ -268,13 +250,10 @@
 				height: 200rpx;
 				// width: 100%;
 				padding: 16rpx 32rpx;
-				//border: 1px solid red;
 				border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 				margin: 20rpx 15rpx;
 				background-color: #fff;
 				border-radius: 10rpx;
-				// display: flex;
-				// flex-direction: row;
 				&:active{
 					background-color: #ccc;
 					

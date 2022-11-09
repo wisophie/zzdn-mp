@@ -148,13 +148,13 @@ export default {
           if (isProvider) {
             switch (res.tapIndex) {
               case 0:
-                uni.$u.route('/pages/goods/upload')
+                uni.$u.route('/pages_goods/upload')
                 break
               case 1:
-                uni.$u.route('/pages/goods/upload-list')
+                uni.$u.route('/pages_goods/upload-list')
                 break
               case 2:
-                uni.$u.route('/pages/goods/order-list')
+                uni.$u.route('/pages_goods/order-list')
                 break
               case 3:
                 uni.$u.route('/pages/buyer/list')
@@ -171,7 +171,7 @@ export default {
                 uni.$u.route('/pages/buyer/list')
                 break
               case 2:
-                uni.$u.route('/pages/goods/order-list')
+                uni.$u.route('/pages_goods/order-list')
                 break
               default:
                 break
@@ -179,7 +179,7 @@ export default {
           } else {
             switch (res.tapIndex) {
               case 0:
-                uni.$u.route('/pages/goods/provider')
+                uni.$u.route('/pages_goods/provider')
                 break
               case 1:
                 uni.$u.route('/pages/buyer/apply')
@@ -203,7 +203,7 @@ export default {
                   confirmText: '立即申请',
                   success: function (res) {
                     if (res.confirm) {
-                      uni.$u.route('/pages/goods/provider')
+                      uni.$u.route('/pages_goods/provider')
                     }
                   }
                 })

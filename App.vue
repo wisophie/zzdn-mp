@@ -6,21 +6,13 @@
 	// #endif
 		
 		// #ifdef H5
-		import TIM from 'tim-js-sdk';
-		import TIMUploadPlugin from 'tim-upload-plugin'
+		//import TIM from 'tim-js-sdk';
+		//import TIMUploadPlugin from 'tim-upload-plugin'
 		logger.error(' TUIKit 暂不支持 H5 / web ，请使用者自己完成兼容哦，页面刷新可能会导致报错，需要重新登录 ');
-		// #endif
-		
-	// #ifdef APP-PLUS
-		import Aegis from 'aegis-weex-sdk';
 		// #endif
 		
 		// #ifdef MP-WEIXIN
 		import Aegis from 'aegis-mp-sdk';
-		// #endif
-		
-		// #ifdef H5
-		import Aegis from 'aegis-web-sdk';
 		// #endif
 		
 		import logger from './utils/logger'; // app.js
@@ -57,13 +49,13 @@ export default {
 			SDKAppID: SDKAppID
 		});
 		// #ifndef H5
-		uni.$TUIKit.registerPlugin({
+		 uni.$TUIKit.registerPlugin({
 			'cos-wx-sdk': COS
 		});
 		// #endif
 		
 		// #ifdef H5
-		uni.$TUIKit.registerPlugin({ 'tim-upload-plugin':TIMUploadPlugin })
+		//uni.$TUIKit.registerPlugin({ 'tim-upload-plugin':TIMUploadPlugin })
 		// #endif
 		// 将原生插件挂载在 uni 上
 		// #ifdef APP-PLUS
