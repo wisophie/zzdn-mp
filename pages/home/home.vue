@@ -15,9 +15,9 @@
 
 		<view class="content-navigate">
 			<view class="navigate-item" @click="toPage('/pages/mine/mine', '', true)">个人<br>信息</view>
-			<view class="navigate-item" @click="toPage('/pages/goods/order-list')">我的<br>订单</view>
-			<view class="navigate-item" @click="toPage('/pages/share/share', 'switchTab')">我的<br>共享</view>
-			<view class="navigate-item" @click="toPage('/pages/TUI-Conversation/conversation/conversation', 'switchTab')">我的<br>沟通</view>
+			<view class="navigate-item" @click="toPage('/pages_goods/order-list')">我的<br>订单</view>
+			<view class="navigate-item" @click="toPage('/pages/share/share', 'switchTab', false, true)">我的<br>共享</view>
+			<view class="navigate-item" @click="toPage('/pages_chat/conversation', 'switchTab')">我的<br>沟通</view>
 			<view class="navigate-item" @click="toPage('/pages/platform/platform', 'switchTab')">我的<br>平台</view>
 		</view>
 
@@ -136,7 +136,7 @@ export default {
 			})
 	},
 	methods: {
-		toPage(url, type, needLogin) {
+		toPage(url, type, needLogin, needFrom) {
 			if (needLogin && !this.isLogin) {
 				uni.navigateTo({
 					 url: '/pages/login/login'
@@ -144,6 +144,9 @@ export default {
 				return
 			}
 			if (type === 'switchTab') {
+				if (needFrom) {
+					uni.setStorageSync('from', 'home')
+				}
 				uni.switchTab({ url });
 			} else {
 				uni.$u.route(url)
