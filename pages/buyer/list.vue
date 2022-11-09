@@ -64,7 +64,12 @@ export default {
     isBuyer() {
       const userInfo = uni.getStorageSync('userInfo')
       return userInfo.userLevel === 2
-    }
+    },
+
+    isLogin() {
+			const token = uni.getStorageSync('token')
+			return !!token
+		}
   },
 
   onShow() {
@@ -122,6 +127,12 @@ export default {
     },
 
     handleDetail(id) {
+      if (!this.isLogin) {
+				uni.navigateTo({
+					 url: '/pages/login/login'
+				})
+				return
+			}
       uni.navigateTo({
          url: `/pages/buyer/demand?id=${id}&detail=1`
       });

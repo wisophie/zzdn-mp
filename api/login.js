@@ -57,10 +57,11 @@ export const resetPwd = (data = {}) =>
   http.post('/wx/auth/reset', data)
 
 // 账号信息更新
-export const updateInfo = (data = {}) =>
+export const updateInfo = (data = {}, notLogin) =>
   http.post('/wx/auth/profile', data, {
     custom: {
-      auth: true
+      auth: true,
+      notLogin: notLogin
     }
   })
 

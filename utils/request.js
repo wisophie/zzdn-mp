@@ -1,6 +1,6 @@
 module.exports = vm => {
 
-  const baseURL = 'http://sbahm2.natappfree.cc/'
+  const baseURL = 'https://zhizaodainan.com'
   uni.$u.http.setConfig(config => {
     config = Object.assign(config, {
       baseURL: baseURL,
@@ -35,9 +35,11 @@ module.exports = vm => {
       } else {
         if (data.errno === 501) {
           uni.removeStorageSync('token')
-          uni.navigateTo({
-             url: '/pages/login/login'
-          });
+          if (!custom.notLogin) {
+            uni.navigateTo({
+               url: '/pages/login/login'
+            });
+          }
         }
         if (custom.toast === true) {
           uni.$u.toast(data.errmsg)
