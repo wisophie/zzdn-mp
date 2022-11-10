@@ -46,6 +46,7 @@
 
 <script>
 import { buyNeedList, buyNeedDelete } from '@/api/goods'
+import user from '@/utils/user'
 export default {
   data() {
     return {
@@ -56,7 +57,8 @@ export default {
         limit: 20,
         sort: '', // 排序规则，默认传add_time, 价格：real_price 商品销售数量sale_num
         order: ''
-      }
+      },
+      isLogin: false
     }
   },
 
@@ -65,14 +67,18 @@ export default {
       const userInfo = uni.getStorageSync('userInfo')
       return userInfo.userLevel === 2
     },
-
-    isLogin() {
-			const token = uni.getStorageSync('token')
-			return !!token
-		}
   },
 
   onShow() {
+    user
+			.checkLogin()
+			.then(() => {
+				this.isLogin = true
+			})
+			.catch(err => {
+				this.isLogin = false
+      })
+      
     this.query.page = 1
     this.getList()
   },

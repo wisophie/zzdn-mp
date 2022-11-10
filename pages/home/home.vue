@@ -100,7 +100,8 @@ export default {
 				'https://steel-ren.oss-cn-beijing.aliyuncs.com/cbvfly0sugum9vmrqqjh.jpg',
 				'https://steel-ren.oss-cn-beijing.aliyuncs.com/htbqbupfwvs1uzhy621b.jpg',
 			],
-			buyList: []
+			buyList: [],
+			isLogin: false
 		}
 	},
 	computed: {
@@ -110,11 +111,6 @@ export default {
 				: this.userLevel === 1
 				? '供货商'
 				: '采购商'
-		},
-
-		isLogin() {
-			const token = uni.getStorageSync('token')
-			return !!token
 		}
 	},
 	onLoad(){
@@ -128,9 +124,11 @@ export default {
 		user
 			.checkLogin()
 			.then(() => {
+				this.isLogin = true
 				this.fetchUserInfo()
 			})
 			.catch(err => {
+				this.isLogin = false
 				uni.removeStorageSync('token');
 				uni.removeStorageSync('userInfo');
 			})
