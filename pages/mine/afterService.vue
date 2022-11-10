@@ -16,7 +16,7 @@ export default {
 		//mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
-				id:16,
+				id:'renyifei',
 			}
 		},
 		methods:{
