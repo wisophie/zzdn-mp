@@ -89,6 +89,11 @@
 		},
 		
 		onShow() {
+			if (uni.getStorageSync('from') === 'home') {
+				uni.removeStorage('from');
+				this.$myVote()
+				return
+			}
 		 this.refresh()
 		},
 		methods:{

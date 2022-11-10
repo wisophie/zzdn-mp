@@ -86,12 +86,18 @@ export default {
     },
 
     handleConnect() {
-		const id =this.form.userId
-		const url = `../TUI-Chat/chat?conversationID=C2C${id}`;
-		uni.navigateTo({
-			url
-		});
-	}
+      if (!uni.getStorageSync('token')) {
+        uni.navigateTo({
+					 url: '/pages/login/login'
+				})
+				return
+      }
+      const id =this.form.userId
+      const url = `../TUI-Chat/chat?conversationID=C2C${id}`;
+      uni.navigateTo({
+        url
+      });
+    }
   }
 }
 </script>
