@@ -90,11 +90,11 @@ function loginByWeixin(userInfo) {
           
           resolve(res);
         } else {
-          reject(res);
+          reject(res.errmsg);
         }
-      }).catch((err) => {
-				console.log('登录失败：', err)
-        reject(err);
+      }).catch((res) => {
+				console.log('登录失败：', res)
+        reject(res.errmsg);
       });
     }).catch((err) => {
       reject(err);

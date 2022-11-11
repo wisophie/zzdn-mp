@@ -40,7 +40,7 @@
 				</view>
 				<view class="item-title">跑腿/帮忙</view>
 			</view>
-			<view class="more-item"  @click="toPage('/pages/mine/afterService')">
+			<view class="more-item"  @click="toPage('/pages/mine/afterService', '', true)">
 				<view class="item-icon">
 					<u-icon name="server-man" size="70rpx" color="pink"></u-icon>
 				</view>

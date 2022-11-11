@@ -3,9 +3,11 @@
   <view class="container">
     <view class="container-title">请完善个人信息</view>
 
+
     <view class="form-box">
       <view class="form-item">
-        <input class="username" v-model="formData.nickname" placeholder="用户名" />
+        <input v-model="formData.nickname" type="nickname" class="username" placeholder="请输入昵称"/>
+        <!-- <input class="username" v-model="formData.nickname" placeholder="请输入昵称" /> -->
       </view>
 
       <view class="form-item">
@@ -59,6 +61,7 @@ export default {
   data() {
     return {
       formData: {
+        avatar: '',
         nickname: '',
         gender: '',
         province: '',
@@ -86,7 +89,7 @@ export default {
       for(let key in this.formData) {
         this.formData[key] = userInfo[key]
       }
-      this.formData.nickname = userInfo.nickName
+      this.formData.nickname = userInfo.nickName === '微信用户' ? '' : userInfo.nickName
       this.isBindMobile = !!userInfo.mobile
     },
 
@@ -104,6 +107,11 @@ export default {
           this.formData[addressType[index]] = item.text
         }
       })
+    },
+
+    onChooseAvatar(e) {
+      const { avatarUrl } = e.detail 
+      this.formData.avatar = avatarUrl
     },
 
     getPhoneNumber(e) {
@@ -127,6 +135,10 @@ export default {
     },
 
     handleSubmit() {
+      if (!this.formData.nickname) {
+        uni.$u.toast('请输入昵称')
+        return
+      }
       if(!this.isBindMobile) return
 
       updateInfo(this.formData).then(res => {
@@ -159,6 +171,17 @@ export default {
   padding: 0 40rpx;
   background: #fff;
   box-sizing: border-box;
+}
+
+.avatar-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+
+  image {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .form-item {

@@ -74,11 +74,12 @@ export const captcha = (data = {}) =>
   })
 
 // 获取个人信息
-export const fetchUserInfo = (params = {}) => {
+export const fetchUserInfo = (params = {}, notLogin) => {
   return http.get('/wx/auth/info', {
     params,
     custom: {
-      auth: true
+      auth: true,
+      notLogin: notLogin
     }
   }).then(res => {
     const userInfo = uni.getStorageSync('userInfo') || {}

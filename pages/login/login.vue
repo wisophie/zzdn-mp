@@ -40,7 +40,7 @@ export default {
     }
   },
 
-  created() {
+  onShow() {
     if (uni.getUserProfile) {
       this.canIUseGetUserProfile = true
     }
@@ -52,13 +52,12 @@ export default {
 				this.doLogin()
 				return
 			}
-			console.log(e, '--gg')
       if (this.canIUseGetUserProfile) {
         uni.getUserProfile({
           desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
           success: (res) => {
+            console.log(res)
             this.userInfo = res.userInfo
-			//console.log(res.userInfo)
             this.doLogin(res.userInfo)
           },
           fail: () => {
@@ -67,10 +66,10 @@ export default {
         })
         return
       }
+      console.log( e.detail, '--gg')
       if (e.detail.userInfo !== undefined) {
         this.userInfo = e.detail.userInfo
         this.doLogin(this.userInfo)
-		
       }
     },
 
@@ -101,7 +100,7 @@ export default {
             this.fetchUserInfo()
 			
           }).catch((err) => {
-            uni.$u.toast('微信登录失败')
+            uni.$u.toast(err)
           });
 
       });

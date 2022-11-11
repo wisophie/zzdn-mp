@@ -7,7 +7,7 @@
       </view>
 
       <view class="user-info">
-        <view class="name">{{ mineInfo.nickName }}</view>
+        <view class="name" @click="toPage('/pages/login/perfectInfo')">{{ mineInfo.nickName }}</view>
         <view>{{ userLevelText }}</view>
       </view>
     </view>
