@@ -3,7 +3,7 @@
 		<view class="TUI-fileMessage">
 			<view class="fileMessage">
 				<view class="fileMessage-box">
-					<image class="file-icon" src="../../static/images/file.png"></image>
+					<!-- <image class="file-icon" src="../../static/images/file.png"></image> -->
 					<label @tap="download" class="file-title">{{ filePayload.fileName }}</label>
 				</view>
 			</view>
