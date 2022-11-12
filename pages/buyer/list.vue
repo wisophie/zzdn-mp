@@ -34,9 +34,14 @@
               </view>
             </view>
           </view>
+          <view>发布人：{{ item.username || '-' }}</view>
           <view>材质：{{ item.texture }}</view>
           <view>规格：{{ item.specification }}</view>
           <view>工期：{{ item.duration }}</view>
+          <view>
+            <text class="status" :class="{'is-fail': item.status === 2}">{{ item.status === 0 ? '已申请' : item.status === 1 ? '审核通过' : '审核不通过' }}</text>
+            <text v-if="item.status === 2" class="is-fail">（{{ 'item.rejectReason' }}）</text>
+          </view>
         </view>
       </u-list-item>
     </u-list>
@@ -187,6 +192,14 @@ export default {
           margin-left: 20rpx;
         }
       }
+    }
+
+    .status {
+      margin-top: 20rpx;
+      color: #3c9cff;
+    }
+    .is-fail {
+      color: #f56c6c;
     }
   }
 
