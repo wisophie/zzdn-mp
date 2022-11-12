@@ -70,7 +70,7 @@ export default {
           })
         } else {
           that.loginErrorCount += 1
-          uni.$u.toast('账户登录失败')
+          uni.$u.toast(res.errmsg)
         }
       })
     }
