@@ -11,10 +11,7 @@
 		>
 		<view class="top-bar">
 			<view class="search-bar">
-				
 					<u-search placeholder="请输入关键字" v-model="keyword" @custom="doSearch"></u-search>
-				
-			
 			</view>
 			<view class="bannerline">
 				<view class="bannerlinem" >
@@ -112,7 +109,7 @@
 			
 				getShareApi(params).then(res =>{
 					const { list: listData, total } = res.data
-					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange]}))
+					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange],judgestat:{'0':'审核中','1':'审核通过','2':'审核不通过'}[v.status]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)

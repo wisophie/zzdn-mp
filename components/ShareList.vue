@@ -6,6 +6,12 @@
           <u-icon name="order" color="#5d51ff" size="18" />
           <text class="ml-1">发布者：{{item.username}}</text>
         </view>
+		
+		<view class="u-flex type">
+		  类型：
+		  <text>{{item.category}}</text>
+		  
+		</view>
         <u--text type="warning" :text="item.extype" />
       </view>
       <view class="o-list__item__content" >
@@ -27,14 +33,16 @@
       <view class="o-list__item__footer u-border-top">
         <view class="u-flex u-flex-between">
 			<view>
-				地点：{{item.province}}/{{item.city}}/{{item.country}}
+				地点：{{item.province}}-{{item.city}}-{{item.country}}
+			</view>
+			<view class="jc"  :class="{judgecolor:item.status==2}" v-if="item.status!==1">
+			  <text class="ml-1">{{item.judgestat}}</text>
 			</view>
 			
-          <view>
-            类型：
-            <text>{{item.category}}</text>
-            
-          </view>
+			<view v-if="item.status==1">
+			  <text>{{item.updateTime.split(' ')[0]}}</text>
+			</view>
+          
         </view>
         
       </view>
@@ -109,5 +117,14 @@ export default {
       }
     }
   }
+}
+.type{
+	margin-right:40rpx;
+}
+.jc{
+	color:orange;
+}
+.judgecolor{
+	color:red;
 }
 </style>

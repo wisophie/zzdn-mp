@@ -48,7 +48,9 @@
 					
 					<view class="friends-list-d">
 						<text class="name">发布人：{{item.username}}</text>
+						
 						<text class="price">价格：{{item.amount}}元</text>
+						<text class="judge" :class="{judgecolor:item.auditStatus==2}" v-if="item.auditStatus!==1">{{item.judgestat}}</text>	
 					</view>
 				</view>
 				
@@ -121,7 +123,7 @@
 				getHelplist(params).then(res =>{
 					const { list:listData, total } = res.data
 					const list = listData.map(v => ({ ...v, statustype:{'1':'等待接单','2':'等待接单','3':'已接单','4':'跑腿完成，等待确认','5':'已取消','6':'订单已完成'}[v.status],
-					imgurl:{'跑腿订单':'../../static/img/pao.png','帮忙订单':'../../static/img/bang.png'}["帮忙订单"]}))
+					imgurl:{'跑腿订单':'../../static/img/pao.png','帮忙订单':'../../static/img/bang.png'}["帮忙订单"],judgestat:{'0':'审核中','1':'审核通过','2':'审核不通过'}[v.auditStatus]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)
@@ -228,6 +230,14 @@
 					margin-top: 12rpx;
 					.price{
 						float:right;
+					}
+					.judge{
+						float:right;
+						margin-right: 40rpx;
+						color:orange;
+					}
+					.judgecolor{
+						color:red;
 					}
 				}
 				

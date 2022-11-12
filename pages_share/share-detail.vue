@@ -25,7 +25,12 @@
 			  <text >发布人：{{list.username}}</text>
 		  </view>
 		 <view class='mt-2 u-tips-color text-s'>
-		 			  <text >联系号码：{{list.tel}}</text>
+		 			<text >联系号码：{{list.tel}}</text>
+					<view class="judge">
+						<text class="judgetype" :class="{judgetyper:list.status==2}" v-if="list.status!=1">{{list.judgestat}}</text>
+						<text class="judgetyper" v-if="list.status==2">:{{list.rejectReason}}</text>
+					</view>
+					
 		 </view>
 		 
 		</view>
@@ -282,6 +287,15 @@ page {
 .detail{
 	
 	height:175rpx;
+}
+.judge{
+	float:right;
+	.judgetype{
+		color:orange;
+	}
+	.judgetyper{
+		color:red;
+	}
 }
 </style>
 

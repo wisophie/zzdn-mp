@@ -4,8 +4,15 @@
 		  <view class="text-lg text-bold">{{list.item[0].topic}}</view>
 		 <view class='mt-2 u-tips-color text-s'>
 			  <text >发布人：{{list.username}}</text>
+			  
+			  <view class="judge">
+			  	<text class="judgetype" :class="{judgetyper:list.auditStatus==2}" v-if="list.auditStatus!=1">{{judgestat}}</text>
+			  	<text class="judgetyper" v-if="list.auditStatus==2">：{{list.rejectReason}}</text>
+			  </view>
 		  </view>
-		 
+		
+		 	
+		
 		 
 		</view>
 		<view class="g-section os-price u-border-top u-border-bottom">
@@ -133,11 +140,13 @@
 					banner2:[],
 					clickeble:0,
 					dtable:1,
+					judgestat:'',
 				
 				
 			};
 		},
 		onLoad(id ){
+			this.judgestat=id.judgestat
 			this.gethelpInfo(id)
 		},
 		computed:{
@@ -398,7 +407,7 @@ page {
 <style lang="scss" scoped>
 .g-section {
   width: 750rpx;
-  padding: 16px;
+  padding:14rpx 16rpx;
   background-color: #fff;
 }
 .os-price__row + .os-price__row {
@@ -516,5 +525,14 @@ page {
 .ff{
 	margin-left: 25rpx;
 	margin-bottom:10rpx;
+}
+.judge{
+	float:right;
+	.judgetype{
+		color:orange;
+	}
+	.judgetyper{
+		color:red;
+	}
 }
 </style>g
