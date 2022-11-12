@@ -68,6 +68,7 @@
 						<view class="item-title">
 							<view class="title">{{ item.goodsName }}</view>
 						</view>
+						<view>发布人：{{ item.username || '-' }}</view>
 						<view>材质：{{ item.texture }}</view>
 						<view>规格：{{ item.specification }}</view>
 						<view>工期：{{ item.duration }}</view>

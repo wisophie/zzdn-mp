@@ -143,9 +143,7 @@ export default {
 
       updateInfo(this.formData).then(res => {
 		  
-        uni.navigateBack({
-          delta: 1
-        })
+        uni.navigateBack(1)
       })
     }
   }
