@@ -6,8 +6,10 @@
         <div>请先登录账号</div>
 
         <div class="login-box">
+          <!-- #ifdef MP-WEIXIN -->
           <button v-if="canIUseGetUserProfile" type="primary" class="uni-login-btn" @click="getUserInfo">微信授权登录/注册</button>
           <button v-else type="primary" class="uni-login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">微信授权登录/注册</button>
+          <!-- #endif -->
           <button type="primary" class="account-login-btn" @click="accountLogin">账号登录</button>
         </div>
       </div>
