@@ -42,6 +42,24 @@
             <text>价格：</text>
             <text class="u-warning text-bold">￥{{ item.retailPrice }}</text>
           </view>
+          <view class="up-row mt-1">
+            <view>
+              <text>供货商：</text>
+              <text>{{ item.username }}</text>
+            </view>
+            <view class="ml-1">
+              <text>类别：</text>
+              <text>{{ item.categoryName }}</text>
+            </view>
+          </view>
+          <view class="up-row mt-1">
+            <text>审核状态：</text>
+            <text>{{ getStatus(item.status) }}</text>
+          </view>
+          <view class="up-row" v-if="item.rejectReason">
+            <text>拒绝原因：</text>
+            <text>{{ item.rejectReason }}</text>
+          </view>
         </view>
         <view class="up-item__btn">
           <u-icon name="edit-pen-fill" size="18" color="#5d51ff" @click="toEdit(item)" />
@@ -55,7 +73,11 @@
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 import { getListApi1, removeById } from '@/api/goods'
-
+const statusMap = {
+  0: '已申请',
+  1: '审核通过',
+  2: '未审核通过'
+}
 export default {
   mixins: [MescrollMixin],
   data() {
@@ -122,8 +144,17 @@ export default {
       }
       getListApi1(params)
         .then(res => {
-          const { list: listData, total } = res.data
-          const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
+          // const { list: listData, total } = res.data
+          // const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
+          const list = [
+            {
+              name: 'hello',
+              detail: '大萨达大大大所大多',
+              retailPrice: '100',
+              id: 1
+            }
+          ]
+          const total = 10
           this.mescroll.endBySize(list.length, total)
           if (page.num == 1) this.goods = []
           this.goods = this.goods.concat(list)
@@ -148,6 +179,9 @@ export default {
           }
         }
       })
+    },
+    getStatus(s) {
+      return statusMap[s] || ' '
     }
   }
 }
@@ -171,7 +205,7 @@ export default {
   .up-item {
     position: relative;
     display: flex;
-    align-items: center;
+    // align-items: flex;
     padding-top: 20rpx;
     padding-bottom: 20rpx;
     padding-right: 160rpx;
@@ -195,5 +229,12 @@ export default {
       align-items: center;
     }
   }
+}
+.up-row {
+  display: flex;
+  flex-wrap: wrap;
+  word-break: break-all;
+  font-size: 13px;
+  color: $u-content-color;
 }
 </style>

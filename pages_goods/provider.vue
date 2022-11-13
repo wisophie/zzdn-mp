@@ -93,7 +93,7 @@
 				></u-upload>
 			</view>
 
-			<view class="form-section">法人/经营者证件</view>
+			<!-- <view class="form-section">法人/经营者证件</view>
 			<view class="u-flex u-flex-x-center">
 				<view>
 					<u-upload
@@ -117,7 +117,7 @@
 					></u-upload>
 					<view class="text-xs u-tips-color text-center" style="textalign: center">身份证国徽面</view>
 				</view>
-			</view>
+			</view> -->
 
 			<view class="form-section">办公环境/厂房照片(非必填)</view>
 			<view>
@@ -216,8 +216,8 @@ export default {
 				tel: '',
 				mail: '',
 				license: [], // 营业执照
-				idCardPortrait: [], // 身份证头像面
-				idCardNational: [], // 身份证国徽面
+				// idCardPortrait: [], // 身份证头像面
+				// idCardNational: [], // 身份证国徽面
 				workshopPhoto: [], // 办公环境
 				netshopName: '', //网店名称
 				netshopPhoto: [], // 网店照片
@@ -268,7 +268,7 @@ export default {
 			const { progress, ...rest } = res.data
 			this.progress = progress
 			const form = rest
-			const imgArr = ['license', 'idCardPortrait', 'idCardNational', 'workshopPhoto', 'netshopPhoto']
+			const imgArr = ['license', 'workshopPhoto', 'netshopPhoto']
 			for (const key of imgArr) {
 				if (form[key]) {
 					const imgs = form[key].split(',').map(v => ({ status: 'success', message: '', url: v }))
