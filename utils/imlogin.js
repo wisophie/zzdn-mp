@@ -8,7 +8,7 @@
 		const {id:userID,avatar:FaceUrl,username:Nick} = uni.getStorageSync('userInfo')
 		let usig=genTestUserSig('administrator').userSig
 		uni.request({
-			url:`https://console.tim.qq.com/v4/im_open_login_svc/account_import?sdkappid=1400757222&identifier=administrator&usersig=${usig}&random=2233221152&contenttype=json`,
+			url:`https://console.tim.qq.com/v4/im_open_login_svc/account_import?sdkappid=1400765363&identifier=administrator&usersig=${usig}&random=2233221152&contenttype=json`,
 			data:{
 				   "UserID":userID.toString(),
 				   "Nick":Nick,

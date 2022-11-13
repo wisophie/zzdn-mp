@@ -7,6 +7,10 @@
 		  <view class="text-md text-bold">{{list.topic}}</view>
 		  <view class='mt-2 u-tips-color text-s'>
 			  <text >发布人：{{list.username}}</text>
+			  <view class="judge">
+			  	<text class="judgetype" :class="{judgetyper:list.status==2}" v-if="list.status!=1">{{judgestat}}</text>
+			  	<text class="judgetyper" v-if="list.status==2">：{{list.rejectReason}}</text>
+			  </view>
 		  </view>
 		  <view class='mt-2 u-tips-color text-s'>
 		  			 <u-upload
@@ -162,9 +166,11 @@
 			drate:0,
 			sum:0,
 			value2:0,
+			judgestat:'',
 			};
 		},
 		onLoad(id){	
+			this.judgestat=id.judgestat
 			this.togetVoteDetail(id)
 		},
 		// onShow(id) {
@@ -463,6 +469,15 @@ page {
 
 .votelist{
 	margin:0 20rpx;
+}
+.judge{
+	float:right;
+	.judgetype{
+		color:orange;
+	}
+	.judgetyper{
+		color:red;
+	}
 }
 </style>
 

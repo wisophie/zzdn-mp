@@ -46,8 +46,8 @@
 					
 					<view class="friends-list-d">
 						<text class="name">发布者：{{item.username}}</text>
-						<!-- <text class="judge">审核通过</text> -->
 						<text class="price">{{item.time}}</text>	
+						<text class="judge" :class="{judgecolor:item.status==2}" v-if="item.status!==1">{{item.judgestat}}</text>
 					</view>
 				</view>
 				
@@ -85,7 +85,7 @@
 						name: '发起投票'
 					},
 					{
-						name: '审核投票'
+						name: '我的投票'
 					},
 					
 				],
@@ -104,6 +104,7 @@
 				jd:'全部',
 				typ:0,
 				extype:'',
+				relme:0,
 			};
 		},
 		onLoad(){
@@ -116,14 +117,15 @@
 				  page:'',
 				  order: '', 
 				  sort:'',
-				  //relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				relatedMe:this.relme,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
 				  type:this.tye,  //0 订单纠纷 1 意见反馈
 				}
 				getVotelist(params).then(res =>{
 					console.log(res.data)
 					console.log(this.list1.index)
 					const { list:listData, total } = res.data
-					const list = listData.map(v => ({ ...v, img: v.pics ? v.pics.split(',')[0] : '',extype:{'0':'订单纠纷','1':'意见反馈'}[v.type],time:v.options[0].updateTime.split(' ')[0]}))
+					const list = listData.map(v => ({ ...v, img: v.pics ? v.pics.split(',')[0] : '',extype:{'0':'订单纠纷','1':'意见反馈'}[v.type],time:v.options[0].updateTime.split(' ')[0],
+					judgestat:{'0':'审核中','1':'审核通过','2':'审核不通过'}[v.status]}))
 					this.mescroll.endBySize(list.length, total)
 						if (page.num == 1) this.goods = []
 						this.goods = this.goods.concat(list)
@@ -176,8 +178,8 @@
 								this.$createConversation();
 								break;
 			
-							case '审核投票':
-								//this.$myVote();
+							case '我的投票':
+								this.$myVote();
 								break;
 							default:
 								break;
@@ -214,9 +216,9 @@
 				});
 			},
 			$myVote() {
-				uni.navigateTo({
-					url: '/pages_platform/myvote'
-				});
+				this.relme=1
+				this.mescroll.resetUpScroll()
+				this.relme=0
 			},
 			toPage(url,id) {
 			  uni.$u.route(url, id )
@@ -264,13 +266,18 @@
 				}
 				.friends-list-d{
 					margin-top: 12rpx;
+					line-height:35rpx ;
 					.price{
 						float:right;
 						font-size:23rpx;
 					}
 					.judge{
-						margin-left:50rpx;
 						float:right;
+						margin-right: 40rpx;
+						color:orange;
+					}
+					.judgecolor{
+						color:red;
 					}
 				}
 				
@@ -327,9 +334,7 @@
 						.footer{
 							float:right;
 							margin-top:3rpx;
-							.price{
-								
-							}
+							
 						}
 						
 					}

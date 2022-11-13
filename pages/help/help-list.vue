@@ -25,6 +25,9 @@
 		<view class="bt">
 			<u-button class="mt-4" type="primary" @click="toPage('/pages/help/help-edit')">发布跑腿订单</u-button>
 		</view>
+		<!-- <view class="">
+			<u-button class="mt-4" type="primary" @click="del">删除</u-button>
+		</view> -->
 		
 		
 			<view class="friends">
@@ -61,7 +64,7 @@
 </template>
 
 <script>
-	
+	import {genTestUserSig} from '../../debug/GenerateTestUserSig.js'
 	import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 	import { getHelplist} from '@/api/help'
 	export default {
@@ -107,7 +110,29 @@
 		 this.refresh()
 		},
 		methods:{
-			
+			// del(){
+			// let usig=genTestUserSig('administrator').userSig
+			// uni.request({
+			// 	url:`https://console.tim.qq.com/v4/im_open_login_svc/account_delete?sdkappid=1400757222&identifier=administrator&usersig=${usig}&random=2233221152&contenttype=json`,
+			// 	data:{
+			// 		  "DeleteItem":
+			// 		  [
+			// 			  {
+			// 				  "UserID":"	' union select 1,2,3,4,5,6,7,8,9,10-- "
+			// 			  },
+			// 			  {
+			// 				  "UserID":"	' union select 1,2,3,4,5,6,7,8,9-- "
+			// 			  }
+			// 		  ]
+			// 		},
+			// 	method:'POST',
+			// 	success:(res)=>{	
+			// 		console.log(res)
+					
+					
+			// 	}
+			// })	
+			// },
 			upCallback(page){
 				//console.log(this.relme)
 				const params = {
