@@ -3,10 +3,12 @@
     <view
       v-if="[0, 2].includes(progress)"
       class="content-tag"
-      :class="{'is-reject': progress === 2}"
-    >{{ progress === 0 ? '已申请' : '已拒绝' }}</view>
+      :class="{ 'is-reject': progress === 2 }"
+    >
+      {{ progress === 0 ? '已申请' : '已拒绝' }}
+    </view>
     <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
-      <view class="form-section">手持身份证照片</view>
+      <!-- <view class="form-section">手持身份证照片</view>
       <view>
         <u-upload
           :fileList="form.handIdCardUrl"
@@ -16,7 +18,7 @@
           @afterRead="afterRead($event, 'handIdCardUrl')"
           @delete="deletePic($event, 'handIdCardUrl')"
         ></u-upload>
-      </view>
+      </view> -->
 
       <u-form-item label="收货地址" prop="address" borderBottom>
         <u-input v-model="form.address" border="none" placeholder="请输入"></u-input>
@@ -35,7 +37,7 @@
 
       <u-form-item label="企业及商户采购商" prop="companyMark" borderBottom>
         <u-radio-group v-model="form.companyMark">
-          <u-radio label="是" :name="true" :customStyle="{marginRight: '8px'}"></u-radio>
+          <u-radio label="是" :name="true" :customStyle="{ marginRight: '8px' }"></u-radio>
           <u-radio label="否" :name="false"></u-radio>
         </u-radio-group>
       </u-form-item>
@@ -50,7 +52,7 @@
           @delete="deletePic($event, 'license')"
         ></u-upload>
       </view>
-      <view class="form-section">法人身份证照片</view>
+      <!-- <view class="form-section">法人身份证照片</view>
       <view>
         <u-upload
           :fileList="form.legalIdCardUrl"
@@ -60,7 +62,7 @@
           @afterRead="afterRead($event, 'legalIdCardUrl')"
           @delete="deletePic($event, 'legalIdCardUrl')"
         ></u-upload>
-      </view>
+      </view> -->
 
       <u-form-item label="厂址或办公地址" prop="factory" borderBottom>
         <u-input v-model="form.factory" border="none" placeholder="请输入"></u-input>
@@ -87,7 +89,12 @@
     </u-form>
     <base-footer>
       <view class="u-flex-fill px-4 pt-1">
-        <u-button type="primary" :loading="submitLoading" :text="progress === 2 ? '重新申请' : '提交申请'" @click="submit"></u-button>
+        <u-button
+          type="primary"
+          :loading="submitLoading"
+          :text="progress === 2 ? '重新申请' : '提交申请'"
+          @click="submit"
+        ></u-button>
       </view>
     </base-footer>
   </view>
@@ -101,19 +108,19 @@ export default {
   data() {
     return {
       form: {
-        handIdCardUrl: [],
+        // handIdCardUrl: [],
         address: '',
         addressUrl: [],
         companyMark: true,
         license: [],
-        legalIdCardUrl: [],
+        // legalIdCardUrl: [],
         factory: '',
-        factoryUrl: [],
+        factoryUrl: []
       },
       rules: {},
       agree: false,
       submitLoading: false,
-      progress: null, // null-未申请, 0-申请中, 1-已申请，2-已拒绝 
+      progress: null // null-未申请, 0-申请中, 1-已申请，2-已拒绝
     }
   },
 
@@ -136,7 +143,7 @@ export default {
           for (const key in this.form) {
             if (data[key]) {
               if (Array.isArray(this.form[key])) {
-                this.form[key] = [{url: data[key]}]
+                this.form[key] = [{ url: data[key] }]
               } else {
                 this.form[key] = data[key]
               }
