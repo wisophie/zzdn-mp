@@ -6,7 +6,7 @@
       :class="{'is-reject': progress === 2}"
     >{{ progress === 0 ? '已申请' : '已拒绝' }}</view>
     <u-form labelPosition="top" :model="form" :rules="rules" ref="formRef" labelWidth="120">
-      <view class="form-section">手持身份证照片</view>
+      <!-- <view class="form-section">手持身份证照片</view>
       <view>
         <u-upload
           :fileList="form.handIdCardUrl"
@@ -16,7 +16,7 @@
           @afterRead="afterRead($event, 'handIdCardUrl')"
           @delete="deletePic($event, 'handIdCardUrl')"
         ></u-upload>
-      </view>
+      </view> -->
 
       <u-form-item label="收货地址" prop="address" borderBottom>
         <u-input v-model="form.address" border="none" placeholder="请输入"></u-input>
@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       form: {
-        handIdCardUrl: [],
+        // handIdCardUrl: [],
         address: '',
         addressUrl: [],
         companyMark: true,
