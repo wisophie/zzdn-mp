@@ -14,7 +14,7 @@
         </u-form-item>
       </u-form>
 
-      <view class="content-title">上传手持证件照</view>
+      <!-- <view class="content-title">上传证件照</view>
       <view class="content-image">
         <u-upload
           :fileList="fileList"
@@ -38,7 +38,7 @@
          style="width: 300rpx;height: 200rpx;"></image>
          <view class="image-tips">身份证国徽面</view>
         </u-upload>
-      </view>
+      </view> -->
     </view>
 
     <view v-if="!certify" class="bottom">
@@ -58,8 +58,8 @@ export default {
       formData: {
         realName: '',
         idCard: '',
-        portraitUrl: '',
-        nationalUrl: ''
+        // portraitUrl: '',
+        // nationalUrl: ''
       },
       certify: false
     }
