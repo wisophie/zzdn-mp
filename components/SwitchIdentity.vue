@@ -55,7 +55,7 @@ export default {
             confirmText: '立即申请',
             success: (res) => {
               if (res.confirm) {
-                uni.$u.route(this.userLevel === 1 ? '/pages/goods/provider' : '/pages/buyer/apply')
+                uni.$u.route(this.userLevel === 1 ? '/pages_goods/provider' : '/pages/buyer/apply')
               } else {
                 this.close()
               }

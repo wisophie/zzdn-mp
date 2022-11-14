@@ -59,6 +59,7 @@
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 import GoodsList from '@/components/GoodsList'
 import { getCateApi, getListApi } from '@/api/goods'
+import user from '@/utils/user'
 const sorts = [
   { name: '综合', id: 'add_time' },
   { name: '销量', id: 'sale_number' },
@@ -83,6 +84,17 @@ export default {
       this.goods = []
       this.mescroll.resetUpScroll(true)
     }
+  },
+  onShow() {
+    user
+			.checkLogin()
+			.catch(err => {
+				uni.removeStorageSync('token');
+        uni.removeStorageSync('userInfo');
+        uni.navigateTo({
+					 url: '/pages/login/login'
+				})
+			})
   },
   methods: {
     upCallback(page) {
