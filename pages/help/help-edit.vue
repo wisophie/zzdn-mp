@@ -60,7 +60,7 @@
 				</view>
 				<view class="row" >
 					<view class="lm">
-					<view class="title">总费用</view>
+					<view class="title">总费用(元)</view>
 					<!-- <view class="cont" @tap="get('amount',list.amount)" >
 						{{list.amount}}
 					</view> -->
@@ -68,6 +68,7 @@
 					    placeholder="请输入价格"
 						border="bottom"	
 					    v-model="list.amount"
+						maxlength='5'
 					  ></u--input>
 				  </view>
 				</view>
@@ -155,11 +156,11 @@
 				index3: 0,
 				extype:false,
 				amount:'',
-				exchangetype:['跑题订单', '帮忙订单'],
+				exchangetype:['跑腿订单', '帮忙订单'],
 				list:{
 					topic:'任务标题',
 					mobile:'输入手机号码',
-					content:'请输入任务描述',
+					content:'',
 				},
 				addressOptions: [],
 			};
@@ -254,9 +255,13 @@
 				this.editable=false
 			},
 			get(type,e){
-				let a={'title':30,'tel':11};
+				let a={'topic':15,'mobile':11};
 				this.show = true;
-				this.data=e;
+				if(e=='任务标题' || e=='输入手机号码'){
+					this.data='';
+				}else{
+					this.data=e;
+				}
 				this.type=type;
 				this.maxl=a[type];
 			},
@@ -268,8 +273,23 @@
 			          // console.log('close');
 			        },
 					modify(type,data){
-						this.list[type]=this.data
-						this.close()
+						if(type=='mobile'){
+						  let result= uni.$u.test.mobile(this.data)
+						   if(result==false){
+							   uni.$u.toast('请输入正确的手机号码')
+						   }else{
+							   this.list[type]=this.data
+							   this.close()
+						   }
+						}else if(type=='topic'){
+							if(this.data==''){
+								uni.$u.toast('标题不能为空')
+							}else{
+								this.list[type]=this.data
+								this.close()
+							}
+							
+						}
 					},
 			bindPickerChange: function(e) {
 				this.index1 = e.target.value
@@ -300,21 +320,35 @@
 				console.log(this.index3)
 			},
 			tocreateHelp(){
-				const data = {
-				  orderType: this.index3,   //订单类型0跑腿订单 1帮忙订单	
-				  topic: this.list.topic,
-				  content: this.list.content,
-				  amount:this.list.amount,
-				  mobile: this.list.mobile,
-				  province:this.formData.province,
-				  city:this.formData.city,
-				  country:this.formData.country,
+				console.log(this.list.amount)
+				if(this.formData.province==''){
+					uni.$u.toast('请选择发布地点！')
+				}else if(this.list.content==''){
+					uni.$u.toast('请输入任务详情！')
+				}else if(this.list.amount==undefined){
+					uni.$u.toast('请输入价格！')
+				}else{
+					const data = {
+					  orderType: this.index3,   //订单类型0跑腿订单 1帮忙订单	
+					  topic: this.list.topic,
+					  content: this.list.content,
+					  amount:this.list.amount,
+					  mobile: this.list.mobile,
+					  province:this.formData.province,
+					  city:this.formData.city,
+					  country:this.formData.country,
+					}
+					createHelp(data).then(res=>{
+						console.log(res)
+						if(res.errmsg=='成功'){
+							uni.$u.toast('发布成功！')
+							this.canceldingdan()
+						}
+						
+					})
+					
 				}
-				createHelp(data).then(res=>{
-					console.log(res)
-					uni.$u.toast('发布成功！')
-				})
-				this.canceldingdan()
+				
 			},
 			canceldingdan(){
 				uni.navigateTo({

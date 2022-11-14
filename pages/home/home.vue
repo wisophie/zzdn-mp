@@ -44,7 +44,7 @@
 				<view class="item-icon">
 					<u-icon name="server-man" size="70rpx" color="pink"></u-icon>
 				</view>
-				<view class="item-title">售后服务</view>
+				<view class="item-title">纠纷处理</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/platform/platform', 'switchTab')">
 				<view class="item-icon">

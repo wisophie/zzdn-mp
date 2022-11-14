@@ -352,6 +352,7 @@
 					      deleteVote(data).then(res => {
 					        uni.$u.toast('删除成功！')
 					      })
+						 
 						  this.canceldingdan()
 					    }
 					  }
@@ -363,7 +364,7 @@
 				canceldingdan(){
 					//uni.navigateBack()
 					uni.switchTab({
-						url:'/pages_platform/platform',
+						url:'/pages/platform/platform',
 					
 					})
 				

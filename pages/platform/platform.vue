@@ -107,8 +107,15 @@
 				relme:0,
 			};
 		},
-		onLoad(){
-			this.getFriends1()
+		onShow(){
+			if(uni.getStorageSync('userInfo').id==undefined){
+				
+			}else{
+				this.relme = uni.getStorageSync('currentIndex')
+				this.mescroll.resetUpScroll()
+				this.relme = 0
+				uni.removeStorageSync('currentIndex');
+			}
 		},
 		methods:{
 			upCallback(page){
@@ -117,7 +124,7 @@
 				  page:'',
 				  order: '', 
 				  sort:'',
-				relatedMe:this.relme,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  relatedMe:this.relme,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
 				  type:this.tye,  //0 订单纠纷 1 意见反馈
 				}
 				getVotelist(params).then(res =>{

@@ -86,12 +86,20 @@
 		},
 		
 		onShow() {
-			if (uni.getStorageSync('from') === 'home') {
-				uni.removeStorage('from');
-				this.$myVote()
-				return
+			// if (uni.getStorageSync('from') === 'home') {
+			// 	uni.removeStorage('from');
+			// 	this.$myVote()
+			// 	return
+			// }
+			if(uni.getStorageSync('userInfo').id==undefined){
+				
+			}else{
+				this.relme = uni.getStorageSync('currentIndex')
+				this.refresh()
+				this.relme = 0
+				uni.removeStorageSync('currentIndex');
 			}
-		 this.refresh()
+			
 		},
 		methods:{
 			

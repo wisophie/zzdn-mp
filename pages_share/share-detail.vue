@@ -45,6 +45,10 @@
 				<text class="os-price__row__value">{{list.category}}</text>
 			</view>
 			<view class="os-price__row">
+				<text class="os-price__row__label">商品规格</text>
+				<text class="os-price__row__value">{{list.specification}}</text>
+			</view>
+			<view class="os-price__row">
 				<text class="os-price__row__label">所在地点</text>
 				<text class="os-price__row__value">{{list.province}}/{{list.city}}/{{list.country}}</text>
 			</view>
@@ -147,8 +151,9 @@
 						    if (res.confirm) {
 						      deleteShare(data).then(res => {
 						        uni.$u.toast('删除成功！')
-						       //this.refresh()
+						       
 						      })
+							  uni.setStorageSync("currentIndex", 1)
 							  this.canceldingdan()
 						    }
 						  }
@@ -163,7 +168,7 @@
 					canceldingdan(){
 						//uni.navigateBack()
 						uni.switchTab({
-							url:'@pages/share/share',
+							url:'/pages/share/share',
 						
 						})
 					

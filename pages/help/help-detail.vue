@@ -306,13 +306,14 @@
 				let id
 				if(this.list.userId!=this.myid){
 					id =this.list.userId
+					const url = `../../pages_chat/chat?conversationID=C2C${id}`;
+					uni.navigateTo({
+						url
+					});
 				}else{
 					id =this.list.maintenanceId
 				}
-				const url = `../../pages_chat/chat?conversationID=C2C${id}`;
-				uni.navigateTo({
-					url
-				});
+				
 			},
 			// 删除图片
 			deletePic(event, key) {

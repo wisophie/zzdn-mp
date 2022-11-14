@@ -93,7 +93,9 @@
 						</view> -->
 						<u--input
 						    placeholder="请输入规格"
-							border="bottom"	
+							border="bottom"
+							maxlength='4'
+							color='#a8a8a8'
 						    v-model="list.specification"
 						  ></u--input>
 						<!-- <view class="more" v-if="id==uid">
@@ -119,10 +121,10 @@
 		  <view class="os-remark__content">
 		    <u--textarea
 		      v-model="list.detail"
-		      placeholder="请输入留言信息"
+		      placeholder="请输入商品详情"
 		      count
 			  :disabled=false
-		      maxlength="50"
+		      maxlength="70"
 			  height='90'
 		    ></u--textarea>
 		  </view>
@@ -149,7 +151,7 @@
 		  	<view class="modify-main">
 		  		<u--textarea
 		  		  v-model="data"
-		  		  placeholder="请输入留言信息"
+		  		  placeholder="请输入内容"
 		  		  count
 		  		  :maxlength="maxl"
 		  		  height='90'
@@ -189,7 +191,8 @@
 				list:{
 					title:'商品标题',
 					tel:'输入手机号码',
-					detail:'请输入商品详情'
+					detail:'',
+					specification:'默认规格',
 				},
 				addressOptions: [],
 			};
@@ -287,9 +290,14 @@
 				this.editable=false
 			},
 			get(type,e){
-				let a={'title':30,'tel':11};
+				let a={'title':15,'tel':11};
 				this.show = true;
-				this.data=e;
+				if(e=='商品标题' || e=='输入手机号码'){
+					this.data='';
+				}else{
+					this.data=e;
+				}
+				
 				this.type=type;
 				this.maxl=a[type];
 			},
@@ -301,8 +309,26 @@
 			          // console.log('close');
 			        },
 					modify(type,data){
-						this.list[type]=this.data
-						this.close()
+						if(type=='tel'){
+						  let result= uni.$u.test.mobile(this.data)
+						   if(result==false){
+							   uni.$u.toast('请输入正确的手机号码')
+						   }else{
+							   this.list[type]=this.data
+							   this.close()
+						   }
+						}else if(type=='title'){
+							if(this.data==''){
+								uni.$u.toast('标题不能为空')
+							}else{
+								this.list[type]=this.data
+								this.close()
+							}
+							
+						}
+						
+						// this.list[type]=this.data
+						// this.close()
 					},
 			bindPickerChange: function(e) {
 				this.index1 = e.target.value
@@ -355,26 +381,36 @@
 			tocreateshare(){
 				this.list.gallery=[]
 				this.banner.map(e=>{this.list.gallery.push(e.url)})
-				console.log(this.list.gallery)
-				const data = {
-				  exchange: this.extype,   //0提供货物1需求货物
-				  category: this.array[this.index1],
-				  title: this.list.title,
-				  gallery: this.list.gallery.toString(),
-				  specification: this.specification[this.index2],
-				  detail: this.list.detail,
-				  tel: this.list.tel,
-				  province:this.formData.province,
-				  city:this.formData.city,
-				  country:this.formData.country,
-				}
-				createShare(data).then(res=>{
-					if(res.errmsg=='成功'){
-						uni.$u.toast('发布成功！')
-						this.canceldingdan()
+				//console.log(this.formData)
+				if(this.list.gallery.length==0){
+					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.formData.province==''){
+					uni.$u.toast('请选择发布地点！')
+				}else if(this.list.detail==''){
+					uni.$u.toast('请输入商品详情！')
+				}else{
+					const data = {
+					  exchange: this.extype,   //0提供货物1需求货物
+					  category: this.array[this.index1],
+					  title: this.list.title,
+					  gallery: this.list.gallery.toString(),
+					  specification: this.specification[this.index2],
+					  detail: this.list.detail,
+					  tel: this.list.tel,
+					  province:this.formData.province,
+					  city:this.formData.city,
+					  country:this.formData.country,
 					}
-					
-				})
+					createShare(data).then(res=>{
+						if(res.errmsg=='成功'){
+							uni.$u.toast('发布成功！')
+							uni.setStorageSync("currentIndex", 1)
+							this.canceldingdan()
+						}
+						
+					})
+				}
+				
 				
 			},
 			canceldingdan(){

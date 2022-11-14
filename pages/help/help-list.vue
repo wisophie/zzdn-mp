@@ -107,7 +107,7 @@
 			
 		},
 		onShow() {
-		 this.refresh()
+		
 		},
 		methods:{
 			// del(){

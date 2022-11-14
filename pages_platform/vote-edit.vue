@@ -131,7 +131,7 @@
 		  	<view class="modify-main">
 		  		<u--textarea
 		  		  v-model="data"
-		  		  placeholder="请输入留言信息"
+		  		  placeholder="请输入反馈信息"
 		  		  count
 		  		  :maxlength="maxl"
 		  		  height='90'
@@ -160,7 +160,7 @@
 				index2: 0,
 				list:{
 					topic:'反馈标题',
-					progress:'反馈内容',
+					progress:'',
 					orderSn:0,
 				},
 				form:{
@@ -259,52 +259,89 @@
 					}
 					]
 				}
-				const data={
-					orderSn:parseInt(this.list.orderSn),
-					progress:this.list.progress,
-					topic:this.list.topic,
-					feedbackType:this.fdtype,  //订单纠纷
-					pics:this.list.pics.toString(),
-					type:this.index1,
-					options:this.optionsubmit,
-				}
-				createVote(data).then(res=>{
-					console.log(res)
-					if(res.errmsg=='成功'){
-						uni.$u.toast('发布成功！')
-						this.canceldingdan()
+				if(this.list.pics.length==0){
+					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.list.progress==''){
+					uni.$u.toast('请输入反馈内容！')
+				}else{
+					const data={
+						orderSn:parseInt(this.list.orderSn),
+						progress:this.list.progress,
+						topic:this.list.topic,
+						feedbackType:this.fdtype,  //订单纠纷
+						pics:this.list.pics.toString(),
+						type:this.index1,
+						options:this.optionsubmit,
 					}
-					
-					
-				})
-			},
-			toeditVote(){
-				const data={
-					id:parseInt(this.list.id),
-					orderSn:parseInt(this.list.orderSn),
-					progress:this.list.progress,
-					topic:this.list.topic,
-					feedbackType:this.fdtype,
-					pics:this.list.pics.toString(),
-					type:this.index1,
-					options:this.optionsubmit,
+					createVote(data).then(res=>{
+						console.log(res)
+						if(res.errmsg=='成功'){
+							uni.$u.toast('发布成功！')
+							uni.setStorageSync("currentIndex", 1)
+							this.canceldingdan()
+						}
+						
+						
+					})
 				}
 				
-				editVote(data).then(res=>{
-					console.log(res)
-					if(res.errmsg=='成功'){
-						uni.$u.toast('保存成功！')
-						this.canceldingdan()
+			},
+			toeditVote(){
+				console.log(parseInt(this.list.orderSn))
+				console.log(this.index1)
+				console.log(this.optionsubmit)
+				this.list.pics=[]
+				this.banner.map(e=>{this.list.pics.push(e.url)})
+				if(this.index1==1){
+					this.optionsubmit=[{
+						content:this.form.one,
+					},{
+						content:this.form.two,
+					},{
+						content:this.form.three,
+					},{
+						content:this.form.four,
 					}
-				})
+					]
+				}
+				if(this.list.pics.length==0){
+					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.list.progress==''){
+					uni.$u.toast('请输入反馈内容！')
+				}else{
+					const data={
+						id:parseInt(this.list.id),
+						orderSn:parseInt(this.list.orderSn),
+						progress:this.list.progress,
+						topic:this.list.topic,
+						feedbackType:this.fdtype,
+						pics:this.list.pics.toString(),
+						type:this.index1,
+						options:this.optionsubmit,
+					}
+					
+					editVote(data).then(res=>{
+						console.log(res)
+						if(res.errmsg=='成功'){
+							uni.$u.toast('保存成功！')
+							uni.setStorageSync("currentIndex", 1)
+							this.canceldingdan()
+						}
+					})
+				}
+				
 			},
 			edit(){
 				this.editable=false
 			},
 			get(type,e){
-				let a={'title':50,'tel':11};
+				let a={'topic':15,'tel':11};
 				this.show = true;
-				this.data=e;
+				if(e=='反馈标题'){
+					this.data='';
+				}else{
+					this.data=e;
+				}
 				this.type=type;
 				this.maxl=a[type];
 			},

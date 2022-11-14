@@ -61,7 +61,7 @@
     ></u-action-sheet>
     <base-footer v-if="userInfo && userInfo.userLevel == 2">
       <view class="b-footer shadow-top">
-        <view class="b-footer__left">
+        <view class="b-footer__left" @tap="handleRoute">
           <u-icon name="chat" color="#303133" size="22" />
         </view>
         <view class="b-footer__right" @click="toOrder">
@@ -128,7 +128,20 @@ export default {
     },
     selectClick(e) {
       uni.$u.route('/pages_goods/order-submit', { id: this.goodsId, payType: e.id })
-    }
+    },
+	handleRoute() {
+		let id
+		if(this.cateList.userId!=this.userInfo.id){
+			id =this.cateList.userId
+			const url = `../../pages_chat/chat?conversationID=C2C${id}`;
+			uni.navigateTo({
+				url
+			});
+		}else{
+			id =this.cateList.maintenanceId
+		}
+		
+	},
   }
 }
 </script>
