@@ -352,7 +352,7 @@
 					      deleteVote(data).then(res => {
 					        uni.$u.toast('删除成功！')
 					      })
-						 
+						  uni.setStorageSync("currentIndex", 1)
 						  this.canceldingdan()
 					    }
 					  }

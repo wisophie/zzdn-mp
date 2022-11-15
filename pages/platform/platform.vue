@@ -102,7 +102,7 @@
 					
 				],
 				jd:'全部',
-				typ:0,
+				tye:0,
 				extype:'',
 				relme:0,
 			};
@@ -144,8 +144,17 @@
 			},
 			click(item) {
 				console.log(item)
-			        this.tye=item.index
+				// if(this.relme==0){
+				// 	this.tye=item.index
+				// 	this.relme==0
+				// }else{
+					
+				// 	this.relme==1
+				// } 
+				      //this.relme=1
+				     this.tye=item.index
 			        this.mescroll.resetUpScroll()
+					this.relme=0
 			  },
 			toPage(url) {
 			  uni.$u.route(url)

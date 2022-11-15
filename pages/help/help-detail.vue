@@ -304,6 +304,7 @@
 			},
 			handleRoute() {
 				let id
+				console.log(this.list.userId,this.myid,this.list.status)
 				if(this.list.userId!=this.myid){
 					id =this.list.userId
 					const url = `../../pages_chat/chat?conversationID=C2C${id}`;
@@ -311,7 +312,16 @@
 						url
 					});
 				}else{
-					id =this.list.maintenanceId
+					if(this.list.status==2){
+						uni.$u.toast('等待接单中！')
+					}else{
+						id =this.list.maintenanceId
+						const url = `../../pages_chat/chat?conversationID=C2C${id}`;
+						uni.navigateTo({
+							url
+						});
+					}
+					
 				}
 				
 			},
@@ -389,7 +399,7 @@
 				})
 					
 			}else{
-				uni.$u.route('pages/platform/vote-edit', this.list)
+				uni.$u.route('/pages_platform/vote-edit', this.list)
 				
 			}
 				

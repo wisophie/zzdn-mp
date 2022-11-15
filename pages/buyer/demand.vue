@@ -93,7 +93,7 @@ export default {
 				return
       }
       const id =this.form.userId
-      const url = `../TUI-Chat/chat?conversationID=C2C${id}`;
+      const url = `/pages_chat/chat?conversationID=C2C${id}`;
       uni.navigateTo({
         url
       });
