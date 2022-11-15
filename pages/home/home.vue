@@ -22,11 +22,11 @@
 		</view>
 
 		<view class="content-more">
-			<view class="more-item" @click="toPage('/pages/buyer/list')">
+			<view class="more-item" @click="toPage('/pages/goods/goods', 'switchTab')">
 				<view class="item-icon">
 					<u-icon name="shopping-cart" size="70rpx" color="red"></u-icon>
 				</view>
-				<view class="item-title">本地采购</view>
+				<view class="item-title">供货/采购</view>
 			</view>
 			<view class="more-item" @click="toPage('/pages/share/share', 'switchTab')">
 				<view class="item-icon">
