@@ -40,6 +40,7 @@ module.exports = vm => {
                url: '/pages/login/login'
             });
           }
+          return
         }
         if (custom.toast === true) {
           uni.$u.toast(data.errmsg)
