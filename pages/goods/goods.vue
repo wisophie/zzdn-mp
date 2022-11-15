@@ -52,12 +52,16 @@
     <view class="g-fab" @click="showAction">
       <u-icon name="more-dot-fill" size="24" color="#fff" />
     </view>
+
+    <SwitchIdentity ref="identity" @success="handleIdentitySuccess" @close="handleIdentityClose"></SwitchIdentity>
+    <view v-if="isVisitor" class="visitor-mask"></view>
   </view>
 </template>
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
 import GoodsList from '@/components/GoodsList'
+import SwitchIdentity from '@/components/SwitchIdentity'
 import { getCateApi, getListApi } from '@/api/goods'
 import user from '@/utils/user'
 const sorts = [
@@ -68,7 +72,7 @@ const sorts = [
 
 export default {
   mixins: [MescrollMixin],
-  components: { GoodsList },
+  components: { GoodsList, SwitchIdentity },
   data() {
     return {
       name: '',
@@ -76,7 +80,8 @@ export default {
       sortList: sorts,
       tabIndex: 0,
       tabs: [],
-      goods: []
+      goods: [],
+      isVisitor: true, // 是否游客身份
     }
   },
   watch: {
@@ -87,17 +92,25 @@ export default {
   },
   onShow() {
     user
-			.checkLogin()
+      .checkLogin()
+      .then(() => {
+        this.isVisitor = uni.getStorageSync('userInfo').userLevel === 0
+        if (this.isVisitor) {
+          this.$refs.identity.show()
+        }
+      })
 			.catch(err => {
 				uni.removeStorageSync('token');
         uni.removeStorageSync('userInfo');
         uni.navigateTo({
 					 url: '/pages/login/login'
 				})
-			})
+      })
   },
   methods: {
     upCallback(page) {
+      if (this.isVisitor) return
+
       if (this.tabs.length === 0) {
         getCateApi({ page: 1, limit: 999 })
           .then(res => {
@@ -226,7 +239,18 @@ export default {
           }
         }
       })
-    }
+    },
+
+    handleIdentitySuccess() {
+      this.isVisitor = false
+      this.doSearch()
+    },
+
+    handleIdentityClose() {
+      uni.switchTab({
+        url: '/pages/home/home'
+      })
+   }
   }
 }
 </script>
@@ -293,5 +317,14 @@ page {
   background: $u-primary;
   box-shadow: 0px 1px 4px 1px rgba($color: $u-primary, $alpha: 0.5);
   z-index: 99;
+}
+.visitor-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 10;
 }
 </style>

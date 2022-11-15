@@ -38,6 +38,7 @@ export default {
 
     close() {
       this.visible = false
+      this.$emit('close')
     },
 
     handleSwitch() {
@@ -45,6 +46,7 @@ export default {
         const otherLevel = this.userInfo.otherLevel
         console.log('%c 【 otherLevel 】-46', 'font-size:14px; color:rgb(210, 110, 210);', this.userInfo)
         const item = otherLevel.find(item => item.userLevel === this.userLevel)
+
         if (item) {
           this.handleLogin(item)
           return
@@ -62,7 +64,7 @@ export default {
             }
           })
         }
-        this.close()
+        this.visible = false
       } else {
         uni.$u.toast('请选择您要切换的身份')
       }
@@ -74,7 +76,7 @@ export default {
       }).then(res => {
         uni.$u.toast('切换成功')
         this.$emit('success', this.userLevel)
-        this.close()
+        this.visible = false
       })
     },
 
