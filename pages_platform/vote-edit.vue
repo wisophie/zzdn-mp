@@ -62,7 +62,7 @@
 						<u--input
 						    placeholder="请输入订单id"
 							border="bottom"	
-						    v-model="list.orderSn"
+						    v-model="list.id"
 						    @change="change"
 						  ></u--input>
 					</view>
@@ -218,11 +218,12 @@
 				}
 			},
 			togetVoteDetail(item){
+				console.log(item)
 				
-				const params={
-					id:item.id
-				}
-				if(item.id!=undefined){
+				if(item.topic!=undefined){
+					const params={
+						id:item.id
+					}
 					getVoteDetail(params).then(res=>{
 						console.log(res.data)
 						this.list = res.data
@@ -238,6 +239,8 @@
 					})
 					this.togetpics(item)
 					console.log(parseInt(this.list.orderSn))
+				}else{
+					this.list.id=item.id
 				}
 				
 			},
@@ -261,6 +264,8 @@
 				}
 				if(this.list.pics.length==0){
 					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.list.topic==''){
+					uni.$u.toast('标题不能为空！')
 				}else if(this.list.progress==''){
 					uni.$u.toast('请输入反馈内容！')
 				}else{
@@ -306,6 +311,8 @@
 				}
 				if(this.list.pics.length==0){
 					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.list.topic==''){
+					uni.$u.toast('标题不能为空！')
 				}else if(this.list.progress==''){
 					uni.$u.toast('请输入反馈内容！')
 				}else{

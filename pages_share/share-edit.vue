@@ -186,7 +186,6 @@
 				index2: 0,
 				index3: 0,
 				extype:false,
-				specification:['金属', '不锈钢'],
 				exchangetype:['提供货物', '需求货物'],
 				list:{
 					title:'商品标题',
@@ -360,32 +359,48 @@
 			toeditshare(){
 				this.list.gallery=[]
 				this.banner.map(e=>{this.list.gallery.push(e.url)})
-				const data = {
-				  id: this.list.id,
-				  exchange: this.extype,   //0提供货物1需求货物
-				  category: this.array[this.index1],
-				  title: this.list.title,
-				  gallery: this.list.gallery.toString(),
-				  specification: this.specification[this.index2],
-				  detail: this.list.detail,
-				  tel: this.list.tel,
-				  province:this.formData.province,
-				  city:this.formData.city,
-				  country:this.formData.country,
-				}
-				editShare(data).then(res=>{
-					console.log(res)
-					uni.$u.toast('发布成功！')
-				})
-			},
-			tocreateshare(){
-				this.list.gallery=[]
-				this.banner.map(e=>{this.list.gallery.push(e.url)})
-				//console.log(this.formData)
 				if(this.list.gallery.length==0){
 					uni.$u.toast('请上传至少一张图片！')
 				}else if(this.formData.province==''){
 					uni.$u.toast('请选择发布地点！')
+				}else if(this.list.tel=='输入手机号码'){
+					uni.$u.toast('请输入正确的手机号码！')
+				}else if(this.list.detail==''){
+					uni.$u.toast('请输入商品详情！')
+				}else{
+					const data = {
+					  id: this.list.id,
+					  exchange: this.extype,   //0提供货物1需求货物
+					  category: this.array[this.index1],
+					  title: this.list.title,
+					  gallery: this.list.gallery.toString(),
+					  specification: this.list.specification,
+					  detail: this.list.detail,
+					  tel: this.list.tel,
+					  province:this.formData.province,
+					  city:this.formData.city,
+					  country:this.formData.country,
+					}
+					editShare(data).then(res=>{
+						if(res.errmsg=='成功'){
+							uni.$u.toast('保存成功！')
+							uni.setStorageSync("currentIndex", 1)
+							this.canceldingdan()
+						}
+					})
+				}
+				
+			},
+			tocreateshare(){
+				this.list.gallery=[]
+				this.banner.map(e=>{this.list.gallery.push(e.url)})
+				console.log(this.list.tel)
+				if(this.list.gallery.length==0){
+					uni.$u.toast('请上传至少一张图片！')
+				}else if(this.formData.province==''){
+					uni.$u.toast('请选择发布地点！')
+				}else if(this.list.tel=='输入手机号码'){
+					uni.$u.toast('请输入正确的手机号码！')
 				}else if(this.list.detail==''){
 					uni.$u.toast('请输入商品详情！')
 				}else{
@@ -394,7 +409,7 @@
 					  category: this.array[this.index1],
 					  title: this.list.title,
 					  gallery: this.list.gallery.toString(),
-					  specification: this.specification[this.index2],
+					  specification: this.list.specification,
 					  detail: this.list.detail,
 					  tel: this.list.tel,
 					  province:this.formData.province,
