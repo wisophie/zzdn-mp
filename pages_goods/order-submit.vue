@@ -196,7 +196,7 @@ export default {
         payType = 'WX_PAY'
       } else if (this.exchange === 1) {
         payType = 'XIANXIA_PAY'
-      } else if (his.exchange === 2) {
+      } else if (this.exchange === 2) {
         payType = 'DELAY_PAY'
       }
       const data = {

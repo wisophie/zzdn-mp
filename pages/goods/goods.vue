@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     upCallback(page) {
-      if (this.isVisitor) return
+      // if (this.isVisitor) return
 
       if (this.tabs.length === 0) {
         getCateApi({ page: 1, limit: 999 })
