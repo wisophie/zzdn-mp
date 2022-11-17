@@ -105,6 +105,7 @@ export default {
     this.userInfo = uni.getStorageSync('userInfo')
     this.goodsId = id
     getCateApi({ page: 1, limit: 999 }).then(res => {
+		
       this.cateList = res.data.list
     })
     this.getInfo(id)
@@ -113,8 +114,10 @@ export default {
     getInfo(id) {
       getInfoApi({ id }).then(res => {
         const { gallery, ...rest } = res.data
+		
         this.banner = gallery.split(',')
         this.info = rest
+		console.log(this.info)
       })
     },
     getCateText(id) {
@@ -130,10 +133,11 @@ export default {
       uni.$u.route('/pages_goods/order-submit', { id: this.goodsId, payType: e.id })
     },
 	handleRoute() {
+		console.log(this.info.userId,this.userInfo.id)
 		let id
-		if(this.cateList.userId!=this.userInfo.id){
-			id =this.cateList.userId
-			const url = `../../pages_chat/chat?conversationID=C2C${id}`;
+		if(this.info.userId!=this.userInfo.id){
+			id =this.info.userId
+			const url = `/pages_chat/chat?conversationID=C2C${id}`;
 			uni.navigateTo({
 				url
 			});
