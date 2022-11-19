@@ -63,6 +63,12 @@
 <script>
 import { register, regCaptcha } from '@/api/login'
 import { regionList } from '@/api/address'
+// #ifdef MP-WEIXIN
+const isMpWeixin = true
+// #endif
+// #ifdef APP-PLUS
+const isMpWeixin = false
+// #endif
 export default {
   data() {
     return {
@@ -136,10 +142,9 @@ export default {
 
     requestRegister(wxCode) {
       let that = this;
-      register({
-        ...this.formData,
-        wxCode: wxCode
-      }).then(res => {
+      const params = {...this.formData}
+      if (wxCode) params.wxCode = wxCode
+      register(params).then(res => {
         if (res.errno == 0) {
           uni.setStorageSync('userInfo', res.data.userInfo);
           uni.setStorage({
@@ -179,15 +184,20 @@ export default {
         return false
       }
 
-      uni.login({
-        success: function(res) {
-          if (!res.code) {
-            uni.$u.toast('注册失败')
+      if (isMpWeixin) {
+        uni.login({
+          success: function(res) {
+            if (!res.code) {
+              uni.$u.toast('注册失败')
+            }
+  
+            that.requestRegister(res.code);
           }
+        });
+      } else {
+        that.requestRegister();
+      }
 
-          that.requestRegister(res.code);
-        }
-      });
     },
   }
 }
