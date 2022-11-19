@@ -70,6 +70,10 @@
             <text class="os-order__row__label">订单编号</text>
             <text class="os-order__row__value">{{ orderInfo.orderSn }}</text>
           </view>
+					<view class="os-order__row" v-if="orderInfo.message">
+					  <text class="os-order__row__label">用户备注</text>
+					  <text class="os-order__row__value">{{ orderInfo.message }}</text>
+					</view>
           <view class="os-order__row">
             <text class="os-order__row__label">创建时间</text>
             <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
@@ -78,9 +82,9 @@
             <text class="os-order__row__label">付款时间</text>
             <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
           </view>
-          <view class="os-order__row">
+          <view class="os-order__row" v-if="orderInfo.confirmTime">
             <text class="os-order__row__label">成交时间</text>
-            <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
+            <text class="os-order__row__value">{{ orderInfo.confirmTime }}</text>
           </view>
           <view class="os-order__row" v-if="orderInfo.applyRefundTime">
             <text class="os-order__row__label">发起退款时间</text>
@@ -123,6 +127,7 @@ export default {
     getOrderInfo() {
       getOrderInfoApi({ orderId: this.orderId }).then(res => {
         this.orderInfo = res.data.orderInfo
+				console.log(this.orderInfo);
       })
     },
     toWuliu() {

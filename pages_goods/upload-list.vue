@@ -144,17 +144,8 @@ export default {
       }
       getListApi1(params)
         .then(res => {
-          // const { list: listData, total } = res.data
-          // const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
-          const list = [
-            {
-              name: 'hello',
-              detail: '大萨达大大大所大多',
-              retailPrice: '100',
-              id: 1
-            }
-          ]
-          const total = 10
+          const { list: listData, total } = res.data
+          const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '' }))
           this.mescroll.endBySize(list.length, total)
           if (page.num == 1) this.goods = []
           this.goods = this.goods.concat(list)

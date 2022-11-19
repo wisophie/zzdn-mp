@@ -45,3 +45,5 @@ export const applyAfterSaleApi = (data = {}) => http.post('/wx/aftersale/submit'
 /** 取消售后 */
 export const cancelAfterSaleApi = (data = {}) => http.post('/wx/aftersale/cancel', data)
 
+/** 修改订单 */
+export const updateOrderApi = (data = {}) => http.post('/wx/order/update', data)

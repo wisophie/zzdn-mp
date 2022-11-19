@@ -68,25 +68,36 @@
 						<view class="o-list__item__btns__item">
 							<u-button size="small" text="删除订单" @click="remove(item.id)" />
 						</view>
-					<!-- 	<view class="o-list__item__btns__item">
+						<view class="o-list__item__btns__item">
+							<u-button type="primary" size="small" text="打赏" @click="give" />
+						</view>
+						<!-- 	<view class="o-list__item__btns__item">
 							<u-button type="primary" size="small" text="去评价" @click="onComment(item)" />
 						</view> -->
 					</template>
 					<!-- 402 -->
 					<template v-if="item.orderStatus == 402">
-					<!-- 	<view class="o-list__item__btns__item">
+						<!-- 	<view class="o-list__item__btns__item">
 							<u-button size="small" text="申请售后" @click="toAftersale(item.id)" />
 						</view> -->
 						<view class="o-list__item__btns__item">
 							<u-button size="small" text="删除订单" @click="remove(item.id)" />
 						</view>
-					<!-- 	<view class="o-list__item__btns__item">
+						<view class="o-list__item__btns__item">
+							<u-button type="primary" size="small" text="打赏" @click="give" />
+						</view>
+						<!-- 	<view class="o-list__item__btns__item">
 							<u-button type="primary" size="small" text="去评价" @click="onComment(item)" />
 						</view> -->
 					</template>
 				</view>
 				<!-- 供应商 -->
 				<view class="o-list__item__btns u-border-top" v-if="userInfo.userLevel === 1">
+					<template v-if="item.orderStatus == 101">
+						<view class="o-list__item__btns__item">
+							<u-button size="small" text="修改订单" @click="updateOrder(item)" />
+						</view>
+					</template>
 					<template v-if="item.orderStatus == 201">
 						<view class="o-list__item__btns__item"><u-button size="small" text="发货" @click="delivery(item)" /></view>
 					</template>
@@ -96,6 +107,16 @@
 						</view>
 						<view class="o-list__item__btns__item">
 							<u-button size="small" text="同意退款" @click="onAgree(item)" />
+						</view>
+					</template>
+					<template v-if="item.orderStatus == 401">
+						<view class="o-list__item__btns__item">
+							<u-button type="primary" size="small" text="打赏" @click="give" />
+						</view>
+					</template>
+					<template v-if="item.orderStatus == 402">
+						<view class="o-list__item__btns__item">
+							<u-button type="primary" size="small" text="打赏" @click="give" />
 						</view>
 					</template>
 				</view>
@@ -121,11 +142,31 @@
 		</u-popup>
 		<u-popup :show="showShip" mode="bottom" closeOnClickOverlay @close="closeShip">
 			<view class="comment">
-				<view class="py-1"><u-input v-model="shipSn" placeholder="请输入物流单号"></u-input></view>
-				<view class="py-1"><u-input v-model="shipChannel" placeholder="请输入物流公司编码"></u-input></view>
+				<view class="py-1"><u-input v-model="shipSn" placeholder="若无，请填写无"></u-input></view>
+				<view class="py-1"><u-input v-model="shipChannel" placeholder="若无，请填写自提/送货其他方式"></u-input></view>
 				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmShip" /></view>
 			</view>
 		</u-popup>
+		<u-popup :show="showUo" mode="bottom" closeOnClickOverlay @close="closeUo">
+			<view class="comment">
+				<view class="py-1"><u-input v-model="uoForm.actualPrice" placeholder="请输入订单总价"></u-input></view>
+				<view class="py-1"><u-input v-model="uoForm.message" placeholder="请输入用户留言信息"></u-input></view>
+				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmUo" /></view>
+			</view>
+		</u-popup>
+		<u-modal
+			:show="showGive"
+			title="扫码打赏~"
+			closeOnClickOverlay
+			@close="showGive = false"
+			@confirm="showGive = false"
+		>
+			<u-image
+				src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"
+				width="400rpx"
+				height="540rpx"
+			></u-image>
+		</u-modal>
 	</view>
 </template>
 
@@ -154,7 +195,17 @@ const statusMap = {
 // 	certify: 是否已实名 false 未实名 true 已实名
 // 	userLevel: 账户身份 0 游客，1 供货商，2 采购商
 // }
-import { commentApi, removeApi, cancelApi, refundApi, agreeApi, refuseApi, deliveryApi,receiveApi } from '@/api/order'
+import {
+	commentApi,
+	removeApi,
+	cancelApi,
+	refundApi,
+	agreeApi,
+	refuseApi,
+	deliveryApi,
+	receiveApi,
+	updateOrderApi
+} from '@/api/order'
 export default {
 	props: {
 		list: {
@@ -175,7 +226,13 @@ export default {
 			userInfo: null,
 			showShip: false,
 			shipSn: '',
-			shipChannel: ''
+			shipChannel: '',
+			showUo: false,
+			uoForm: {
+				message: '',
+				actualPrice: ''
+			},
+			showGive: false
 		}
 	},
 	mounted() {
@@ -300,6 +357,31 @@ export default {
 		},
 		toAftersale(id) {
 			uni.$u.route('/pages_goods/aftersale')
+		},
+		updateOrder(item) {
+			this.current = item
+			this.showUo = true
+		},
+		closeUo() {
+			this.uoForm = {
+				message: '',
+				actualPrice: ''
+			}
+			this.showUo = false
+		},
+		confirmUo() {
+			const data = {
+				...this.uoForm,
+				orderId: this.current.id
+			}
+			updateOrderApi(data).then(res => {
+				uni.$u.toast('修改成功')
+				this.refresh()
+				this.showUo = false
+			})
+		},
+		give() {
+			this.showGive = true
 		}
 	}
 }
