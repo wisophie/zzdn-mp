@@ -81,7 +81,7 @@
           ></u--textarea>
         </view>
       </view>
-<!--      <view class="os-pay">
+      <!--      <view class="os-pay">
         <view class="os-pay__title">支付方式</view>
         <view class="os-pay__content">
           <u-radio-group v-model="pay">
@@ -191,6 +191,18 @@ export default {
       }
     },
     toPay() {
+      if (!this.currentAd) {
+        uni.showModal({
+          title: '提示',
+          content: '尚未添加收货地址，是否确认前往添加？',
+          success: res => {
+            if (res.confirm) {
+              uni.$u.route('/pages/address/list')
+            }
+          }
+        })
+        return
+      }
       let payType = null
       if (this.exchange === 0) {
         payType = 'WX_PAY'
