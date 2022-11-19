@@ -14,7 +14,7 @@ export const isMpWeixin = false
  */
 function checkSession() {
   return new Promise(function(resolve, reject) {
-    if (uni.checkSession) {
+    if (isMpWeixin) {
       uni.checkSession({
         success: function() {
           resolve(true);
@@ -110,7 +110,6 @@ function checkLogin() {
   return new Promise(function(resolve, reject) {
     if (uni.getStorageSync('userInfo') && uni.getStorageSync('token')) {
       checkSession().then(() => {
-        console.log('gg')
         resolve(true);
       }).catch(() => {
         reject(false);
