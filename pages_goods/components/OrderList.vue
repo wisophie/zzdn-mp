@@ -69,7 +69,7 @@
 							<u-button size="small" text="删除订单" @click="remove(item.id)" />
 						</view>
 						<view class="o-list__item__btns__item">
-							<u-button type="primary" size="small" text="打赏" @click="give" />
+							<u-button type="primary" size="small" text="打赏平台" @click="give" />
 						</view>
 						<!-- 	<view class="o-list__item__btns__item">
 							<u-button type="primary" size="small" text="去评价" @click="onComment(item)" />
@@ -84,7 +84,7 @@
 							<u-button size="small" text="删除订单" @click="remove(item.id)" />
 						</view>
 						<view class="o-list__item__btns__item">
-							<u-button type="primary" size="small" text="打赏" @click="give" />
+							<u-button type="primary" size="small" text="打赏平台" @click="give" />
 						</view>
 						<!-- 	<view class="o-list__item__btns__item">
 							<u-button type="primary" size="small" text="去评价" @click="onComment(item)" />
@@ -111,12 +111,12 @@
 					</template>
 					<template v-if="item.orderStatus == 401">
 						<view class="o-list__item__btns__item">
-							<u-button type="primary" size="small" text="打赏" @click="give" />
+							<u-button type="primary" size="small" text="打赏平台" @click="give" />
 						</view>
 					</template>
 					<template v-if="item.orderStatus == 402">
 						<view class="o-list__item__btns__item">
-							<u-button type="primary" size="small" text="打赏" @click="give" />
+							<u-button type="primary" size="small" text="打赏平台" @click="give" />
 						</view>
 					</template>
 				</view>
@@ -156,7 +156,7 @@
 		</u-popup>
 		<u-modal
 			:show="showGive"
-			title="扫码打赏~"
+			title="扫码打赏平台~"
 			closeOnClickOverlay
 			@close="showGive = false"
 			@confirm="showGive = false"
