@@ -26,3 +26,16 @@ export const editShare = (data = {}) => http.post('/wx/share/goods/update', data
         auth: true
       }
     })
+	
+	/** 已完结*/
+	export const finishShare = (data = {}) => http.post('/wx/share/goods/finish', data, {
+	    custom: {
+	      auth: true
+	    }
+	  })
+	  /** 共享商品单个详情接口*/
+	  export const getShare = (data = {}) => http.post('/wx/share/goods/detail', data, {
+	      custom: {
+	        auth: true
+	      }
+	    })

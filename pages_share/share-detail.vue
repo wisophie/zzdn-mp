@@ -27,6 +27,7 @@
 		 <view class='mt-2 u-tips-color text-s'>
 		 			<text >联系号码：{{list.tel}}</text>
 					<view class="judge">
+						<text class="transfertype" v-if="list.transfer==2">已完结</text>
 						<text class="judgetype" :class="{judgetyper:list.status==2}" v-if="list.status!=1">{{list.judgestat}}</text>
 						<text class="judgetyper" v-if="list.status==2">:{{list.rejectReason}}</text>
 					</view>
@@ -75,6 +76,9 @@
 		 <view class="b-footer__right" v-if="list.userId==myid" @click="toPage('pages_share/share-edit',list)">
 		    <text class="bt" >编辑商品</text>
 		  </view>
+		  <view class="b-footer__right dashang" v-if="list.userId==myid" @click="show = true">
+		     <text class="bt" >打赏平台</text>
+		   </view>
 		  <view class="b-footer__left" v-if="list.userId!=myid">
 		  			  <view @tap="handleRoute(list.userId)" class="u">
 		  				  <u-icon name="chat"  color="#303133" size="28" />
@@ -94,12 +98,18 @@
 					cancelText="取消"
 				>
 				</u-action-sheet>
+				<u-overlay :show="show" >
+						<view class="dashangpic">
+						   <image class="dpic" src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"></image> 
+						    <u-button @click="show = false">确认</u-button>
+						</view>
+					</u-overlay>
 	</view>
 	
 </template>
 
 <script>
-	import { deleteShare} from '@/api/share'
+	import { finishShare,getShare} from '@/api/share'
 	
 	export default {
 		data() {
@@ -109,25 +119,39 @@
 				current: 0,
 				banner: [],
 			actions2: [{
-							name: '删除商品',
+							name: '已完结',
 						},
 							
 					],
 			show2: false,
 			myid:'',
+			show: false
 			};
 		},
 		onLoad(id){
 			this.list = id
-			this.getShareInfo()
+			this.getShareInfo(id)
 		},
 		methods:{
-			getShareInfo(){
-				console.log(this.list)
+			open() {
+			        // console.log('open');
+			      },
+			      close() {
+			        this.show = false
+			        // console.log('close');
+			      },
+			async getShareInfo(item){
+				console.log(item.id)
+				
 				this.myid= uni.getStorageSync('userInfo').id
 				console.log(this.myid)
 				this.banner=this.list.gallery.split(",")
 				this.extype={'false':'提供货物','true':'需求货物'}[this.list.exchange]
+				const data={
+					id:item.id
+				}
+				let res =await getShare(data)
+				console.log(res.data)
 			},
 			handleRoute() {
 				const id =this.list.userId
@@ -140,17 +164,18 @@
 				uni.$u.route(url,id)
 			},
 			selectClick(index){
-					if(index.name=='删除商品'){
+					if(index.name=='已完结'){
 						const data={
 							id:this.list.id
 						}
 						uni.showModal({
 						  title: '提示',
-						  content: '是否确认删除？',
+						  content: '是否确认完结？',
 						  success: res => {
 						    if (res.confirm) {
-						      deleteShare(data).then(res => {
-						        uni.$u.toast('删除成功！')
+						      finishShare(data).then(res => {
+								  console.log(res)
+						        uni.$u.toast('完结成功！')
 						       
 						      })
 							  uni.setStorageSync("currentIndex", 1)
@@ -277,6 +302,10 @@ page {
 		border:1px solid #ccc;
 		
 	}
+	.dashang{
+		color: orange;
+		border:1px solid orange;
+	}
 	.u{ display: flex;
 		justify-content: center;
 		align-items: center;
@@ -300,6 +329,18 @@ page {
 	}
 	.judgetyper{
 		color:red;
+	}
+	.transfertype{
+		color:#3fcc44;
+	}
+}
+.dashangpic{
+	margin:auto;
+	height:850rpx;
+	width:95%;
+	.dpic{
+		height:850rpx;
+		width:100%;
 	}
 }
 </style>

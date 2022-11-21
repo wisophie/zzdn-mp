@@ -53,10 +53,13 @@ export default {
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad() {},
-
+	onLoad() {
+		
+	},
+       
 	onShow() {
 		logger.log(`| TUI-Index | onshow  | login|userSig:${app.globalData.userInfo.userSig} userID:${app.globalData.userInfo.userID}`);
+	
 	},
 	created() {
 		uni.$on('isSDKReady', value => {
@@ -66,6 +69,7 @@ export default {
 	methods: {
 		handleOnPageNavigate(event) {
 			const tab = event.currentTarget.dataset.item;
+			console.log(tab.url)
 			if (!tab.url) {
 				uni.navigateToMiniProgram({
 					appId: 'wx3b91b7aaa809ecf9'

@@ -103,6 +103,12 @@
 		<view class='more' @click="show2 = true" v-if='list.userId==myid'>
 					  <text>更多▴</text>
 		</view>
+		<view class="da">
+			<view class="dashang" v-if="list.status==6" @click="show = true">
+			   <text class="bt" >打赏平台</text>
+			 </view>
+		</view>
+		
 		<u-action-sheet
 					:show="show2"
 					@close="show2 = false"
@@ -111,6 +117,12 @@
 					cancelText="取消"
 				>
 				</u-action-sheet>
+		<u-overlay :show="show" >
+				<view class="dashangpic">
+				   <image class="dpic" src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"></image> 
+					<u-button @click="show = false">确认</u-button>
+				</view>
+			</u-overlay>
 	</view>
 </template>
 
@@ -141,6 +153,7 @@
 					clickeble:0,
 					dtable:1,
 					judgestat:'',
+					show:false,
 				
 				
 			};
@@ -544,6 +557,37 @@ page {
 	}
 	.judgetyper{
 		color:red;
+	}
+}
+.da{
+	position: absolute;
+	bottom:130rpx;
+	left:5rpx;
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+	margin-top:40rpx;
+	padding: 0 32rpx;
+	height:75rpx;
+	.dashang{
+		display: flex;
+		align-items: center;
+		margin-left: 32rpx;
+		border-radius: 40rpx;
+		padding: 10rpx 40rpx;
+		color: orange;
+		background-color: #fff;
+		border:1px solid orange;
+	}
+}
+
+.dashangpic{
+	margin:auto;
+	height:850rpx;
+	width:95%;
+	.dpic{
+		height:850rpx;
+		width:100%;
 	}
 }
 </style>g

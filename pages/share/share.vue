@@ -82,6 +82,7 @@
 				  myid:'',
 				  categ:'',
 				  relme:0,
+				  transf:'',
 			};
 		},
 		
@@ -117,7 +118,8 @@
 			
 				getShareApi(params).then(res =>{
 					const { list: listData, total } = res.data
-					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange],judgestat:{'0':'审核中','1':'审核通过','2':'审核不通过'}[v.status]}))
+					const list = listData.map(v => ({ ...v, img: v.gallery ? v.gallery.split(',')[0] : '',extype:{'false':'提供货物','true':'需求货物'}[v.exchange],judgestat:{'0':'审核中','1':'审核通过','2':'审核不通过'}[v.status],
+					transf:{'0':'待发布','1':'已发布','2':'已完结'}[v.transfer]}))
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)

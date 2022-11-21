@@ -39,6 +39,9 @@
 			  <text class="ml-1">{{item.judgestat}}</text>
 			</view>
 			
+			<view v-if="item.transfer==2">
+			  <text>已完结</text>
+			</view>
 			<view v-if="item.status==1">
 			  <text>{{item.updateTime.split(' ')[0]}}</text>
 			</view>
