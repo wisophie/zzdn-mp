@@ -47,6 +47,11 @@
 							<u-button size="small" text="取消订单" @click="cancel(item.id)" />
 						</view>
 					</template>
+					<template v-if="item.orderStatus == 104">
+						<view class="o-list__item__btns__item">
+							<u-button size="small" text="确认订单" @click="confirmOrder(item.id)" />
+						</view>
+					</template>
 					<!-- 201 -->
 					<template v-if="item.orderStatus == 201 || item.orderStatus == 204">
 						<view class="o-list__item__btns__item">
@@ -98,6 +103,11 @@
 							<u-button size="small" text="修改订单" @click="updateOrder(item)" />
 						</view>
 					</template>
+					<template v-if="item.orderStatus == 104">
+						<view class="o-list__item__btns__item">
+							<u-button size="small" text="修改价格" @click="changeOrder(item)" />
+						</view>
+					</template>
 					<template v-if="item.orderStatus == 201">
 						<view class="o-list__item__btns__item"><u-button size="small" text="发货" @click="delivery(item)" /></view>
 					</template>
@@ -136,7 +146,11 @@
 		</u-popup>
 		<u-popup :show="showMoney" mode="bottom" closeOnClickOverlay @close="closeMoney">
 			<view class="comment">
-				<u-input v-model="money" :placeholder="agree ? '请输入退款金额' : '请输入拒绝理由'"></u-input>
+				<u-input
+					v-model="money"
+					:type="agree ? 'number' : 'text'"
+					:placeholder="agree ? '请输入退款金额' : '请输入拒绝理由'"
+				></u-input>
 				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmMoney" /></view>
 			</view>
 		</u-popup>
@@ -167,6 +181,12 @@
 				height="540rpx"
 			></u-image>
 		</u-modal>
+		<u-popup :show="showMoneyC" mode="bottom" closeOnClickOverlay @close="closeMoneyC">
+			<view class="comment">
+				<u-input v-model="moneyC" type="number" placeholder="请输入价格"></u-input>
+				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmMoneyC" /></view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -232,7 +252,9 @@ export default {
 				message: '',
 				actualPrice: ''
 			},
-			showGive: false
+			showGive: false,
+			showMoneyC: false,
+			moneyC: ''
 		}
 	},
 	mounted() {
@@ -382,6 +404,33 @@ export default {
 		},
 		give() {
 			this.showGive = true
+		},
+		confirmOrder(id) {
+			const data = {
+				orderId: id,
+				orderStatus: 201
+			}
+			updateOrderApi(data).then(() => {
+				this.refresh()
+				uni.$u.toast('确认成功')
+			})
+		},
+		changeOrder(item){
+			this.current = item
+			this.showMoneyC = true
+		},
+		confirmMoneyC() {
+			if (this.moneyC.trim() === '') return uni.$u.toast('请输入价格')
+			updateOrderApi({ orderId: this.current.id, actualPrice: this.moneyC }).then(res => {
+				uni.$u.toast('已修改价格')
+				this.moneyC = ''
+				this.refresh()
+				this.showMoneyC = false
+			})
+		},
+		closeMoneyC() {
+			this.moneyC = ''
+			this.showMoneyC = false
 		}
 	}
 }
