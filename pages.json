@@ -266,12 +266,6 @@
 	  "root": "pages_platform/",
 	  "pages": [
 	    {
-	      "path": "myvote",
-	      "style": {
-	        "navigationBarTitleText": "投票列表"
-	      }
-	    },
-	    {
 	      "path": "vote-detail",
 	      "style": {
 	        "navigationBarTitleText": "投票详情"

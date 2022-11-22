@@ -158,7 +158,6 @@
 				      //this.relme=1
 				     this.tye=item.index
 			        this.mescroll.resetUpScroll()
-					this.relme=0
 			  },
 			toPage(url) {
 			  uni.$u.route(url)
