@@ -83,6 +83,7 @@
 				  categ:'',
 				  relme:0,
 				  transf:'',
+				  keyword:''
 			};
 		},
 		
@@ -97,10 +98,13 @@
 			}else{
 				this.relme = uni.getStorageSync('currentIndex')
 				this.refresh()
-				this.relme = 0
+				//this.relme = 0
 				uni.removeStorageSync('currentIndex');
 			}
 			
+		},
+		onHide(){
+			this.array[1].name='我的共享'
 		},
 		methods:{
 			
@@ -108,6 +112,7 @@
 	          console.log(this.relme)
 				const params = {
 				  category:this.categ,
+				  title:this.keyword,
 				  page: '',
 				  limit: '',
 				  order: '',
@@ -123,6 +128,7 @@
 					this.mescroll.endBySize(list.length, total)
 					if (page.num == 1) this.goods = []
 					this.goods = this.goods.concat(list)
+					this.goods[0].myid=uni.getStorageSync('userInfo').id
 					console.log(this.goods)
 				}).catch(() => {
 				  this.mescroll.endErr()
@@ -157,6 +163,10 @@
 							case '我的共享':
 								this.$myVote();
 								break;
+								
+							case '全部共享':
+								this.$allVote();
+								break;
 							default:
 								break;
 						}
@@ -175,12 +185,19 @@
 			},
 			$myVote() {
 				this.relme=1
+				this.array[1].name='全部共享'
 			    this.mescroll.resetUpScroll()
+				//this.relme=0
+			},
+			$allVote() {
 				this.relme=0
+				this.array[1].name='我的共享'
+			    this.mescroll.resetUpScroll()
+				//this.relme=0
 			},
 			doSearch() {
-			  this.goods = []
-			  this.mescroll.resetUpScroll(true)
+			  //this.goods = []
+			  this.mescroll.resetUpScroll()
 			},
 			refresh() {
 			  this.mescroll.resetUpScroll()

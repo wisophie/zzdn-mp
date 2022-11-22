@@ -9,7 +9,7 @@
 		@up="upCallback"
 	>
 		<view class="search-bar">
-		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
+		<u-search placeholder="请输入关键字" v-model="keyword" @custom="doSearch"></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
 		</view>
 		<view class="bottom-back">
@@ -113,9 +113,12 @@
 			}else{
 				this.relme = uni.getStorageSync('currentIndex')
 				this.mescroll.resetUpScroll()
-				this.relme = 0
+				//this.relme = 0
 				uni.removeStorageSync('currentIndex');
 			}
+		},
+		onHide(){
+			this.array[1].name='我的投票'
 		},
 		methods:{
 			upCallback(page){
@@ -124,6 +127,7 @@
 				  page:'',
 				  order: '', 
 				  sort:'',
+				  topic:this.keyword,
 				  relatedMe:this.relme,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
 				  type:this.tye,  //0 订单纠纷 1 意见反馈
 				}
@@ -197,6 +201,9 @@
 							case '我的投票':
 								this.$myVote();
 								break;
+							case '全部投票':
+								this.$allVote();
+								break;
 							default:
 								break;
 						}
@@ -233,12 +240,22 @@
 			},
 			$myVote() {
 				this.relme=1
+				this.array[1].name='全部投票'
 				this.mescroll.resetUpScroll()
+				//this.relme=0
+			},
+			$allVote() {
 				this.relme=0
+				this.array[1].name='我的投票'
+			    this.mescroll.resetUpScroll()
+				//this.relme=0
 			},
 			toPage(url,id) {
 			  uni.$u.route(url, id )
 			},
+			doSearch(){
+				this.mescroll.resetUpScroll()
+			}
 		}
 	}
 </script>

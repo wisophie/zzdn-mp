@@ -39,10 +39,10 @@
 			  <text class="ml-1">{{item.judgestat}}</text>
 			</view>
 			
-			<view v-if="item.transfer==2">
-			  <text>已完结</text>
+		   <view :class="{transfertype:item.transfer==2}" v-if="item.myid==item.userId||item.transfer==2">
+			  <text>{{item.transf}}</text>
 			</view>
-			<view v-if="item.status==1">
+			<view style="font-size:26rpx" v-if="item.status==1">
 			  <text>{{item.updateTime.split(' ')[0]}}</text>
 			</view>
           
@@ -130,4 +130,7 @@ export default {
 .judgecolor{
 	color:red;
 }
+.transfertype{
+		color:#3fcc44;
+	}
 </style>

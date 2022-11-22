@@ -27,7 +27,7 @@
 		 <view class='mt-2 u-tips-color text-s'>
 		 			<text >联系号码：{{list.tel}}</text>
 					<view class="judge">
-						<text class="transfertype" v-if="list.transfer==2">已完结</text>
+						<text class="transfertype" v-if="list.transfer==2">{{list.transf}}</text>
 						<text class="judgetype" :class="{judgetyper:list.status==2}" v-if="list.status!=1">{{list.judgestat}}</text>
 						<text class="judgetyper" v-if="list.status==2">:{{list.rejectReason}}</text>
 					</view>
@@ -147,11 +147,12 @@
 				console.log(this.myid)
 				this.banner=this.list.gallery.split(",")
 				this.extype={'false':'提供货物','true':'需求货物'}[this.list.exchange]
-				const data={
-					id:item.id
-				}
-				let res =await getShare(data)
-				console.log(res.data)
+				// const data={
+				// 	id:item.id
+				// }
+				// let res =await getShare(data)
+				// console.log(res.data)
+				// this.list.transfer=res.data.transfer
 			},
 			handleRoute() {
 				const id =this.list.userId
@@ -291,6 +292,10 @@ page {
 		color: $uni-color-error;
 		background-color: #fff;
 		border:1px solid $uni-color-error;
+		&:active{
+			background-color: #eb8258;
+			
+		}
 	}
 	&__left{
 		display: flex;
@@ -305,6 +310,10 @@ page {
 	.dashang{
 		color: orange;
 		border:1px solid orange;
+		&:active{
+			background-color: #ebc905;
+			
+		}
 	}
 	.u{ display: flex;
 		justify-content: center;

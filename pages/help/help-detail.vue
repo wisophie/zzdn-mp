@@ -100,7 +100,7 @@
 		    <text >{{ordertext}}</text>
 		  </view>
 		</view>
-		<view class='more' @click="show2 = true" v-if='list.userId==myid'>
+		<view class='more' @click="show2=true" v-if='list.userId==myid'>
 					  <text>更多▴</text>
 		</view>
 		<view class="da">
@@ -117,10 +117,10 @@
 					cancelText="取消"
 				>
 				</u-action-sheet>
-		<u-overlay :show="show" >
+		<u-overlay :show="show3" >
 				<view class="dashangpic">
 				   <image class="dpic" src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"></image> 
-					<u-button @click="show = false">确认</u-button>
+					<u-button @click="show3 = false">确认</u-button>
 				</view>
 			</u-overlay>
 	</view>
@@ -140,10 +140,7 @@
 							},
 								
 						],
-				show2: false,
-				fileList3: [{
-							url: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-						}],
+				    show2: false,
 					myid:0,
 					list:[],
 					statustype:',',
@@ -153,7 +150,7 @@
 					clickeble:0,
 					dtable:1,
 					judgestat:'',
-					show:false,
+					show3:false,
 				
 				
 			};
@@ -541,6 +538,7 @@ page {
 	position: absolute;
 	bottom:10%;
 	right:630rpx;
+	z-index:10;
 }
 .tt{
 	position: absolute;
@@ -578,6 +576,10 @@ page {
 		color: orange;
 		background-color: #fff;
 		border:1px solid orange;
+		&:active{
+			background-color: #ebc905;
+			
+		}
 	}
 }
 

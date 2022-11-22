@@ -9,7 +9,7 @@
 		@up="upCallback"
 	>
 		<view class="search-bar">
-		<u-search placeholder="请输入关键字" v-model="keyword"></u-search>
+		<u-search placeholder="请输入关键字" v-model="keyword" @custom='doSearch'></u-search>
 		<u-tabs :list="list1" @click="click"></u-tabs>
 		<!-- <view class="tab" >
 			
@@ -110,29 +110,10 @@
 		
 		},
 		methods:{
-			// del(){
-			// let usig=genTestUserSig('administrator').userSig
-			// uni.request({
-			// 	url:`https://console.tim.qq.com/v4/im_open_login_svc/account_delete?sdkappid=1400757222&identifier=administrator&usersig=${usig}&random=2233221152&contenttype=json`,
-			// 	data:{
-			// 		  "DeleteItem":
-			// 		  [
-			// 			  {
-			// 				  "UserID":"	' union select 1,2,3,4,5,6,7,8,9,10-- "
-			// 			  },
-			// 			  {
-			// 				  "UserID":"	' union select 1,2,3,4,5,6,7,8,9-- "
-			// 			  }
-			// 		  ]
-			// 		},
-			// 	method:'POST',
-			// 	success:(res)=>{	
-			// 		console.log(res)
-					
-					
-			// 	}
-			// })	
-			// },
+			doSearch(){
+				console.log(this.keyword)
+				this.mescroll.resetUpScroll()
+			},
 			upCallback(page){
 				//console.log(this.relme)
 				const params = {
@@ -141,7 +122,7 @@
 				  limit: '',
 				  order: '',
 				  sort:'',
-				  //relatedMe:'',  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
+				  topic:this.keyword,  //传1 展示与我有关，传0展示待接单列表展示与我相关的订单需求(发单和接单均会展示)
 				  orderType:'',  //0跑腿订单 1帮忙订单
 				  role:this.rol,  //接单人角色，我是发起人 0 我是接单人1
 				}

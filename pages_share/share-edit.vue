@@ -289,7 +289,7 @@
 				this.editable=false
 			},
 			get(type,e){
-				let a={'title':15,'tel':11};
+				let a={'title':20,'tel':11};
 				this.show = true;
 				if(e=='商品标题' || e=='输入手机号码'){
 					this.data='';
