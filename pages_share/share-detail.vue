@@ -120,6 +120,7 @@
 				banner: [],
 			actions2: [{
 							name: '已完结',
+							disabled: false
 						},
 							
 					],
@@ -141,8 +142,10 @@
 			        // console.log('close');
 			      },
 			async getShareInfo(item){
-				console.log(item.id)
-				
+				console.log(item)
+				if(item.status!=1){
+					this.actions2[0].disabled=true
+				}
 				this.myid= uni.getStorageSync('userInfo').id
 				console.log(this.myid)
 				this.banner=this.list.gallery.split(",")
@@ -165,7 +168,8 @@
 				uni.$u.route(url,id)
 			},
 			selectClick(index){
-					if(index.name=='已完结'){
+				
+					if(index.name=='已完结'&&this.list.status==1){
 						const data={
 							id:this.list.id
 						}
@@ -185,6 +189,8 @@
 						  }
 						})
 						
+						}else{
+							uni.$u.toast('请等待审核')
 						}
 						
 						

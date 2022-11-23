@@ -98,14 +98,18 @@
 			}else{
 				this.relme = uni.getStorageSync('currentIndex')
 				this.refresh()
-				//this.relme = 0
+				if(this.relme==1){
+					this.array[1].name='全部共享'
+				}else{
+					this.array[1].name='我的共享'
+				}
 				uni.removeStorageSync('currentIndex');
 			}
 			
 		},
-		onHide(){
-			this.array[1].name='我的共享'
-		},
+		// onHide(){
+		// 	this.array[1].name='我的共享'
+		// },
 		methods:{
 			
 			upCallback(page) {

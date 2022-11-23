@@ -429,6 +429,7 @@
 				
 			},
 			canceldingdan(){
+				uni.setStorageSync("currentIndex", 1)
 				uni.switchTab({
 					url:'/pages/share/share',
 				})
