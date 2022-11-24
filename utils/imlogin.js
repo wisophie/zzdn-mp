@@ -85,31 +85,31 @@
 			})
 		})
 		
-		// 登录原生插件
-		// #ifdef APP-PLUS
-		if(typeof(uni.$TUICalling) == 'undefined') {
-			uni.showToast({
-				title: '如果需要音视频功能，请集成插件使用真机运行并且自定义基座调试哦～',
-				icon: 'none',
-				duration: 3000
-			});
-			logger.error('请使用真机运行并且自定义基座调试，否则影响音视频功能～ 插件地址：https://ext.dcloud.net.cn/plugin?id=7097 , 调试地址：https://nativesupport.dcloud.net.cn/NativePlugin/use/use');
-		} else {
-			uni.$TUICalling.login(
-				{
-					sdkAppID: SDKAppID,
-					userID: userID,
-					userSig: userSig
-				},
-				res => {
-					console.log(JSON.stringify(res.msg));
-					uni.showToast({
-						title: 'login',
-						icon: 'none'
-					});
-				}
-			);
-		}
+		// // 登录原生插件
+		// // #ifdef APP-PLUS
+		// if(typeof(uni.$TUICalling) == 'undefined') {
+		// 	uni.showToast({
+		// 		title: '如果需要音视频功能，请集成插件使用真机运行并且自定义基座调试哦～',
+		// 		icon: 'none',
+		// 		duration: 3000
+		// 	});
+		// 	logger.error('请使用真机运行并且自定义基座调试，否则影响音视频功能～ 插件地址：https://ext.dcloud.net.cn/plugin?id=7097 , 调试地址：https://nativesupport.dcloud.net.cn/NativePlugin/use/use');
+		// } else {
+		// 	uni.$TUICalling.login(
+		// 		{
+		// 			sdkAppID: SDKAppID,
+		// 			userID: userID,
+		// 			userSig: userSig
+		// 		},
+		// 		res => {
+		// 			console.log(JSON.stringify(res.msg));
+		// 			uni.showToast({
+		// 				title: 'login',
+		// 				icon: 'none'
+		// 			});
+		// 		}
+		// 	);
+		// }
 		
 		// #endif
 		if (this.path && this.path !== 'undefined') {

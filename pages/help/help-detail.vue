@@ -90,8 +90,9 @@
 		</view>
 		<view class="b-footer shadow-top">
 		  <view class="b-footer__left">
-			  <view @tap="handleRoute">
-				  <u-icon name="chat" class="u" color="#303133" size="28" />
+			  <view @tap="handleRoute()">
+				  <u-icon name="chat" class="u" color="#303133" size="28" v-if="app==true"/>
+				  <image class="u1" src="./contact.png" v-if="app==false"></image> 
 				  <text>联系他</text>
 			  </view>
 		    
@@ -151,6 +152,7 @@
 					dtable:1,
 					judgestat:'',
 					show3:false,
+					app:true,
 				
 				
 			};
@@ -158,6 +160,7 @@
 		onLoad(id ){
 			this.judgestat=id.judgestat
 			this.gethelpInfo(id)
+			this.appplus()
 		},
 		computed:{
 			cid(){
@@ -172,6 +175,11 @@
 			}
 		},
 		methods:{
+			// #ifdef  APP-PLUS
+			appplus(){
+				this.app=false
+			},
+			// #endif
 			async gethelpInfo(item){
 				console.log(item)
 				const params={
@@ -488,7 +496,15 @@ page {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		
+		width: 28rpx;
+		height:28rpx;
+	}
+	.u1{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 70rpx;
+		height:60rpx;
 	}
 	
 }

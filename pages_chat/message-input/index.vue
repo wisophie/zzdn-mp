@@ -7,7 +7,10 @@
 				</view>
 			</view>
 			<view class="TUI-message-input">
-				<image class="TUI-icon" @tap="switchAudio" :src="isAudio ? '../static/assets/keyboard.svg' : '../static/assets/audio.svg'"></image>
+				<view class="TUI-message-input-functions" hover-class="none">
+				<image class="TUI-icon" @tap="switchAudio" :src="isAudio ? '../static/assets/keyboard.svg' : '../static/assets/audio.svg' " v-if="app==true"></image>
+				<image class="TUI-icon"  @tap="switchAudio" src="../static/assets/more.svg" v-if="app==false"></image>
+				</view>
 				<view v-if="!isAudio" class="TUI-message-input-main">
 					<input
 						class="TUI-message-input-area"
@@ -59,22 +62,22 @@
 					<image class="TUI-Extension-icon" src="../static/assets/send-video.svg"></image>
 					<view class="TUI-Extension-slot-name">发送视频</view>
 				</view>
-				<view class="TUI-Extension-slot" @tap="handleCalling(1)">
+				<!-- <view class="TUI-Extension-slot" @tap="handleCalling(1)">
 					<image class="TUI-Extension-icon" src="../static/assets/audio-calling.svg"></image>
 					<view class="TUI-Extension-slot-name">语音通话</view>
 				</view>
 				<view class="TUI-Extension-slot" @tap="handleCalling(2)">
 					<image class="TUI-Extension-icon" src="../static/assets/video-calling.svg"></image>
 					<view class="TUI-Extension-slot-name">视频通话</view>
-				</view>
+				</view> -->
 				<view class="TUI-Extension-slot" @tap="handleServiceEvaluation">
 					<image class="TUI-Extension-icon" src="../static/assets/service-assess.svg"></image>
 					<view class="TUI-Extension-slot-name">服务评价</view>
 				</view>
-				<view class="TUI-Extension-slot" @tap="handleSendOrder">
+				<!-- <view class="TUI-Extension-slot" @tap="handleSendOrder">
 					<image class="TUI-Extension-icon" src="../static/assets/send-order.svg"></image>
 					<view class="TUI-Extension-slot-name">发送订单</view>
-				</view>
+				</view> -->
 			</view>
 			<TUI-Common-Words class="tui-cards" :display="displayCommonWords" @sendMessage="$handleSendTextMessage" @close="$handleCloseCards"></TUI-Common-Words>
 			<TUI-Order-List class="tui-cards" :display="displayOrderList" @sendCustomMessage="$handleSendCustomMessage" @close="$handleCloseCards"></TUI-Order-List>
@@ -126,17 +129,14 @@ export default {
 					key: '0'
 				},
 				{
-					name: '发送订单',
-					key: '1'
-				},
-				{
 					name: '服务评价',
 					key: '2'
 				}
 			],
 			displayServiceEvaluation: false,
 			displayCommonWords: false,
-			displayOrderList: false
+			displayOrderList: false,
+			app:true,
 		};
 	},
 
@@ -166,6 +166,7 @@ export default {
 	},
 
 	beforeMount() {
+		this.appplus()
 		// 加载声音录制管理器
 		this.recorderManager = uni.getRecorderManager();
 		this.recorderManager.onStop(res => {
@@ -208,8 +209,16 @@ export default {
 			});
 		});
 	},
+	// onLoad(){
+	// 	this.appplus()
+	// },
 
 	methods: {
+		// #ifdef  APP-PLUS
+		appplus(){
+			this.app=false
+		},
+		// #endif
 		switchAudio() {
 			this.setData({
 				isAudio: !this.isAudio,
@@ -396,11 +405,11 @@ export default {
 			}
 		},
 
-		handleSendOrder() {
-			this.setData({
-				displayOrderList: true
-			});
-		},
+		// handleSendOrder() {
+		// 	this.setData({
+		// 		displayOrderList: true
+		// 	});
+		// },
 
 		appendMessage(e) {
 			this.setData({
@@ -425,45 +434,45 @@ export default {
 					return this.conversation.conversationID;
 			}
 		},
-		handleCalling(value) {
-			// todo 目前支持单聊
-			if (this.conversation.type === 'GROUP') {
-				uni.showToast({
-					title: '群聊暂不支持',
-					icon: 'none'
-				});
-				return;
-			}
-			const { userID } = this.conversation.userProfile;
+		// handleCalling(value) {
+		// 	// todo 目前支持单聊
+		// 	if (this.conversation.type === 'GROUP') {
+		// 		uni.showToast({
+		// 			title: '群聊暂不支持',
+		// 			icon: 'none'
+		// 		});
+		// 		return;
+		// 	}
+		// 	const { userID } = this.conversation.userProfile;
 
-			// #ifdef APP-PLUS
-			if(typeof(uni.$TUICalling) === 'undefined') {
-					logger.error('请使用真机运行并且自定义基座调试，可能影响音视频功能～ 插件地址：https://ext.dcloud.net.cn/plugin?id=7097 , 调试地址：https://nativesupport.dcloud.net.cn/NativePlugin/use/use');
-					uni.showToast({
-						title: '请使用真机运行并且自定义基座调试，可能影响音视频功能～ ',
-						icon: 'none',
-						duration: 3000
-					});
-			} else {
-				uni.$TUICalling.call(
-					{
-						userID: userID,
-						type: value
-					},
-					res => {
-						console.log(JSON.stringify(res));
-					}
-				);
-			}
-			// #endif
-			// #ifdef MP-WEIXIN
-			uni.showToast({
-				title: '微信小程序暂不支持',
-				icon: 'none'
-			});
-			// uni.$wxTUICalling.call({userID, type: value})
-			// #endif
-		},
+		// 	// #ifdef APP-PLUS
+		// 	if(typeof(uni.$TUICalling) === 'undefined') {
+		// 			logger.error('请使用真机运行并且自定义基座调试，可能影响音视频功能～ 插件地址：https://ext.dcloud.net.cn/plugin?id=7097 , 调试地址：https://nativesupport.dcloud.net.cn/NativePlugin/use/use');
+		// 			uni.showToast({
+		// 				title: '请使用真机运行并且自定义基座调试，可能影响音视频功能～ ',
+		// 				icon: 'none',
+		// 				duration: 3000
+		// 			});
+		// 	} else {
+		// 		uni.$TUICalling.call(
+		// 			{
+		// 				userID: userID,
+		// 				type: value
+		// 			},
+		// 			res => {
+		// 				console.log(JSON.stringify(res));
+		// 			}
+		// 		);
+		// 	}
+		// 	// #endif
+		// 	// #ifdef MP-WEIXIN
+		// 	uni.showToast({
+		// 		title: '微信小程序暂不支持',
+		// 		icon: 'none'
+		// 	});
+		// 	// uni.$wxTUICalling.call({userID, type: value})
+		// 	// #endif
+		// },
 		sendTextMessage(msg, flag) {
 			const to = this.getToAccount();
 			const text = flag ? msg : this.inputText;

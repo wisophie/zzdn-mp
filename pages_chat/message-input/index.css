@@ -8,6 +8,7 @@
 	padding-bottom: 16rpx;
 	background-color: #F1F1F1;
 	width: 100vw;
+	align-items: center;
 }
 
 .TUI-commom-function {
@@ -30,6 +31,7 @@
 	margin-left: 16rpx;
 	border-radius: 24rpx;
 	background-color: #00C8DC;
+	
 }
 
 .TUI-commom-function-item:first-child {
@@ -60,6 +62,7 @@
 	width: 56rpx;
 	height: 56rpx;
 	margin: 0 16rpx;
+	z-index: 10;
 }
 
 .TUI-Extensions {

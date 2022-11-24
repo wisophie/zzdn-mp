@@ -81,7 +81,8 @@
 		   </view>
 		  <view class="b-footer__left" v-if="list.userId!=myid">
 		  			  <view @tap="handleRoute(list.userId)" class="u">
-		  				  <u-icon name="chat"  color="#303133" size="28" />
+		  				  <u-icon name="chat" class="u" color="#303133" size="28" v-if="app==true"/>
+		  				  <image class="u1" src="./contact.png" v-if="app==false"></image> 
 		  				  <text>联系他</text>
 		  			  </view>
 		    
@@ -126,14 +127,21 @@
 					],
 			show2: false,
 			myid:'',
-			show: false
+			show: false,
+			app:true,
 			};
 		},
 		onLoad(id){
 			this.list = id
 			this.getShareInfo(id)
+			this.appplus()
 		},
 		methods:{
+			// #ifdef  APP-PLUS
+			appplus(){
+				this.app=false
+			},
+			// #endif
 			open() {
 			        // console.log('open');
 			      },
@@ -321,10 +329,19 @@ page {
 			
 		}
 	}
-	.u{ display: flex;
+	.u{
+		display: flex;
 		justify-content: center;
 		align-items: center;
-		
+		width: 28rpx;
+		height:28rpx;
+	}
+	.u1{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 70rpx;
+		height:60rpx;
 	}
 
 }
