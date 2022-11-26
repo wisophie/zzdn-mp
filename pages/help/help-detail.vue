@@ -160,7 +160,9 @@
 		onLoad(id ){
 			this.judgestat=id.judgestat
 			this.gethelpInfo(id)
+			// #ifdef  APP-PLUS
 			this.appplus()
+			// #endif
 		},
 		computed:{
 			cid(){

@@ -94,7 +94,7 @@
 						<u--input
 						    placeholder="请输入规格"
 							border="bottom"
-							maxlength='4'
+							maxlength='20'
 							color='#a8a8a8'
 						    v-model="list.specification"
 						  ></u--input>

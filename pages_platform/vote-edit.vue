@@ -50,7 +50,7 @@
 					<view class="lm">
 						<view class="title">投票类型</view>
 						<view class="cont">
-							<picker @change="bindPickerChange" :value="index1" :range="array" v-if="id==uid">
+							<picker @change="bindPickerChange" :value="index1" :range="array" v-if="id==uid" :disabled='list.type!=undefined'>
 								<view class="uni-input">{{array[index1]}}</view>
 							</picker>
 							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
@@ -238,7 +238,7 @@
 						
 					})
 					this.togetpics(item)
-					console.log(parseInt(this.list.orderSn))
+					//console.log(this.form.four)
 				}else{
 					this.list.id=item.id
 				}
@@ -252,6 +252,7 @@
 				this.banner.map(e=>{this.list.pics.push(e.url)})
 				if(this.index1==1){
 					this.optionsubmit=[{
+						
 						content:this.form.one,
 					},{
 						content:this.form.two,
@@ -299,12 +300,13 @@
 				this.banner.map(e=>{this.list.pics.push(e.url)})
 				if(this.index1==1){
 					this.optionsubmit=[{
+						id:this.list.options[0].id,
 						content:this.form.one,
-					},{
+					},{ id:this.list.options[1].id,
 						content:this.form.two,
-					},{
+					},{ id:this.list.options[2].id,
 						content:this.form.three,
-					},{
+					},{ id:this.list.options[3].id,
 						content:this.form.four,
 					}
 					]

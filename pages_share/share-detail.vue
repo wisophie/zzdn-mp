@@ -134,7 +134,10 @@
 		onLoad(id){
 			this.list = id
 			this.getShareInfo(id)
+			// #ifdef  APP-PLUS
 			this.appplus()
+			// #endif
+			
 		},
 		methods:{
 			// #ifdef  APP-PLUS

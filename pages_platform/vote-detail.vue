@@ -52,25 +52,25 @@
 		  </view>
 		  <view class="votelist" v-if='list.type==1'>
 			  <u-radio-group v-model="value2" placement="column" iconPlacement="right" :borderBottom="true">
-			  			  <view class='select' v-if="formlength>=1">
+			  			  <view class='select' v-if="form[0].content!=''">
 							  <text class="a">支持</text>
 			  				  <u-radio activeColor="green" :label="form[0].content" name='0'></u-radio>
-			  				  <u-line-progress :percentage="arate" :showText="true" ></u-line-progress>
+			  				  <u-line-progress :percentage="arate" :showText="false" ></u-line-progress>
 			  			  </view>
-			  	<view class='select' v-if="formlength>=2">
+			  	<view class='select' v-if="form[1].content!=''">
 					<text class="a">支持</text>
 					  <u-radio activeColor="green" :label="form[1].content" name='1'></u-radio>
-					  <u-line-progress :percentage="brate" :showText="true" ></u-line-progress>
+					  <u-line-progress :percentage="brate" :showText="false" ></u-line-progress>
 			  	</view>
-			  			<view class='select' v-if="formlength>=3">
+			  			<view class='select' v-if="form[2].content!=''">
 							<text class="a">支持</text>
 						  <u-radio activeColor="green" :label="form[2].content" name='2'></u-radio>
-						  <u-line-progress :percentage="crate" :showText="true" ></u-line-progress>
+						  <u-line-progress :percentage="crate" :showText="false" ></u-line-progress>
 			  			</view>
-			  			<view class='select' v-if="formlength>=4">
+			  			<view class='select' v-if="form[3].content!=''">
 							<text class="a">支持</text>
 							 <u-radio activeColor="green" :label="form[3].content" name='3'></u-radio>
-							 <u-line-progress :percentage="drate" :showText="true" ></u-line-progress>
+							 <u-line-progress :percentage="drate" :showText="false" ></u-line-progress>
 			  			</view>
 			  			
 			  
@@ -80,13 +80,17 @@
 			  <u-radio-group v-model="value" @change="groupChange" placement="column" iconPlacement="right" :borderBottom="true">
 				  <view class='select'>
 						<text class="a">支持</text>
-						<u-radio activeColor="green" :label="support" name="1"></u-radio>
-					  <u-line-progress :percentage="suprate" :showText="true" height="12"></u-line-progress>
+						<u-radio activeColor="green" label="投票项" name="1"></u-radio>
+					  <u-line-progress :percentage="suprate" :showText="false" height="12">
+						  <text class="u-percentage-slot1">票数：{{support}}</text>
+						  </u-line-progress>
 				  </view>
 				<view class='select'>
 					  <text class="b">反对</text>
-					  <u-radio activeColor="red" :label="obj" name="0"></u-radio>
-					  <u-line-progress :percentage="objrate" :showText="true" activeColor="#ff0000" height="12"></u-line-progress>
+					  <u-radio activeColor="red" label="投票项" name="0"></u-radio>
+					  <u-line-progress :percentage="objrate" :showText="false" activeColor="#ff0000" height="12">
+						  <text class="u-percentage-slot2">票数：{{obj}}</text>
+					  </u-line-progress>
 				</view>
 			  </u-radio-group>
 		  </view>
@@ -227,6 +231,7 @@
 				
 			},
 			togetVoteDetail(item){
+				console.log(item)
 				const params={
 					id:item.id
 				}
@@ -277,6 +282,8 @@
 						}else if(this.value2==3){ 
 							this.form[3].count++
 						}
+					}else{
+						uni.$u.toast('请勿重复投票！')
 					}
 					
 				})
@@ -408,7 +415,22 @@ page {
 	margin-right:10rpx;
 	margin-top:100rpx;
 }
-
+.u-percentage-slot1 {
+	padding: 1px 5px;
+	background-color: #28bf1d;
+	color: #fff;
+	border-radius: 100px;
+	font-size: 10px;
+	margin-right: -5px;
+}
+.u-percentage-slot2 {
+	padding: 1px 5px;
+	background-color: red;
+	color: #fff;
+	border-radius: 100px;
+	font-size: 10px;
+	margin-right: -5px;
+}
 .b-footer {
 	position: absolute;
 	bottom:60rpx;
