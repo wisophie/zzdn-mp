@@ -5,9 +5,48 @@
         基本信息
         <text class="form-section__status">{{ progressText }}</text>
       </view>
-      <u-form-item label="真实姓名" prop="realName" borderBottom>
-        <u-input v-model="form.realName" border="none" placeholder="请输入"></u-input>
-      </u-form-item>
+			<u-form-item label="公司名称" prop="companyName" borderBottom>
+			  <u-input v-model="form.companyName" border="none" placeholder="请输入"></u-input>
+			</u-form-item>
+			<u-form-item label="营业执照" prop="license" borderBottom>
+			  <u-upload
+			    :fileList="form.license"
+			    :maxCount="1"
+			    width="160"
+			    height="100"
+			    @afterRead="afterRead($event, 'license')"
+			    @delete="deletePic($event, 'license')"
+			  ></u-upload>
+			</u-form-item>
+			<u-form-item label="店铺名称" prop="netshopName" borderBottom>
+			  <u-input v-model="form.netshopName" border="none" placeholder="请输入"></u-input>
+			</u-form-item>
+			<u-form-item label="公司地址" prop="address" borderBottom>
+			  <u-input v-model="form.address" border="none" placeholder="请输入"></u-input>
+			</u-form-item>
+			<u-form-item label="办公环境/厂房照片" prop="workshopPhoto" borderBottom>
+			  <u-upload
+			    :fileList="form.workshopPhoto"
+			    width="160"
+			    height="100"
+			    multiple
+			    :maxCount="8"
+			    @delete="deletePic($event, 'workshopPhoto')"
+			    @afterRead="afterRead($event, 'workshopPhoto')"
+			  ></u-upload>
+			</u-form-item>
+			<u-form-item label="真实姓名" prop="realName" borderBottom>
+			  <u-input v-model="form.realName" border="none" placeholder="请输入"></u-input>
+			</u-form-item>
+			<u-form-item label="联系方式" prop="tel" borderBottom>
+			  <u-input
+			    v-model="form.tel"
+			    border="none"
+			    type="number"
+			    maxlength="11"
+			    placeholder="请输入"
+			  ></u-input>
+			</u-form-item>
       <u-form-item label="身份证号" prop="idCardNumber" borderBottom>
         <u-input
           v-model="form.idCardNumber"
@@ -15,22 +54,6 @@
           border="none"
           placeholder="请输入"
         ></u-input>
-      </u-form-item>
-      <u-form-item label="公司名称" prop="companyName" borderBottom>
-        <u-input v-model="form.companyName" border="none" placeholder="请输入"></u-input>
-      </u-form-item>
-      <u-form-item label="公司地址" prop="address" borderBottom>
-        <u-input v-model="form.address" border="none" placeholder="请输入"></u-input>
-      </u-form-item>
-      <u-form-item label="营业执照" prop="license" borderBottom>
-        <u-upload
-          :fileList="form.license"
-          :maxCount="1"
-          width="160"
-          height="100"
-          @afterRead="afterRead($event, 'license')"
-          @delete="deletePic($event, 'license')"
-        ></u-upload>
       </u-form-item>
       <u-form-item label="营业执照注册号" prop="licenseNo" borderBottom>
         <u-input v-model="form.licenseNo" border="none" placeholder="请输入"></u-input>
@@ -40,20 +63,6 @@
       </u-form-item>
       <u-form-item label="证件的经营者/法定代表人姓名" prop="legalPerson" borderBottom>
         <u-input v-model="form.legalPerson" border="none" placeholder="请输入"></u-input>
-      </u-form-item>
-      <u-form-item label="办公环境/厂房照片(非必填)" prop="workshopPhoto" borderBottom>
-        <u-upload
-          :fileList="form.workshopPhoto"
-          width="160"
-          height="100"
-          multiple
-          :maxCount="8"
-          @delete="deletePic($event, 'workshopPhoto')"
-          @afterRead="afterRead($event, 'workshopPhoto')"
-        ></u-upload>
-      </u-form-item>
-      <u-form-item label="店铺名称" prop="netshopName" borderBottom>
-        <u-input v-model="form.netshopName" border="none" placeholder="请输入"></u-input>
       </u-form-item>
       <u-form-item label="网店后台界面(非必填)" prop="netshopPhoto" borderBottom>
         <u-upload
@@ -68,15 +77,6 @@
       </u-form-item>
       <u-form-item label="机构代码" prop="organizationCode" borderBottom>
         <u-input v-model="form.organizationCode" border="none" placeholder="请输入"></u-input>
-      </u-form-item>
-      <u-form-item label="联系方式" prop="tel" borderBottom>
-        <u-input
-          v-model="form.tel"
-          border="none"
-          type="number"
-          maxlength="11"
-          placeholder="请输入"
-        ></u-input>
       </u-form-item>
       <u-form-item label="公司邮箱" prop="mail" borderBottom>
         <u-input v-model="form.mail" border="none" placeholder="请输入"></u-input>

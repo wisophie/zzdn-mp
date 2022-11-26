@@ -156,8 +156,8 @@
 		</u-popup>
 		<u-popup :show="showShip" mode="bottom" closeOnClickOverlay @close="closeShip">
 			<view class="comment">
-				<view class="py-1"><u-input v-model="shipSn" placeholder="若无，请填写无"></u-input></view>
-				<view class="py-1"><u-input v-model="shipChannel" placeholder="若无，请填写自提/送货其他方式"></u-input></view>
+				<view class="py-1"><u-input v-model="shipSn" placeholder="单号若无，请填写无"></u-input></view>
+				<view class="py-1"><u-input v-model="shipChannel" placeholder="快递公司若无，请填写发货方式:自提/送货上门"></u-input></view>
 				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmShip" /></view>
 			</view>
 		</u-popup>
@@ -183,7 +183,10 @@
 		</u-modal>
 		<u-popup :show="showMoneyC" mode="bottom" closeOnClickOverlay @close="closeMoneyC">
 			<view class="comment">
-				<u-input v-model="moneyC" type="number" placeholder="请输入价格"></u-input>
+				<view class="py-1"><u-input v-model="moneyC" type="number" placeholder="请输入价格"></u-input></view>
+				<view class="py-1">
+					<u-textarea v-model="messageC" placeholder="请填写该订单具体包含的每种产品的价格明细" />
+				</view>
 				<view class="mt-4"><u-button type="primary" text="确认" @click="confirmMoneyC" /></view>
 			</view>
 		</u-popup>
@@ -254,7 +257,8 @@ export default {
 			},
 			showGive: false,
 			showMoneyC: false,
-			moneyC: ''
+			moneyC: '',
+			messageC: ''
 		}
 	},
 	mounted() {
@@ -415,21 +419,28 @@ export default {
 				uni.$u.toast('确认成功')
 			})
 		},
-		changeOrder(item){
+		changeOrder(item) {
 			this.current = item
 			this.showMoneyC = true
 		},
 		confirmMoneyC() {
 			if (this.moneyC.trim() === '') return uni.$u.toast('请输入价格')
-			updateOrderApi({ orderId: this.current.id, actualPrice: this.moneyC }).then(res => {
+			const data = {
+				orderId: this.current.id,
+				actualPrice: this.moneyC,
+				message: this.messageC
+			}
+			updateOrderApi(data).then(res => {
 				uni.$u.toast('已修改价格')
 				this.moneyC = ''
+				this.messageC = ''
 				this.refresh()
 				this.showMoneyC = false
 			})
 		},
 		closeMoneyC() {
 			this.moneyC = ''
+			this.messageC = ''
 			this.showMoneyC = false
 		}
 	}
