@@ -416,7 +416,7 @@ page {
 	margin-top:100rpx;
 }
 .u-percentage-slot1 {
-	padding: 1px 5px;
+	padding: 1px 10px;
 	background-color: #28bf1d;
 	color: #fff;
 	border-radius: 100px;
@@ -424,7 +424,7 @@ page {
 	margin-right: -5px;
 }
 .u-percentage-slot2 {
-	padding: 1px 5px;
+	padding: 1px 10px;
 	background-color: red;
 	color: #fff;
 	border-radius: 100px;
