@@ -78,9 +78,17 @@
             <text class="os-order__row__label">创建时间</text>
             <text class="os-order__row__value">{{ orderInfo.addTime }}</text>
           </view>
-          <view class="os-order__row">
-            <text class="os-order__row__label">付款时间</text>
-            <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
+					<view class="os-order__row">
+					  <text class="os-order__row__label">付款时间</text>
+					  <text class="os-order__row__value">{{ orderInfo.payTime }}</text>
+					</view>
+					<view class="os-order__row" v-if="orderInfo.expCode">
+					  <text class="os-order__row__label">物流公司</text>
+					  <text class="os-order__row__value">{{ orderInfo.expCode }}</text>
+					</view>
+          <view class="os-order__row" v-if="orderInfo.expNo">
+            <text class="os-order__row__label">物流单号</text>
+            <text class="os-order__row__value">{{ orderInfo.expNo }}</text>
           </view>
           <view class="os-order__row" v-if="orderInfo.confirmTime">
             <text class="os-order__row__label">成交时间</text>

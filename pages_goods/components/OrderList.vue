@@ -425,6 +425,7 @@ export default {
 		},
 		confirmMoneyC() {
 			if (this.moneyC.trim() === '') return uni.$u.toast('请输入价格')
+			if (this.messageC.trim() === '') return uni.$u.toast('请输入价格明细')
 			const data = {
 				orderId: this.current.id,
 				actualPrice: this.moneyC,
