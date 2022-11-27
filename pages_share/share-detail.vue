@@ -23,8 +23,13 @@
 		  <view class="text-md text-bold">{{list.title}}</view>
 		 <view class='mt-2 u-tips-color text-s'>
 			  <text >发布人：{{list.username}}</text>
+			  <view class="judge" v-if="list.category!=='滞销'">
+			  	<text class="transfertype" v-if="list.transfer==2">{{list.transf}}</text>
+			  	<text class="judgetype" :class="{judgetyper:list.status==2}" v-if="list.status!=1">{{list.judgestat}}</text>
+			  	<text class="judgetyper" v-if="list.status==2">:{{list.rejectReason}}</text>
+			  </view>
 		  </view>
-		 <view class='mt-2 u-tips-color text-s'>
+		 <view class='mt-2 u-tips-color text-s' v-if="list.category=='滞销'">
 		 			<text >联系号码：{{list.tel}}</text>
 					<view class="judge">
 						<text class="transfertype" v-if="list.transfer==2">{{list.transf}}</text>
@@ -36,8 +41,8 @@
 		 
 		</view>
 		<view class="g-section os-price u-border-top u-border-bottom">
-			<view class="os-price__row">
-				<text class="os-price__row__label">交易类型</text>
+			<view class="os-price__row" v-if="list.category=='滞销'">
+				<text class="os-price__row__label" >交易类型</text>
 				<!-- <text class="os-price__row__value">{{extype}}</text> -->
 				<u--text type="warning" :text="extype" />
 			</view>
@@ -45,11 +50,11 @@
 				<text class="os-price__row__label">商品类目</text>
 				<text class="os-price__row__value">{{list.category}}</text>
 			</view>
-			<view class="os-price__row">
+			<view class="os-price__row" v-if="list.category=='滞销'">
 				<text class="os-price__row__label">商品规格</text>
 				<text class="os-price__row__value">{{list.specification}}</text>
 			</view>
-			<view class="os-price__row">
+			<view class="os-price__row" v-if="list.category=='滞销'">
 				<text class="os-price__row__label">所在地点</text>
 				<text class="os-price__row__value">{{list.province}}/{{list.city}}/{{list.country}}</text>
 			</view>
@@ -60,7 +65,7 @@
 			
 		</view>
 		<view class="g-section">
-		  <view class="pb-4 text-md text-bold">商品详情</view>
+		  <view class="pb-4 text-md text-bold">详情</view>
 		  <view class='detail'>
 		    {{list.detail}}
 		  </view>

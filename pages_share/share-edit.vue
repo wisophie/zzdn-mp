@@ -3,6 +3,21 @@
 		
 		<view class="main">
 			<view class="column heads">
+					<view class="bannerline" v-if="list.category==undefined">
+						<view class="bannerlinem" >
+							<view class="meal" v-for="(item,index) in array" :key="index" @click="clickmeal(index)" :class="{active1:index1==index}"><a class="t">{{item}}</a></view>
+						</view>
+					</view>
+					<view class="row" v-if="list.category!==undefined">
+						<view class="title l">类目</view>
+						<view class="cont leimu l">
+							{{list.category}}
+						</view>
+					</view>
+					<!-- <view class="more" v-if="id==uid">
+						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
+					</view> -->
+			
 				<view class="row head">
 					<view class="title">图片</view>
 					<view class="user-head" v-if="id==uid">
@@ -27,7 +42,7 @@
 						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
 					</view>
 				</view>
-				<view class="row">
+				<view class="row" v-if="index1==0">
 					<view class="title">选择地点</view>
 					<view class="fff">
 						<view class="form-item">
@@ -42,7 +57,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="row">
+				<view class="row" v-if="index1==0">
 					<view class="lm">
 						<view class="title">交易类型</view>
 						<view class="cont">
@@ -58,7 +73,7 @@
 				</view>
 				
 			</view>
-			<view class="column heads">
+			<view class="column heads"  v-if="index1==0">
 				<!-- <view class="row" @tap="modify('name','昵称',user.name,false)">
 					<view class="title">明细</view>
 					<view class="cont">
@@ -69,20 +84,9 @@
 					</view>
 				</view> -->
 				<view class="row cc">
-					<view class="lm">
-						<view class="title">类目</view>
-						<view class="cont">
-							<picker @change="bindPickerChange" :value="index1" :range="array" v-if="id==uid">
-								<view class="uni-input">{{array[index1]}}</view>
-							</picker>
-							<view class="uni-input" v-if="id!=uid">{{array[index]}}</view>
-						</view>
-						<!-- <view class="more" v-if="id==uid">
-							<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
-						</view> -->
-					</view>
 					
-					<view class="lm">
+					
+					<view class="lm" >
 						<view class="title">规格</view>
 						<!-- <view class="cont">
 							<picker @change="bindPickerChange2" :value="index2" :range="specification" v-if="id==uid">
@@ -105,7 +109,7 @@
 				</view>
 				
 				
-				<view class="row" @tap="get('tel',list.tel)">
+				<view class="row" v-if="index1==0" @tap="get('tel',list.tel)">
 					<view class="title">联系方式</view>
 					<view class="cont"   >
 						{{list.tel}}
@@ -117,7 +121,7 @@
 				
 			</view>
 		<view class="os-remark">
-		  <view class="os-remark__title">商品详情</view>
+		  <view class="os-remark__title">详情</view>
 		  <view class="os-remark__content">
 		    <u--textarea
 		      v-model="list.detail"
@@ -205,6 +209,9 @@
 		  this.getRegionList()
 		},
 		methods:{
+			clickmeal(e){
+				this.index1=e;			
+			},
 			getlist(id){
 				console.log(id)
 				const banners=id.gallery.split(",")
@@ -213,6 +220,9 @@
 				url: banners[i]})))
 				if(id.city!==undefined){
 					this.list = id
+					if(this.list.category=='共享'){
+						this.index1=1
+					}
 				}else{
 					
 				}
@@ -361,9 +371,9 @@
 				this.banner.map(e=>{this.list.gallery.push(e.url)})
 				if(this.list.gallery.length==0){
 					uni.$u.toast('请上传至少一张图片！')
-				}else if(this.formData.province==''){
+				}else if(this.list.category==0&&this.formData.province==''){
 					uni.$u.toast('请选择发布地点！')
-				}else if(this.list.tel=='输入手机号码'){
+				}else if(this.list.category==0&&this.list.tel=='输入手机号码'){
 					uni.$u.toast('请输入正确的手机号码！')
 				}else if(this.list.detail==''){
 					uni.$u.toast('请输入商品详情！')
@@ -371,14 +381,14 @@
 					const data = {
 					  id: this.list.id,
 					  exchange: this.extype,   //0提供货物1需求货物
-					  category: this.array[this.index1],
+					  category: this.list.category,
 					  title: this.list.title,
 					  gallery: this.list.gallery.toString(),
 					  specification: this.list.specification,
 					  detail: this.list.detail,
 					  tel: this.list.tel,
-					  province:this.formData.province,
-					  city:this.formData.city,
+					  province:this.list.province,
+					  city:this.list.city,
 					  country:this.formData.country,
 					}
 					editShare(data).then(res=>{
@@ -397,9 +407,9 @@
 				console.log(this.list.tel)
 				if(this.list.gallery.length==0){
 					uni.$u.toast('请上传至少一张图片！')
-				}else if(this.formData.province==''){
+				}else if(this.list.category==0&&this.formData.province==''){
 					uni.$u.toast('请选择发布地点！')
-				}else if(this.list.tel=='输入手机号码'){
+				}else if(this.list.category==0&&this.list.tel=='输入手机号码'){
 					uni.$u.toast('请输入正确的手机号码！')
 				}else if(this.list.detail==''){
 					uni.$u.toast('请输入商品详情！')
@@ -442,11 +452,12 @@
 
 <style lang="scss" scoped>
 .main {
-		padding-top: 60rpx;
+		padding-top: 5rpx;
 		padding-bottom: 320rpx;
 		display: flex;
 		flex-direction: column;
         background-color: #fff;
+		height:100vh;
 		.column {
 			display: flex;
 			flex-direction: column;
@@ -468,7 +479,7 @@
 					}
 				}
 			}
-
+           
 			.title {
 				flex: none;
 				// flex: auto;
@@ -478,6 +489,7 @@
 				color: #333;
 				line-height: 80rpx;
 			}
+			
 
 			.user-head {
 				flex: auto;
@@ -488,6 +500,7 @@
 				height: 148rpx;
 				display: flex;
 				align-items: center;
+				
 			}
 
 			.user-img {
@@ -514,7 +527,12 @@
 				
 				
 			}
-
+			.l{
+				height: 105rpx;
+			}
+.leimu{
+				color:#5555ff;
+			}
 			.more {
 				flex: none;
 				height: 80rpx;
@@ -527,13 +545,7 @@
 			}
 		}
 
-		.bt2 {
-			margin-top: 50rpx;
-			text-align: center;
-			font-size: 32rpx;
-			color: $uni-color-error;
-			line-height: 88rpx;
-		}
+		
 	}
 	
 	.os-remark {
@@ -593,10 +605,21 @@
 			}
 			
 		}
+		.bt2 {
+			position:fixed;
+			left:320rpx;
+			bottom:150rpx;
+			text-align: center;
+			font-size: 32rpx;
+			color: $uni-color-error;
+			line-height: 88rpx;
+		}
 	.func{
+		position:fixed;
 		display: flex;
-		margin-top: 20rpx;
+		bottom:70rpx;
 		padding:0 20rpx;
+		width:100%;
 		.f{
 			flex:1;
 			padding:0 20rpx;
@@ -606,7 +629,7 @@
 		display: flex;
 		align-items: center;
 		position: absolute;
-		top:300rpx;
+		top:345rpx;
 		left:240rpx;
 		 
 	}
@@ -660,4 +683,35 @@
 	  background: #fff;
 	 
 	}
+	.bannerline {
+	    height: 45px;
+	    // border-bottom: 1px solid #edeef0;
+	    // border-top: 1px solid #edeef0;
+	    background-color: #dfdfdf;
+	    line-height: 45px;
+		//border:1px solid red;
+		text-align: center;
+		color:#afafaf;
+		margin-bottom: 25rpx;
+	}
+	
+	
+	.bannerline .bannerlinem {
+		display:flex;
+	   justify-content: space-between;
+	   .meal{
+		flex:1;
+		
+	   }
+	}
+	.active1 {
+	    background-color: #ffffff;
+		.t{
+			//padding-bottom:10rpx;
+			//border-bottom:1px solid #5555ff;
+			color:#5555ff;
+			//border:1px solid red;
+		}
+	}
+	
 </style>

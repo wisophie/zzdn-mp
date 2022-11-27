@@ -58,10 +58,10 @@
 				},
 				array: [
 					{
-						name: '创建共享'
+						name: '创建商品'
 					},
 					{
-						name: '我的共享'
+						name: '我的商品'
 					},
 					
 				],
@@ -99,9 +99,9 @@
 				this.relme = uni.getStorageSync('currentIndex')
 				this.refresh()
 				if(this.relme==1){
-					this.array[1].name='全部共享'
+					this.array[1].name='全部商品'
 				}else{
-					this.array[1].name='我的共享'
+					this.array[1].name='我的商品'
 				}
 				uni.removeStorageSync('currentIndex');
 			}
@@ -160,15 +160,15 @@
 					},
 					() => {
 						switch (event.currentTarget.dataset.name) {
-							case '创建共享':
+							case '创建商品':
 								this.$createConversation();
 								break;
 			
-							case '我的共享':
+							case '我的商品':
 								this.$myVote();
 								break;
 								
-							case '全部共享':
+							case '全部商品':
 								this.$allVote();
 								break;
 							default:
@@ -189,13 +189,13 @@
 			},
 			$myVote() {
 				this.relme=1
-				this.array[1].name='全部共享'
+				this.array[1].name='全部商品'
 			    this.mescroll.resetUpScroll()
 				//this.relme=0
 			},
 			$allVote() {
 				this.relme=0
-				this.array[1].name='我的共享'
+				this.array[1].name='我的商品'
 			    this.mescroll.resetUpScroll()
 				//this.relme=0
 			},

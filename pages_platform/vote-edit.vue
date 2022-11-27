@@ -614,9 +614,9 @@
 	.func{
 		
 		display: flex;
-		margin-top: 20rpx;
+		margin-top: 5rpx;
 		width:100%;
-		bottom: 60rpx;
+		bottom: 70rpx;
 		padding:0 20rpx;
 		.f{
 			flex:1;

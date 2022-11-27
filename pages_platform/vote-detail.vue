@@ -51,43 +51,64 @@
 		    <text class="u-warning text-bold text-md"></text>
 		  </view>
 		  <view class="votelist" v-if='list.type==1'>
-			  <u-radio-group v-model="value2" placement="column" iconPlacement="right" :borderBottom="true">
+			  <u-radio-group v-model="value2" placement="column" iconPlacement="right" :borderBottom="false">
 			  			  <view class='select' v-if="form[0].content!=''">
+							  <view class="top">
 							  <text class="a">支持</text>
 			  				  <u-radio activeColor="green" :label="form[0].content" name='0'></u-radio>
-			  				  <u-line-progress :percentage="arate" :showText="false" ></u-line-progress>
+							   </view>
+			  				  <u-line-progress :percentage="arate" :showText="false" >
+								  <text class="u-percentage-slot1">票数：{{form[0].count}}</text>
+							  </u-line-progress>
 			  			  </view>
 			  	<view class='select' v-if="form[1].content!=''">
+					 <view class="top">
 					<text class="a">支持</text>
 					  <u-radio activeColor="green" :label="form[1].content" name='1'></u-radio>
-					  <u-line-progress :percentage="brate" :showText="false" ></u-line-progress>
+					  </view>
+					  <u-line-progress :percentage="brate" :showText="false" >
+						   <text class="u-percentage-slot1">票数：{{form[1].count}}</text>
+					  </u-line-progress>
 			  	</view>
 			  			<view class='select' v-if="form[2].content!=''">
+						<view class="top">
 							<text class="a">支持</text>
 						  <u-radio activeColor="green" :label="form[2].content" name='2'></u-radio>
-						  <u-line-progress :percentage="crate" :showText="false" ></u-line-progress>
+						</view>
+						  <u-line-progress :percentage="crate" :showText="false" >
+							   <text class="u-percentage-slot1">票数：{{form[2].count}}</text>
+						  </u-line-progress>
 			  			</view>
 			  			<view class='select' v-if="form[3].content!=''">
+							<view class="top">
 							<text class="a">支持</text>
 							 <u-radio activeColor="green" :label="form[3].content" name='3'></u-radio>
-							 <u-line-progress :percentage="drate" :showText="false" ></u-line-progress>
+							 </view>
+							 <u-line-progress :percentage="drate" :showText="false" >
+								  <text class="u-percentage-slot1">票数：{{form[3].count}}</text>
+							 </u-line-progress>
 			  			</view>
 			  			
 			  
 			  </u-radio-group>
 		  </view>
 		  <view class="votelist" v-if='list.type==0'>
-			  <u-radio-group v-model="value" @change="groupChange" placement="column" iconPlacement="right" :borderBottom="true">
+			  <u-radio-group v-model="value" @change="groupChange" placement="column" iconPlacement="right" :borderBottom="false">
 				  <view class='select'>
-						<text class="a">支持</text>
-						<u-radio activeColor="green" label="投票项" name="1"></u-radio>
-					  <u-line-progress :percentage="suprate" :showText="false" height="12">
-						  <text class="u-percentage-slot1">票数：{{support}}</text>
+					  <view class="top">
+					  	<text class="a">支持</text>
+					  	<u-radio activeColor="green" label="投票" name="1"></u-radio>
+					  </view>
+						
+					  <u-line-progress :percentage="suprate" :showText="true" height="12">
+						 <text class="u-percentage-slot1">票数：{{support}}</text>
 						  </u-line-progress>
 				  </view>
 				<view class='select'>
+					 <view class="top">
 					  <text class="b">反对</text>
-					  <u-radio activeColor="red" label="投票项" name="0"></u-radio>
+					  <u-radio activeColor="red" label="投票" name="0"></u-radio>
+					  </view>
 					  <u-line-progress :percentage="objrate" :showText="false" activeColor="#ff0000" height="12">
 						  <text class="u-percentage-slot2">票数：{{obj}}</text>
 					  </u-line-progress>
@@ -176,9 +197,21 @@
 		onLoad(id){	
 			this.judgestat=id.judgestat
 			this.togetVoteDetail(id)
+			
+		},
+		onShow(){
+			// #ifdef  APP-PLUS
+			this.rateapp()
+			// #endif
+			// #ifdef  APP-PLUS
+			this.rate2app()
+			// #endif
+			
 		},
 		// onShow(id) {
-		  
+		// created(){
+		// 	this.rateapp()
+		// }
 		//  this.togetVoteDetail(id)
 		// },
 		computed:{
@@ -208,6 +241,27 @@
 			}
 		},
 		methods:{
+			rateapp(){
+				this.suprate=(this.support/(this.support+this.obj))*100
+				this.objrate=(this.obj/(this.support+this.obj))*100
+			},
+			rate2app(){
+				if(this.formlength==2){
+					this.arate=(this.form[0].count/this.sum)*100
+					this.brate=(this.form[1].count/this.sum)*100
+				}else if(this.formlength==3){
+					this.arate=(this.form[0].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+					this.brate=(this.form[1].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+					this.crate=(this.form[2].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+				}else if(this.formlength==4){
+					this.arate=(this.form[0].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+					this.brate=(this.form[1].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+					this.crate=(this.form[2].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+					this.drate=(this.form[3].count/(this.form[0].count+this.form[1].count+this.form[2].count))*100
+				}
+				
+				
+			},
 			groupChange(e){
 				this.value=e
 				console.log(this.value)
@@ -243,6 +297,9 @@
 					if(this.list.type==0){
 						this.support=this.list.options[1].count
 						this.obj=this.list.options[0].count
+						// #ifdef  APP-PLUS
+						this.rateapp()
+						// #endif
 					}else{
 						this.formlength=this.list.options.length
 						this.form.forEach((e,i)=>{
@@ -251,6 +308,9 @@
 							this.sum+=e.count
 							//console.log(this.sum)
 						})
+						// #ifdef  APP-PLUS
+						this.rate2app()
+						// #endif
 					}
 					
 				})
@@ -479,6 +539,7 @@ page {
 	left:20rpx;
 }
 .select{
+	margin-top:20rpx;
 	margin-bottom:30rpx;
 	.a{
 	  position:absolute;
@@ -488,6 +549,9 @@ page {
 	  position:absolute;
 	  right:90rpx;
 	}
+}
+.top{
+	margin-bottom:10rpx;
 }
 
 .votelist{
