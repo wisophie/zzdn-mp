@@ -163,7 +163,7 @@ export default {
         content: '是否确认删除该产品？',
         success: res => {
           if (res.confirm) {
-            getListApi1({ id: item.id }).then(() => {
+            removeById({ id: item.id }).then(() => {
               this.mescroll.resetUpScroll()
               uni.$u.toast('删除成功')
             })
