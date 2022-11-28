@@ -13,7 +13,7 @@
         v-model="name"
         prefixIcon="search"
         shape="circle"
-        placeholder="请输入订单号/货品编码/用户名"
+        placeholder="请输入商品名/用户名/订单号"
         confirmType="search"
         @confirm="doSearch"
       >
