@@ -62,12 +62,22 @@
         "selectedIconPath": "static/tabbar/tab3_a.png",
         "text": "共享"
       },
+	  // #ifdef  MP-WEIXIN
       {
         "pagePath": "pages/TUI-Index/index",
         "iconPath": "static/tabbar/tab4.png",
         "selectedIconPath": "static/tabbar/tab4_a.png",
         "text": "沟通"
       },
+	  // #endif
+	  // #ifdef  APP-PLUS
+	  {
+	    "pagePath": "pages_chat/conversation",
+	    "iconPath": "static/tabbar/tab4.png",
+	    "selectedIconPath": "static/tabbar/tab4_a.png",
+	    "text": "沟通"
+	  },
+	  // #endif
       {
         "pagePath": "pages/platform/platform",
         "iconPath": "static/tabbar/tab5.png",

@@ -29,8 +29,8 @@
 
 <script>
 // miniprogram/pages/TUI-Index/TUI-create.js
-import {loginImUser} from '../../utils/imlogin';
-import logger from '../../utils/logger';
+import {loginImUser} from '@/utils/imlogin';
+import logger from '@/utils/logger';
 const app = getApp();
 
 export default {
@@ -54,7 +54,9 @@ export default {
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad() {
-		
+		// //#ifdef MP-WEIXIN
+		// this.reddot()
+		// //#endif
 	},
        
 	onShow() {
@@ -67,6 +69,12 @@ export default {
 		});
 	},
 	methods: {
+		// reddot(){
+		// 	uni.setTabBarBadge({ //显示数字
+		// 	  index: 3,//tabbar下标
+		// 	  text: '1'//数字
+		// 	})
+		// },
 		handleOnPageNavigate(event) {
 			const tab = event.currentTarget.dataset.item;
 			console.log(tab.url)

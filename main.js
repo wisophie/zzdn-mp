@@ -18,7 +18,7 @@ Vue.component('MeTabs', MeTabs)
 Vue.config.productionTip = false
 
 App.mpType = 'app'
-
+Vue.prototype.$totalunread
 const app = new Vue({
   ...App
 })

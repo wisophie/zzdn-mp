@@ -21,6 +21,7 @@
 <!-- 这里有个加载的补丁逻辑待优化，页面向SDK请求conversationList的时候会有时延，
 造成页面的一个抖动，这里加一个if逻辑打一个补丁，后续继续优化 -->
 <script>
+
 import logger from '@/utils/logger';
 import TUIConversationItem from './conversation-item/index';
 import TUIMessageList from './message-list/index';
@@ -40,7 +41,7 @@ export default {
 				{
 					name: '加入群聊'
 				}
-			]
+			],
 		};
 	},
 
@@ -53,20 +54,46 @@ export default {
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
+	
+	
+	onShow(){
+		
+		
+		uni.$TUIKit.on(uni.$TUIKitEvent.CONVERSATION_LIST_UPDATED, this.onConversationListUpdated);
+		this.getConversationList();
+		this.reddot()
+	},
+	
 	onLoad() {
 		// 登入后拉去会话列表
-		this.getConversationList();
-		uni.$TUIKit.on(uni.$TUIKitEvent.CONVERSATION_LIST_UPDATED, this.onConversationListUpdated);
-	},
-
+		
+		
+	}, 
+      
 	/**
 	 * 生命周期函数--监听页面卸载
 	 */
-	onUnload() {
+	onHide() {
+		
 		uni.$TUIKit.off(uni.$TUIKitEvent.SDK_READY, this.onConversationListUpdated);
+		this.getConversationList();
+		this.reddot()
 	},
-
+   
 	methods: {
+		reddot(){
+			if(this.$totalunread!==0){
+				uni.setTabBarBadge({ //显示数字
+				  index: 3,//tabbar下标
+				  text: this.$totalunread.toString() //数字
+				})
+			}else{
+				uni.removeTabBarBadge({ //显示数字
+				  index: 3,//tabbar下标
+				  
+				})
+			}
+		},
 		handleRoute(id) {
 			const url = `./chat?conversationID=${id}`;
 			console.log(id)
@@ -79,6 +106,7 @@ export default {
 			this.setData({
 				conversationList: event.data
 			});
+			
 		},
 
 		getConversationList() {
@@ -87,6 +115,10 @@ export default {
 				this.setData({
 					conversationList: imResponse.data.conversationList
 				});
+				var it=imResponse.data.conversationList
+				this.$totalunread=it.reduce((pre,cur)=>{
+					return pre+cur.unreadCount
+				},0)
 			});
 		},
 

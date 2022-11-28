@@ -83,6 +83,9 @@
 </template>
 
 <script>
+
+import {loginImUser} from '@/utils/imlogin';
+import logger from '@/utils/logger';
 import { fetchUserInfo } from '@/api/login'
 import { buyNeedList } from '@/api/goods'
 import user from '@/utils/user'
@@ -102,7 +105,10 @@ export default {
 				'https://steel-ren.oss-cn-beijing.aliyuncs.com/htbqbupfwvs1uzhy621b.jpg',
 			],
 			buyList: [],
-			isLogin: false
+			isLogin: false,
+			isSDKReady: false,
+			conversationList: [],
+			
 		}
 	},
 	computed: {
@@ -120,6 +126,10 @@ export default {
 			this.fetchUserInfo()
 		}
 		this.getBuyNeedList()
+		// this.getConversationList();
+		// uni.$TUIKit.on(uni.$TUIKitEvent.CONVERSATION_LIST_UPDATED, this.onConversationListUpdated);
+		// this.reddot()
+		
 	},
 	onShow() {
 		user
@@ -133,8 +143,70 @@ export default {
 				uni.removeStorageSync('token');
 				uni.removeStorageSync('userInfo');
 			})
+			// #ifdef  APP-PLUS
+			this.handleOnPageNavigate()
+			// #endif
+			
+			uni.$TUIKit.on(uni.$TUIKitEvent.CONVERSATION_LIST_UPDATED, this.onConversationListUpdated);
+			this.getConversationList();
+			this.reddot()
+	},
+	
+	created() {
+		// #ifdef  APP-PLUS
+		uni.$on('isSDKReady', value => {
+			this.isSDKReady = value.isSDKReady;
+		});
+		// #endif
+	},
+	onHide() {
+		
+		uni.$TUIKit.off(uni.$TUIKitEvent.SDK_READY, this.onConversationListUpdated);
+		this.getConversationList();
+		this.reddot()
 	},
 	methods: {
+		reddot(){
+			if(this.$totalunread!==0){
+				uni.setTabBarBadge({ //显示数字
+				  index: 3,//tabbar下标
+				  text: this.$totalunread.toString() //数字
+				})
+			}else{
+				uni.removeTabBarBadge({ //显示数字
+				  index: 3,//tabbar下标
+				  
+				})
+			}
+			
+		},
+		handleOnPageNavigate() {
+			
+				if(this.isSDKReady==false){
+					loginImUser()
+					
+				}
+			
+		},
+		onConversationListUpdated(event) {
+			logger.log('TUI-conversation | onConversationListUpdated  |ok');
+			this.setData({
+				conversationList: event.data
+			});
+		},
+		getConversationList() {
+			uni.$TUIKit.getConversationList().then(imResponse => {
+				logger.log(`TUI-conversation | getConversationList | getConversationList-length: ${imResponse.data.conversationList.length}`);
+				this.setData({
+					conversationList: imResponse.data.conversationList
+				});
+				var it=imResponse.data.conversationList
+				this.$totalunread=it.reduce((pre,cur)=>{
+					return pre+cur.unreadCount
+				},0)
+				console.log(it,this.$totalunread)
+			});
+		},
 		toPage(url, type, needLogin, needFrom) {
 			if (needLogin && !this.isLogin) {
 				uni.navigateTo({
