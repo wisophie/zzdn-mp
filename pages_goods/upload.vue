@@ -47,8 +47,9 @@
         <u-textarea
           v-model="form.detail"
           placeholder="请输入产品详情"
+          maxlength="400"
           count
-          maxlength="200"
+					height="100"
         ></u-textarea>
       </u-form-item>
       <u-form-item label="产品图片">

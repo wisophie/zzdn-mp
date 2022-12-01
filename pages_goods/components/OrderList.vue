@@ -102,6 +102,9 @@
 						<view class="o-list__item__btns__item">
 							<u-button size="small" text="修改订单" @click="updateOrder(item)" />
 						</view>
+						<view class="o-list__item__btns__item">
+							<u-button size="small" text="取消订单" @click="cancel(item.id)" />
+						</view>
 					</template>
 					<template v-if="item.orderStatus == 104">
 						<view class="o-list__item__btns__item">
