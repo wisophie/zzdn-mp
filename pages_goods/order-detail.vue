@@ -27,7 +27,7 @@
       </view>
 
       <view class="os-content">
-        <view class="os-goods" v-for="item in orderInfo.goodsList">
+        <view class="os-goods" v-for="item in orderInfo.goodsList" @click="toDetail(item.goodsId)">
           <view class="os-goods__img">
             <u--image :src="item.picUrl" width="81" height="81" radius="4" />
           </view>
@@ -140,7 +140,10 @@ export default {
     },
     toWuliu() {
       uni.$u.route('/pages_goods/wuliu')
-    }
+    },
+    toDetail(id) {
+			uni.$u.route('/pages_goods/goods-detail', { id })
+		}
   }
 }
 </script>

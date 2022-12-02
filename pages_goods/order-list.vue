@@ -9,24 +9,13 @@
     @up="upCallback"
   >
     <view class="top-wrap">
-      <u-input
+      <order-search
+        :selectList="selectList"
         v-model="name"
-        prefixIcon="search"
-        shape="circle"
-        placeholder="请输入商品名/用户名/订单号"
-        confirmType="search"
+        @search="doSearch"
         @confirm="doSearch"
-      >
-        <template slot="suffix">
-          <u-button
-            size="mini"
-            text="搜索"
-            shape="circle"
-            color="linear-gradient(to right, #C5C1FF, #473AFF)"
-            @click="doSearch"
-          ></u-button>
-        </template>
-      </u-input>
+        @change="changeSelect"
+      />
       <view class="o-tabs">
         <view
           class="o-tabs__item"
@@ -99,6 +88,7 @@
 
 <script>
 import MescrollMixin from '@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js'
+import OrderSearch from './components/OrderSearch'
 import OrderList from './components/OrderList'
 import { getOrderApi } from '@/api/order'
 
@@ -127,9 +117,24 @@ const statusList = [
 
 export default {
   mixins: [MescrollMixin], // 使用mixin
-  components: { OrderList },
+  components: { OrderSearch, OrderList },
   data() {
     return {
+      selectIndex: 0,
+      selectList: [
+        {
+          id: 'goodsName',
+          name: '商品名'
+        },
+        {
+          id: 'username',
+          name: '用户名'
+        },
+        {
+          id: 'orderSn',
+          name: '订单号'
+        }
+      ],
       tabId: 0,
       tabs: statusList,
       showDate: false,
@@ -183,6 +188,12 @@ export default {
     //   }, 300)
     // },
     // 搜索
+    changeSelect(index) {
+      if (this.selectIndex !== index) {
+        this.name = ''
+        this.selectIndex = index
+      }
+    },
     doSearch() {
       this.goods = [] // 先清空列表,显示加载进度
       this.mescroll.resetUpScroll()
@@ -216,10 +227,14 @@ export default {
         showType: this.tabId,
         page: page.num,
         limit: page.size,
-        orderSn: this.name,
         start: this.startDate,
         end: this.endDate
       }
+      const key = this.selectList[this.selectIndex].id
+      if (this.name) {
+        params[key] = this.name
+      }
+
       getOrderApi(params)
         .then(res => {
           // const { list, total } = res.data
