@@ -58,10 +58,10 @@
 				},
 				array: [
 					{
-						name: '创建商品'
+						name: '创 建'
 					},
 					{
-						name: '我的商品'
+						name: '我 的'
 					},
 					
 				],
@@ -99,9 +99,9 @@
 				this.relme = uni.getStorageSync('currentIndex')
 				this.refresh()
 				if(this.relme==1){
-					this.array[1].name='全部商品'
+					this.array[1].name='全 部'
 				}else{
-					this.array[1].name='我的商品'
+					this.array[1].name='我 的'
 				}
 				uni.removeStorageSync('currentIndex');
 			}
@@ -160,15 +160,15 @@
 					},
 					() => {
 						switch (event.currentTarget.dataset.name) {
-							case '创建商品':
+							case '创 建':
 								this.$createConversation();
 								break;
 			
-							case '我的商品':
+							case '我 的':
 								this.$myVote();
 								break;
 								
-							case '全部商品':
+							case '全 部':
 								this.$allVote();
 								break;
 							default:
@@ -189,13 +189,13 @@
 			},
 			$myVote() {
 				this.relme=1
-				this.array[1].name='全部商品'
+				this.array[1].name='全 部'
 			    this.mescroll.resetUpScroll()
 				//this.relme=0
 			},
 			$allVote() {
 				this.relme=0
-				this.array[1].name='我的商品'
+				this.array[1].name='我 的'
 			    this.mescroll.resetUpScroll()
 				//this.relme=0
 			},

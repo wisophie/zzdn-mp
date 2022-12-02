@@ -14,7 +14,6 @@ import BaseFooter from '@/components/BaseFooter'
 import MeTabs from '@/components/MeTabs'
 Vue.component('BaseFooter', BaseFooter)
 Vue.component('MeTabs', MeTabs)
-
 Vue.config.productionTip = false
 
 App.mpType = 'app'

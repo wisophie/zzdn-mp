@@ -64,7 +64,7 @@
 			</view>
 			
 		</view>
-		<view class="g-section">
+		<view class="g-section pb">
 		  <view class="pb-4 text-md text-bold">详情</view>
 		  <view class='detail'>
 		    {{list.detail}}
@@ -144,19 +144,22 @@
 			// #endif
 			
 		},
+		computed:{
+			
+		},
 		methods:{
 			// #ifdef  APP-PLUS
 			appplus(){
 				this.app=false
 			},
 			// #endif
-			open() {
-			        // console.log('open');
-			      },
-			      close() {
-			        this.show = false
-			        // console.log('close');
-			      },
+			// open() {
+			//         // console.log('open');
+			//       },
+			//       close() {
+			//         this.show = false
+			//         // console.log('close');
+			//       },
 			async getShareInfo(item){
 				console.log(item)
 				if(item.status!=1){
@@ -295,7 +298,7 @@ page {
 }
 
 .b-footer {
-	position: absolute;
+	position: fixed;
 	bottom:60rpx;
 	left:5rpx;
 	display: flex;
@@ -354,7 +357,7 @@ page {
 
 }
 .more{
-	position: absolute;
+	position: fixed;
 	bottom:80rpx;
 	left:20rpx;
 }
@@ -382,6 +385,9 @@ page {
 		height:850rpx;
 		width:100%;
 	}
+}
+.pb{
+	padding-bottom: 450rpx;
 }
 </style>
 

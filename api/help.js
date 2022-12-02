@@ -18,6 +18,12 @@ export const createHelp = (data = {}) => http.post('/wx/errand/order/create', da
       auth: true
     }
   })
+/** 更新跑腿订单*/
+export const updateHelp = (data = {}) => http.post('/wx/errand/order/update', data, {
+    custom: {
+      auth: true
+    }
+  })
 
 /** 接单*/
 export const takeHelp = (data = {}) => http.post('/wx/errand/order/takeOrder', data, {
@@ -33,6 +39,12 @@ export const takeHelp = (data = {}) => http.post('/wx/errand/order/takeOrder', d
       }
     })
 	
+	/** 取消接单*/
+	export const cancelTakeOrder = (data = {}) => http.post('/wx/errand/order/cancelTakeOrder', data, {
+	    custom: {
+	      auth: true
+	    }
+	  })
 	/** 发布人同意订单完成*/
 	export const agreeHelp = (data = {}) => http.post('/wx/errand/order/agreeOverOrder', data, {
 	    custom: {

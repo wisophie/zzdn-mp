@@ -81,10 +81,10 @@
 		  <view class="os-remark__content">
 		    <u--textarea
 		      v-model="list.progress"
-		      placeholder="请输入留言信息"
+		      placeholder="请输入内容"
 		      count
 			  :disabled=false
-		      maxlength="50"
+		      maxlength="300"
 			  height='90'
 		    ></u--textarea>
 		  </view>

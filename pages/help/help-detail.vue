@@ -43,7 +43,7 @@
 		</view>
 		
 			<view class="ff" v-if="list.userId!==myid&&list.status==3">请上传完成凭证</view>
-			<view class="u-flex tt" v-if="(list.userId!==this.myid&&list.status==3)||list.status==4">
+			<view class="u-flex tt" v-if="(list.userId!==myid&&list.status==3)||list.status==4">
 			  <view>
 			    <u-upload
 			      :fileList="banner1"
@@ -67,6 +67,7 @@
 			      @delete="deletePic($event, 'two')"
 				  :previewFullImage="true"
 				  :deletable='dtable'
+				  
 			    ></u-upload>
 			    <view class="text-xs u-tips-color text-center" style="textalign: center">
 			      结束拍的照片
@@ -91,8 +92,8 @@
 		<view class="b-footer shadow-top">
 		  <view class="b-footer__left">
 			  <view @tap="handleRoute()">
-				  <u-icon name="chat" class="u" color="#303133" size="28" v-if="app==true"/>
-				  <image class="u1" src="./contact.png" v-if="app==false"></image> 
+				  <u-icon name="chat" class="u" color="#303133" size="28" v-if="app==false"/>
+				  <image class="u1" src="./contact.png" v-if="app==true"></image> 
 				  <text>联系他</text>
 			  </view>
 		    
@@ -101,47 +102,62 @@
 		    <text >{{ordertext}}</text>
 		  </view>
 		</view>
-		<view class='more' @click="show2=true" v-if='list.userId==myid'>
-					  <text>更多▴</text>
-		</view>
+		
 		<view class="da">
-			<view class="dashang" v-if="list.status==6" @click="show = true">
+			<view class="dashang" v-if="list.status==6" @click="dashang">
 			   <text class="bt" >打赏平台</text>
 			 </view>
+			 <view class="edit" v-if="list.status==2&&list.userId==myid" @click="toPage('pages/help/help-edit',list)">
+			    <text class="" >编辑订单</text>
+			  </view>
 		</view>
-		
+	
+		<view class='more' @tap="toOrder" v-if='app==false'>
+					  <text>更多▴</text>
+		</view>
+		<view class="bottom-back" v-if='app==true'>
+			<view class="bottom-area">
+				<view v-if="showSelectTag" class="conversation-bubble" :class="{cbb:iscancelord==0}" @tap.stop="handleEditToggle">
+					<view v-for="(item, index) in actions" :key="index" class="picker" :data-name="item.name" @tap="handleOnTap">{{ item.name }}</view>
+				</view>
+				<image @tap="showMore" class="btn-show-more" src="/static/static/assets/add.svg"></image>
+				<view class="btn-show-more" @tap="showMore">
+				  <text>更多▴</text>
+				</view>
+			</view>
+		</view>
 		<u-action-sheet
-					:show="show2"
-					@close="show2 = false"
-					:actions="actions2"
-					@select="selectClick"
-					cancelText="取消"
-				>
-				</u-action-sheet>
-		<u-overlay :show="show3" >
+			:actions="actions"
+			:show="showh"
+			closeOnClickOverlay
+			@close="showh = false"
+			@select="selectClick"
+			cancelText="取消"
+		></u-action-sheet>
+		<u-overlay :show="show" >
 				<view class="dashangpic">
 				   <image class="dpic" src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"></image> 
-					<u-button @click="show3 = false">确认</u-button>
+				    <u-button @click="show = false">确认</u-button>
 				</view>
 			</u-overlay>
+			<view class="dashangpic2" v-if='show3==true'>
+			   <image class="dpic" src="https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg"></image> 
+			    <u-button @click="show3= false">确认</u-button>
+			</view>
+			
 	</view>
 </template>
 
 <script>
 	import { uploadApi } from '@/api/common'
-	import { getHelpDetail,takeHelp,fulfillHelp,agreeHelp,unAgreeHelp} from '@/api/help'
+	import { getHelpDetail,takeHelp,fulfillHelp,agreeHelp,unAgreeHelp,cancelTakeOrder} from '@/api/help'
+	
 	export default {
 		data() {
 			return {
-				actions2: [{
-								name: '取消任务',
-							},
-							{
-								name: '提交纠纷',
-							},
-								
-						],
-				    show2: false,
+				actions: [],
+				    showh: false,
+					 show3: false,
 					myid:0,
 					list:[],
 					statustype:',',
@@ -151,37 +167,186 @@
 					clickeble:0,
 					dtable:1,
 					judgestat:'',
-					show3:false,
-					app:true,
-				
-				
+					show:false,
+					app:false,
+				    showSelectTag: false,
+					iscancelord:1,
+				     fileList1:[{
+			url: "https://steel-ren.oss-cn-beijing.aliyuncs.com/y1cvhp64uxpk5uvhw6v6.jpg",
+		}],
 			};
 		},
 		onLoad(id ){
 			this.judgestat=id.judgestat
+			this.cid()
 			this.gethelpInfo(id)
+			
 			// #ifdef  APP-PLUS
 			this.appplus()
 			// #endif
 		},
-		computed:{
+		// onShow(){
+		// 	// #ifdef  APP-PLUS
+		// 	this.cid()
+		// 	this.canclick()
+		// 	// #endif
+		// },
+		// computed:{
+		// 	cid(){
+		// 		this.myid=uni.getStorageSync('userInfo').id
+		// 	},
+		// 	canclick(){
+		// 		if((this.list.userId!==this.myid&&this.list.status==2)||(this.list.userId!==this.myid&&this.list.status==3)||(this.list.userId==this.myid&&this.list.status==4)){
+		// 			this.clickeble=1
+		// 		}else{
+		// 			this.clickeble=0
+		// 		}
+		// 	}
+		// },
+		methods:{
+			dashang(){
+				this.show=true
+				// #ifdef  APP-PLUS
+				this.show3=true
+				// #endif
+				
+			},
+			showMore() {
+				
+				this.setData({
+					showSelectTag: !this.showSelectTag
+				});
+				if(this.list.status>=3){
+					this.actions=[ {
+								name: '取消接单',
+							},{
+								name: '取消订单或者不认同订单完成',
+							},
+							{
+								name: '提交纠纷',
+							},
+						]
+						this.iscancelord=1
+				}else{
+					this.actions=[{
+								name: '取消订单或者不认同订单完成',
+							},
+							{
+								name: '提交纠纷',
+							},
+						]
+						this.iscancelord=0
+				}
+				this.showh=true
+			},
+			handleEditToggle() {
+				this.setData({
+					showSelectTag: false
+				});
+			},
+			untakeorder(){
+				const data={
+					orderId:this.list.item[0].orderId,
+				}
+				uni.showModal({
+				  title: '提示',
+				  content: '是否确认取消订单？',
+				  success: res => {
+				    if (res.confirm) {
+				     cancelTakeOrder(data).then(res=>{
+				     	if(res.errmsg=='成功'){
+				     		uni.$u.toast('接单取消成功！')
+							this.canceldingdan()
+				     	}
+				     })
+					   
+				    }
+				  }
+				})
+			},
+			cancelorder(){
+				const data={
+					orderId:this.list.item[0].orderId,
+				}
+				uni.showModal({
+				  title: '提示',
+				  content: '是否确认取消订单？',
+				  success: res => {
+				    if (res.confirm) {
+				     unAgreeHelp(data).then(res=>{
+				     	if(res.errmsg=='成功'){
+				     		uni.$u.toast('订单取消成功！')
+							this.canceldingdan()
+				     	}
+				     })
+					   
+				    }
+				  }
+				})
+			},
+			handleOnTap(event) {
+				this.setData(
+					{
+						showSelectTag: false
+					},
+					() => {
+						switch (event.currentTarget.dataset.name) {
+							case '取消接单':
+								this.untakeorder();
+								break;
+			
+							case '取消订单或者不认同订单完成':
+								this.cancelorder();
+								break;
+								
+							case '提交纠纷':
+								uni.$u.route('/pages_platform/vote-edit', this.list);
+								break;
+							default:
+								break;
+						}
+					}
+				);
+			},
+			// #ifdef  APP-PLUS
+			appplus(){
+				this.app=true
+			},
+			// #endif
+			toOrder() {
+				if(this.list.status>=3){
+					this.actions=[ {
+								name: '取消接单',
+							},{
+								name: '取消订单或者不认同订单完成',
+							},
+							{
+								name: '提交纠纷',
+							},
+						]
+				}else{
+					this.actions=[{
+								name: '取消订单或者不认同订单完成',
+							},
+							{
+								name: '提交纠纷',
+							},
+						]
+				}
+				this.showh=true
+			},
+			
 			cid(){
-			  this.myid=uni.getStorageSync('userInfo').id
+				this.myid=uni.getStorageSync('userInfo').id
 			},
 			canclick(){
+				console.log(this.myid,this.list.userId)
 				if((this.list.userId!==this.myid&&this.list.status==2)||(this.list.userId!==this.myid&&this.list.status==3)||(this.list.userId==this.myid&&this.list.status==4)){
 					this.clickeble=1
 				}else{
 					this.clickeble=0
 				}
-			}
-		},
-		methods:{
-			// #ifdef  APP-PLUS
-			appplus(){
-				this.app=false
 			},
-			// #endif
 			async gethelpInfo(item){
 				console.log(item)
 				const params={
@@ -189,6 +354,7 @@
 				}
 				let res =await getHelpDetail(params)
 					this.list= res.data
+					 this.canclick()
 					console.log(this.list)
 					this.statustype = {'1':'等待接单','2':'等待接单','3':'已接单','4':'跑腿完成，等待确认','5':'已取消','6':'订单已完成'}[res.data.status]
 				    this.list.username=item.username
@@ -397,8 +563,11 @@
 			      })
 			  }
 			},
+			toPage(url,id) {
+				uni.$u.route(url,id)
+			},
 			selectClick(index){
-				if(index.name=="取消任务"){
+				if(index.name=="取消订单或者不认同订单完成"){
 				const data={
 					orderId:this.list.item[0].orderId,
 				}
@@ -410,6 +579,26 @@
 				     unAgreeHelp(data).then(res=>{
 				     	if(res.errmsg=='成功'){
 				     		uni.$u.toast('订单取消成功！')
+							this.canceldingdan()
+				     	}
+				     })
+					   
+				    }
+				  }
+				})
+					
+			}else if(index.name=="取消接单"){
+				const data={
+					orderId:this.list.item[0].orderId,
+				}
+				uni.showModal({
+				  title: '提示',
+				  content: '是否确认取消订单？',
+				  success: res => {
+				    if (res.confirm) {
+				     cancelTakeOrder(data).then(res=>{
+				     	if(res.errmsg=='成功'){
+				     		uni.$u.toast('接单取消成功！')
 							this.canceldingdan()
 				     	}
 				     })
@@ -553,7 +742,7 @@ page {
 
 }
 .more{
-	position: absolute;
+	position: fixed;
 	bottom:10%;
 	right:630rpx;
 	z-index:10;
@@ -594,11 +783,28 @@ page {
 		color: orange;
 		background-color: #fff;
 		border:1px solid orange;
+		
 		&:active{
-			background-color: #ebc905;
+			background-color: #e1e1e1;
 			
 		}
 	}
+	.edit{
+		display: flex;
+		align-items: center;
+		margin-left: 32rpx;
+		border-radius: 40rpx;
+		padding: 10rpx 40rpx;
+		color: $u-primary;
+		background-color: #fff;
+		border:1px solid $u-primary;
+		
+		&:active{
+			background-color: #e1e1e1;
+			
+		}
+	}
+	
 }
 
 .dashangpic{
@@ -609,5 +815,109 @@ page {
 		height:850rpx;
 		width:100%;
 	}
+	
 }
-</style>g
+.dashangpic2{
+	position:fixed;
+     //margin:0 auto;
+	bottom:500rpx;
+	left:18rpx;
+	height:850rpx;
+	width:95%;
+	.dpic{
+		height:850rpx;
+		width:100%;
+	}
+	
+}
+.bottom-back {
+			position: fixed;
+			height: 10rpx;
+			width: 100%;
+			bottom:5%;
+			right:430rpx;
+			
+			z-index: 1000;
+		}
+		.bottom-area {
+			flex-direction: column;
+			position: absolute;
+			bottom: 20rpx;
+			right: 0;
+			width: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: right;
+		}
+		.conversation-bubble {
+			padding-top: 10rpx;
+			position: absolute;
+			width: 450rpx;
+			padding-right: 3px;
+			background-color: #FFFFFF;
+			height:260rpx;
+			bottom: 150rpx;
+			left:-110rpx;
+			z-index: 100;
+			box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+			border-radius: 14rpx;
+			transition-duration: all .3s;
+		}
+		.cbb{
+			height:180rpx;
+		}
+		
+		.conversation-bubble:before,
+		.conversation-bubble:after {
+			content: "";
+			display: block;
+			border-width:15px;
+			position: absolute;
+			bottom: -28px;
+			left: 34px;
+			border-style: solid dashed dashed;
+			border-color: #fff transparent transparent;
+			font-size: 0;
+			line-height: 0;
+			margin-left: 4px;
+			transition: all .3s;
+			//border:1px solid red;
+		}
+		
+		.conversation-bubble:after {
+			bottom: -28px;
+			
+			border-color: #fff transparent transparent;
+		
+		}
+		.picker {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 32rpx;
+			font-weight: 300;
+			width: 100%;
+			height: 80rpx;
+			&:active{
+				background-color: #ccc;
+			}
+			
+		}
+		.btn-show-more {
+			
+			  position: fixed;
+			bottom:10%;
+			right:630rpx;
+			  width: 80rpx;
+			  height: 50rpx;
+			  display: flex;
+			  justify-content: center;
+			  align-items: center;
+			 
+			  z-index: 99;
+			  &:active{
+			  	background-color: #ccc;
+			  }
+			
+		}
+</style>

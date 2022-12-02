@@ -318,7 +318,7 @@
 	    {
 	      "path": "share-edit",
 	      "style": {
-	        "navigationBarTitleText": "编辑共享"
+	        "navigationBarTitleText": "编辑&创建共享"
 	      }
 	    }
 	  ]

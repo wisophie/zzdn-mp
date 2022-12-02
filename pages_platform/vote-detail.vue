@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="main">
 		
 		<view class="g-section">
 			
@@ -45,11 +45,11 @@
 		  <view>
 		    {{list.progress}}
 		  </view>
-		  <view class="mission mt-1 u-tips-color text-md">
+		  <!-- <view class="mission mt-1 u-tips-color text-md">
 		    <text></text>
 		    <text class="u-warning"></text>
 		    <text class="u-warning text-bold text-md"></text>
-		  </view>
+		  </view> -->
 		  <view class="votelist" v-if='list.type==1'>
 			  <u-radio-group v-model="value2" placement="column" iconPlacement="right" :borderBottom="false">
 			  			  <view class='select' v-if="form[0].content!=''">
@@ -134,17 +134,29 @@
 		    
 		  </view>
 		</view>
-		<view class='more' @click="show2 = true">
-					  <text>更多</text>
+		<view class='more' @click="show6 = true" v-if='app==false'>
+					  <text>更多▴</text>
+		</view>
+		<view class="bottom-back" v-if='app==true'>
+			<view class="bottom-area">
+				<view v-if="showSelectTag" class="conversation-bubble" @tap.stop="handleEditToggle">
+					<view v-for="(item, index) in actions" :key="index" class="picker" :data-name="item.name" @tap="handleOnTap">{{ item.name }}</view>
+				</view>
+				<image @tap="showMore" class="btn-show-more" src="/static/static/assets/add.svg"></image>
+				<view class="btn-show-more" @tap="showMore">
+				  <text>更多▴</text>
+				</view>
+			</view>
 		</view>
 		<u-action-sheet
-					:show="show2"
-					@close="show2 = false"
-					:actions="actions2"
+					:show="show6"
+					@close="show6 = false"
+					:actions="actions"
 					@select="selectClick"
 					cancelText="取消"
 				>
 				</u-action-sheet>
+			
 	</view>
 	
 </template>
@@ -155,12 +167,13 @@
 		data() {
 			return {
 				
-			actions2: [{
+			actions: [{
 							name: '删除投票',
 						},
 							
 					],
-			show2: false,
+			show6: false,
+			showSelectTag: false,
 			list:{},
 			extype:'',
 			banner:[],
@@ -192,20 +205,24 @@
 			sum:0,
 			value2:0,
 			judgestat:'',
+			app:false,
 			};
 		},
 		onLoad(id){	
 			this.judgestat=id.judgestat
 			this.togetVoteDetail(id)
-			
-		},
-		onShow(){
 			// #ifdef  APP-PLUS
 			this.rateapp()
 			// #endif
 			// #ifdef  APP-PLUS
 			this.rate2app()
 			// #endif
+			// #ifdef  APP-PLUS
+			this.appplus()
+			// #endif
+			
+		},
+		onShow(){
 			
 		},
 		// onShow(id) {
@@ -216,7 +233,7 @@
 		// },
 		computed:{
 			cid(){
-			  this.myid=uni.getStorageSync('userInfo').id
+			  
 			},
 			rate(){
 				this.suprate=(this.support/(this.support+this.obj))*100
@@ -241,6 +258,58 @@
 			}
 		},
 		methods:{
+			showMore() {
+				
+				this.setData({
+					showSelectTag: !this.showSelectTag
+				});
+			
+				this.show6=true
+			},
+			handleEditToggle() {
+				this.setData({
+					showSelectTag: false
+				});
+			},
+			handleOnTap(event) {
+				this.setData(
+					{
+						showSelectTag: false
+					},
+					() => {
+						switch (event.currentTarget.dataset.name) {
+							case '删除投票':
+								this.delevote();
+								break;
+							default:
+								break;
+						}
+					}
+				);
+			},
+			delevote(){
+				const data={
+					id:this.list.id
+				}
+				uni.showModal({
+				  title: '提示',
+				  content: '是否确认删除该投票？',
+				  success: res => {
+				    if (res.confirm) {
+				      deleteVote(data).then(res => {
+				        uni.$u.toast('删除成功！')
+				      })
+					  uni.setStorageSync("currentIndex", 1)
+					  this.canceldingdan()
+				    }
+				  }
+				})
+			},
+			// #ifdef  APP-PLUS
+			appplus(){
+				this.app=true
+			},
+			// #endif
 			rateapp(){
 				this.suprate=(this.support/(this.support+this.obj))*100
 				this.objrate=(this.obj/(this.support+this.obj))*100
@@ -262,6 +331,13 @@
 				
 				
 			},
+			open() {
+			        // console.log('open');
+			      },
+			      close() {
+			        this.show = false
+			        // console.log('close');
+			      },
 			groupChange(e){
 				this.value=e
 				console.log(this.value)
@@ -292,6 +368,7 @@
 				getVoteDetail(params).then(res=>{
 					
 					this.list = res.data
+					this.myid=uni.getStorageSync('userInfo').id
 					console.log(this.list)
 					this.extype={'0':'订单纠纷','1':'意见反馈'}[this.list.type]
 					if(this.list.type==0){
@@ -447,7 +524,10 @@ page {
 </style>
 
 <style lang="scss" scoped>
-	
+	.main{
+		
+		//padding-bottom:10vh;
+	}
 .g-section {
   width: 750rpx;
   padding: 14rpx 16rpx;
@@ -492,12 +572,12 @@ page {
 	margin-right: -5px;
 }
 .b-footer {
-	position: absolute;
+	position: fixed;
 	bottom:60rpx;
-	left:5rpx;
+	right:5rpx;
 	display: flex;
 	justify-content: flex-end;
-	width: 100%;
+	width: 80%;
 	margin-top:40rpx;
 	padding: 0 32rpx;
 	height:75rpx;
@@ -534,9 +614,10 @@ page {
 
 }
 .more{
-	position: absolute;
+	position: fixed;
 	bottom:70rpx;
 	left:20rpx;
+	z-index: 10;
 }
 .select{
 	margin-top:20rpx;
@@ -555,7 +636,7 @@ page {
 }
 
 .votelist{
-	margin:0 20rpx;
+	margin:10rpx 20rpx;
 }
 .judge{
 	float:right;
@@ -566,5 +647,95 @@ page {
 		color:red;
 	}
 }
+.bottom-back {
+			position: fixed;
+			height: 10rpx;
+			width: 100%;
+			bottom:4%;
+			right:430rpx;
+			
+			z-index: 1000;
+		}
+		.bottom-area {
+			flex-direction: column;
+			position: absolute;
+			bottom: 20rpx;
+			right: 0;
+			width: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: right;
+		}
+		.conversation-bubble {
+			padding-top: 10rpx;
+			position: absolute;
+			width: 200rpx;
+			padding-right: 3px;
+			background-color: #FFFFFF;
+			height:100rpx;
+			bottom: 60rpx;
+			left:-110rpx;
+			z-index: 100;
+			box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.08);
+			border-radius: 14rpx;
+			transition-duration: all .3s;
+		}
+		.cbb{
+			height:180rpx;
+		}
+		
+		.conversation-bubble:before,
+		.conversation-bubble:after {
+			content: "";
+			display: block;
+			border-width:15px;
+			position: absolute;
+			bottom: -28px;
+			left: 34px;
+			border-style: solid dashed dashed;
+			border-color: #fff transparent transparent;
+			font-size: 0;
+			line-height: 0;
+			margin-left: 4px;
+			transition: all .3s;
+			//border:1px solid red;
+		}
+		
+		.conversation-bubble:after {
+			bottom: -28px;
+			
+			border-color: #fff transparent transparent;
+		
+		}
+		.picker {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 32rpx;
+			font-weight: 300;
+			width: 100%;
+			height: 80rpx;
+			&:active{
+				background-color: #ccc;
+			}
+			
+		}
+		.btn-show-more {
+			
+			  position: fixed;
+			bottom:4%;
+			right:630rpx;
+			  width: 80rpx;
+			  height: 50rpx;
+			  display: flex;
+			  justify-content: center;
+			  align-items: center;
+			 
+			  z-index: 99;
+			  &:active{
+			  	background-color: #ccc;
+			  }
+			
+		}
 </style>
 

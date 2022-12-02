@@ -32,8 +32,11 @@
       </view>
       <view class="o-list__item__footer u-border-top">
         <view class="u-flex u-flex-between">
-			<view>
+			<view v-if="item.category=='滞销'">
 				地点：{{item.province}}-{{item.city}}-{{item.country}}
+			</view>
+			<view v-if="item.category=='共享'">
+				地点：{{item.province}}-{{item.city}}
 			</view>
 			<view class="jc"  :class="{judgecolor:item.status==2}" v-if="item.status!==1">
 			  <text class="ml-1">{{item.judgestat}}</text>

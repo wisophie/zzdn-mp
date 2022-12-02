@@ -6,8 +6,8 @@
 				
 				<view class="row" >
 					<view class="title">标题</view>
-					<view class="cont" @tap="get('topic',list.topic)" >
-						{{list.topic}}
+					<view class="cont" @tap="get('topic',list.item[0].topic)" >
+						{{list.item[0].topic}}
 					</view>
 					<view class="more">
 						<view class="os-addr-box__arrow"><u-icon name="arrow-right" color="#000" size="18" /></view>
@@ -19,7 +19,7 @@
 						<view class="form-item">
 						  <uni-data-picker 
 						    :localdata="addressOptions" 
-						    placeholder="地址" 
+						    :placeholder="defaultformData" 
 						    popup-title="请选择"
 						    :map="{text: 'name', value: 'code'}"
 						    :clear-icon="false"
@@ -88,18 +88,18 @@
 		  <view class="os-remark__title">任务内容</view>
 		  <view class="os-remark__content">
 		    <u--textarea
-		      v-model="list.content"
+		      v-model="list.item[0].content"
 		      placeholder="请输入内容信息"
 		      count
 			  :disabled=false
-		      maxlength="50"
-			  height='90'
+		      maxlength="300"
+			  height='180'
 		    ></u--textarea>
 		  </view>
 		</view>
 			
 
-			<view class="bt2" v-if="id!=uid"@tap="deleteFriend">联系买家</view>
+			<view class="bt2"  @tap="toupdateHelp">保存商品</view>
 			<view class="func">
 				<view class="f">
 					<u-button class="mt-4" type="primary" :plain="true" @click="canceldingdan">取消修改</u-button>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-	import { createHelp} from '@/api/help'
+	import { createHelp,getHelpDetail,updateHelp} from '@/api/help'
 	import { regionList } from '@/api/address'
 	export default {
 		data() {
@@ -143,6 +143,7 @@
 				  city: '',
 				  country:'',
 				},
+				defaultformData:'选择地址',
 				banner: [],
 				editable:'true',
 				maxl:10,
@@ -158,16 +159,19 @@
 				amount:'',
 				exchangetype:['跑腿订单', '帮忙订单'],
 				list:{
-					topic:'任务标题',
+					item:[{
+						topic:'任务标题',
+						content:'',
+					}],
 					mobile:'输入手机号码',
-					content:'',
+					
 				},
 				addressOptions: [],
 			};
 		},
 		onLoad(id){
 			
-			this.getlist(id)
+			this.gethelpInfo(id)
 		},
 		created() {
 		  
@@ -176,64 +180,80 @@
 		methods:{
 			getlist(id){
 				console.log(id.id)
-				const banners=id.gallery.split(",")
-				const temp =[{ url: 1 },{ url: 1 }]
-				this.banner= temp.map(((o, i) => ({ 
-				url: (i < banners.length) ? banners[i]  : ''})))
 				if(id.city!==undefined){
-					this.list = id
+				
 				}else{
 					
 				}
-				console.log(this.banner)
-			},
-			// 删除图片
-			deletePic(event, key) {
-			     this.banner.splice(event.index,1)
-			},
-			// 新增图片
-			async afterRead(event, key) {
 				
-			  let lists = [].concat(event.file)
-			  let fileListLen = this.banner.length
-			  lists.map(item => {
-			    this.banner.push({
-			      ...item,
-			      status: 'uploading',
-			      message: '上传中'
-			    })
-			  })
-			  for (let i = 0; i < lists.length; i++) {
-			    let type = null
-			    uploadApi(lists[i].url, type)
-			      .then(res => {
-			        const result = res.data
-					console.log(result)
-			        let item = this.banner[fileListLen]
-			        this.banner.splice(
-			          fileListLen,
-			          1,
-			          Object.assign(item, {
-			            status: 'success',
-			            message: '',
-			            url: result
-			          })
-			        )
-			        fileListLen++
-			      })
-			      .catch(err => {
-			        this.banner.splice(
-			          fileListLen,
-			          1,
-			          Object.assign(item, {
-			            status: 'fail',
-			            message: '上传失败'
-			          })
-			        )
-			        fileListLen++
-			      })
-			  }
+				// const banners=id.gallery.split(",")
+				// const temp =[{ url: 1 },{ url: 1 }]
+				// this.banner= temp.map(((o, i) => ({ 
+				// url: (i < banners.length) ? banners[i]  : ''})))
+				
+				
 			},
+			
+				async gethelpInfo(item){
+					console.log(item)
+					if(item.id!=undefined){
+					const params={
+						orderId:item.id
+					}
+					let res =await getHelpDetail(params)
+						this.list= res.data
+						this.defaultformData=this.list.province+'/'+this.list.city
+						console.log(this.list)
+					}
+			},
+			
+			// 删除图片
+			// deletePic(event, key) {
+			//      this.banner.splice(event.index,1)
+			// },
+			// 新增图片
+			// async afterRead(event, key) {
+				
+			//   let lists = [].concat(event.file)
+			//   let fileListLen = this.banner.length
+			//   lists.map(item => {
+			//     this.banner.push({
+			//       ...item,
+			//       status: 'uploading',
+			//       message: '上传中'
+			//     })
+			//   })
+			//   for (let i = 0; i < lists.length; i++) {
+			//     let type = null
+			//     uploadApi(lists[i].url, type)
+			//       .then(res => {
+			//         const result = res.data
+			// 		console.log(result)
+			//         let item = this.banner[fileListLen]
+			//         this.banner.splice(
+			//           fileListLen,
+			//           1,
+			//           Object.assign(item, {
+			//             status: 'success',
+			//             message: '',
+			//             url: result
+			//           })
+			//         )
+			//         fileListLen++
+			//       })
+			//       .catch(err => {
+			//         this.banner.splice(
+			//           fileListLen,
+			//           1,
+			//           Object.assign(item, {
+			//             status: 'fail',
+			//             message: '上传失败'
+			//           })
+			//         )
+			//         fileListLen++
+			//       })
+			//   }
+			// },
 			getRegionList() {
 			  regionList().then(res => {
 			    this.addressOptions = res.data.list
@@ -255,7 +275,7 @@
 				this.editable=false
 			},
 			get(type,e){
-				let a={'topic':15,'mobile':11};
+				let a={'topic':20,'mobile':11};
 				this.show = true;
 				if(e=='任务标题' || e=='输入手机号码'){
 					this.data='';
@@ -285,7 +305,7 @@
 							if(this.data==''){
 								uni.$u.toast('标题不能为空')
 							}else{
-								this.list[type]=this.data
+								this.list.item[0].topic=this.data
 								this.close()
 							}
 							
@@ -319,19 +339,60 @@
 					}
 				console.log(this.index3)
 			},
-			tocreateHelp(){
-				console.log(this.list.amount)
-				if(this.formData.province==''){
+			toupdateHelp(){
+				console.log(this.list.id)
+				if(this.list.city==''){
 					uni.$u.toast('请选择发布地点！')
-				}else if(this.list.content==''){
-					uni.$u.toast('请输入任务详情！')
+				}else if(this.list.item[0].topic=='任务标题'){
+					uni.$u.toast('输入标题！')
 				}else if(this.list.amount==undefined){
 					uni.$u.toast('请输入价格！')
+				}else if(this.list.mobile=='输入手机号码'){
+					uni.$u.toast('请输入手机号码！')
+				}else if(this.list.item[0].content==''){
+					uni.$u.toast('请输入任务详情！')
+				}else{
+					const data = {
+					  id:this.list.id,
+					  orderType:this.index3,   //订单类型0跑腿订单 1帮忙订单	
+					  topic: this.list.item[0].topic,
+					  content: this.list.item[0].content,
+					  amount:this.list.amount,
+					  mobile: this.list.mobile,
+					  // province:this.formData.province,
+					  // city:this.formData.city,
+					  // country:this.formData.country,
+					}
+					console.log(data)
+					updateHelp(data).then(res=>{
+						console.log(res)
+						if(res.errmsg=='成功'){
+							uni.$u.toast('更新成功！')
+							this.canceldingdan()
+						}
+						
+					})
+					
+				}
+				
+			},
+			tocreateHelp(){
+				console.log(this.list)
+				if(this.formData.city==''){
+					uni.$u.toast('请选择发布地点！')
+				}else if(this.list.item[0].topic=='任务标题'){
+					uni.$u.toast('输入标题！')
+				}else if(this.list.amount==undefined){
+					uni.$u.toast('请输入价格！')
+				}else if(this.list.mobile=='输入手机号码'){
+					uni.$u.toast('请输入手机号码！')
+				}else if(this.list.item[0].content==''){
+					uni.$u.toast('请输入任务详情！')
 				}else{
 					const data = {
 					  orderType: this.index3,   //订单类型0跑腿订单 1帮忙订单	
-					  topic: this.list.topic,
-					  content: this.list.content,
+					  topic: this.list.item[0].topic,
+					  content: this.list.item[0].content,
 					  amount:this.list.amount,
 					  mobile: this.list.mobile,
 					  province:this.formData.province,
@@ -367,6 +428,7 @@
 		padding-bottom: 360rpx;
 		display: flex;
 		flex-direction: column;
+		height:100vh;
         background-color: #fff;
 		.column {
 			display: flex;
@@ -448,7 +510,9 @@
 		}
 
 		.bt2 {
-			margin-top: 50rpx;
+			position:fixed;
+			left:320rpx;
+			bottom:150rpx;
 			text-align: center;
 			font-size: 32rpx;
 			color: $uni-color-error;
@@ -514,9 +578,11 @@
 			
 		}
 	.func{
+		position:fixed;
 		display: flex;
-		margin-top: 200rpx;
+		bottom:70rpx;
 		padding:0 20rpx;
+		width:100%;
 		.f{
 			flex:1;
 			padding:0 20rpx;

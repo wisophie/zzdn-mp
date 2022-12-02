@@ -48,7 +48,7 @@
 						<view class="form-item">
 						  <uni-data-picker 
 						    :localdata="addressOptions" 
-						    placeholder="地址" 
+						    :placeholder="defaultformData" 
 						    popup-title="请选择"
 						    :map="{text: 'name', value: 'code'}"
 						    :clear-icon="false"
@@ -125,11 +125,11 @@
 		  <view class="os-remark__content">
 		    <u--textarea
 		      v-model="list.detail"
-		      placeholder="请输入商品详情"
+		      placeholder="请输入详情"
 		      count
 			  :disabled=false
-		      maxlength="70"
-			  height='90'
+		      maxlength="300"
+			  height='180'
 		    ></u--textarea>
 		  </view>
 		</view>
@@ -179,6 +179,7 @@
 				  city: '',
 				  country:'',
 				},
+				defaultformData:'选择地址',
 				banner: [],
 				editable:'true',
 				maxl:10,
@@ -192,10 +193,11 @@
 				extype:false,
 				exchangetype:['提供货物', '需求货物'],
 				list:{
-					title:'商品标题',
+					title:'输入标题',
 					tel:'输入手机号码',
 					detail:'',
 					specification:'默认规格',
+					//category:'滞销'
 				},
 				addressOptions: [],
 			};
@@ -203,14 +205,15 @@
 		onLoad(id){
 			
 			this.getlist(id)
+			
 		},
 		created() {
-		  
 		  this.getRegionList()
+		  
 		},
 		methods:{
 			clickmeal(e){
-				this.index1=e;			
+				this.index1=e;		
 			},
 			getlist(id){
 				console.log(id)
@@ -220,6 +223,7 @@
 				url: banners[i]})))
 				if(id.city!==undefined){
 					this.list = id
+					this.defaultformData=this.list.province+'/'+this.list.city+'/'+this.list.country
 					if(this.list.category=='共享'){
 						this.index1=1
 					}
@@ -282,6 +286,7 @@
 			  regionList().then(res => {
 			    this.addressOptions = res.data.list
 			  })
+			  
 			},
 			onchange(e) {
 			  console.log(e)
@@ -301,7 +306,7 @@
 			get(type,e){
 				let a={'title':20,'tel':11};
 				this.show = true;
-				if(e=='商品标题' || e=='输入手机号码'){
+				if(e=='输入标题' || e=='输入手机号码'){
 					this.data='';
 				}else{
 					this.data=e;
@@ -371,17 +376,17 @@
 				this.banner.map(e=>{this.list.gallery.push(e.url)})
 				if(this.list.gallery.length==0){
 					uni.$u.toast('请上传至少一张图片！')
-				}else if(this.list.category==0&&this.formData.province==''){
+				}else if(this.index1==0&&this.list.city==''){
 					uni.$u.toast('请选择发布地点！')
-				}else if(this.list.category==0&&this.list.tel=='输入手机号码'){
+				}else if(this.index1==0&&this.list.tel=='输入手机号码'){
 					uni.$u.toast('请输入正确的手机号码！')
 				}else if(this.list.detail==''){
-					uni.$u.toast('请输入商品详情！')
+					uni.$u.toast('请输入详情！')
 				}else{
 					const data = {
 					  id: this.list.id,
 					  exchange: this.extype,   //0提供货物1需求货物
-					  category: this.list.category,
+					  category: this.list.category||'滞销',
 					  title: this.list.title,
 					  gallery: this.list.gallery.toString(),
 					  specification: this.list.specification,
@@ -389,7 +394,7 @@
 					  tel: this.list.tel,
 					  province:this.list.province,
 					  city:this.list.city,
-					  country:this.formData.country,
+					  country:this.list.country,
 					}
 					editShare(data).then(res=>{
 						if(res.errmsg=='成功'){
@@ -407,12 +412,14 @@
 				console.log(this.list.tel)
 				if(this.list.gallery.length==0){
 					uni.$u.toast('请上传至少一张图片！')
-				}else if(this.list.category==0&&this.formData.province==''){
+				}else if(this.list.title=='输入标题'){
+					uni.$u.toast('请输入标题！')
+				}else if(this.index1==0&&this.formData.city==''){
 					uni.$u.toast('请选择发布地点！')
-				}else if(this.list.category==0&&this.list.tel=='输入手机号码'){
+				}else if(this.index1==0&&this.list.tel=='输入手机号码'){
 					uni.$u.toast('请输入正确的手机号码！')
 				}else if(this.list.detail==''){
-					uni.$u.toast('请输入商品详情！')
+					uni.$u.toast('请输入详情！')
 				}else{
 					const data = {
 					  exchange: this.extype,   //0提供货物1需求货物
