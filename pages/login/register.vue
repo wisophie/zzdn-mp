@@ -15,20 +15,6 @@
       </div>
 
       <div class="form-item">
-        <uni-data-picker
-          v-model="formData.gender"
-          :localdata="genderOption" 
-          placeholder="性别" 
-          popup-title="请选择"
-          :clear-icon="false"
-        ></uni-data-picker>
-      </div>
-
-      <div class="form-item">
-        <input class="mobile" v-model="formData.birthday" placeholder="生日（例：2022-02-02）" />
-      </div>
-
-      <div class="form-item">
         <uni-data-picker 
           :localdata="addressOptions" 
           placeholder="地址" 
@@ -78,8 +64,6 @@ export default {
         confirmPassword: '',
         mobile: '',
         code: '',
-        gender: 0,
-        birthday: '',
         province: '',
         city: '',
       },
@@ -164,8 +148,12 @@ export default {
 
     startRegister() {
       var that = this;
-      if (this.formData.password.length < 6 || this.formData.username.length < 6) {
-        uni.$u.toast('用户名和密码不得少于6位')
+      if (this.formData.username.length < 1) {
+        uni.$u.toast('用户名不得少于1位')
+        return false;
+      }
+      if (this.formData.password.length < 6) {
+        uni.$u.toast('密码不得少于6位')
         return false;
       }
 
